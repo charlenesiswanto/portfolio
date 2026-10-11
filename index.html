@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Charlene Siswanto, Portfolio</title>
+<meta name="description" content="Charlene Siswanto, product designer studying Human-Centered Design and Engineering at the University of Washington.">
+
+<link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;500;600&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#f6f5f1}
+html{scroll-behavior:smooth}
+a{color:inherit}a:hover{color:var(--ac)}
+.root{--bg:#f6f5f1;--fg:#0c0c0c;--fg2:#2a2a2a;--mut:#6a6a6a;--line:rgba(12,12,12,.22);--ac:#2f4bff;--acfg:#fff;--acs:rgba(47,75,255,.12);background:#f6f5f1 url(assets/light3.jpg) center top / max(100%,900px) auto repeat-y;color:var(--fg);font-family:'Helvetica Neue',Helvetica,'Arimo',sans-serif;overflow-x:hidden;position:relative;transition:background-color .5s,color .5s}
+.root.dark{--bg:#111;--fg:#f2f0ec;--fg2:#e4e1db;--mut:#b9b5ae;--line:rgba(242,240,236,.3);--ac:#d9f45a;--acfg:#111;--acs:rgba(217,244,90,.16);background:#131313 url(assets/dark3.jpg) center top / max(100%,900px) auto repeat-y}
+.root::before{content:none}
+.root.dark::before{opacity:0}
+.root *{box-sizing:border-box}
+.k1{--h:#f4ff7a}.k2{--h:#ffb37a}.k3{--h:#ff9ad5}.k4{--h:#8fd3ff}.k5{--h:#b9f27c}
+.hascur,.hascur *{cursor:none!important}
+.serif{font-family:'Instrument Serif','Times New Roman',serif}
+.mono{font-family:'DM Mono',ui-monospace,Menlo,monospace;text-transform:uppercase;letter-spacing:.04em}
+.wrap{max-width:1320px;margin:0 auto;padding-left:clamp(16px,4vw,44px);padding-right:clamp(16px,4vw,44px)}
+.cur{position:fixed;left:0;top:0;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--ac);pointer-events:none;z-index:90;opacity:0}
+.ring{position:fixed;left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;border:1px solid var(--fg);pointer-events:none;z-index:89;opacity:0;display:flex;align-items:center;justify-content:center;transition:width .3s,height .3s,margin .3s,background .3s,border-color .3s}
+.ring span{font-family:'DM Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--acfg);opacity:0;transition:opacity .2s}
+.ring.mid{width:68px;height:68px;margin:-34px 0 0 -34px;background:var(--acs);border-color:var(--ac)}
+.ring.big{width:108px;height:108px;margin:-54px 0 0 -54px;background:var(--ac);border-color:var(--ac)}
+.ring.big span{opacity:1}
+.hascur .cur,.hascur .ring{opacity:1}
+.loader{position:fixed;inset:0;z-index:100;background:#f6f5f1 url(assets/light3.jpg) center top / max(100%,900px) auto repeat-y;color:var(--fg);display:flex;flex-direction:column;justify-content:space-between;padding:clamp(20px,4vw,44px);animation:lift .9s cubic-bezier(.7,0,.2,1) 2.5s forwards}
+.dark .loader{background:#131313 url(assets/dark3.jpg) center top / max(100%,900px) auto repeat-y}
+@keyframes lift{to{transform:translateY(-101%);visibility:hidden}}
+.ldname{font-size:clamp(28px,6.75vw,102.6px);line-height:.9;letter-spacing:-.06em;display:flex;flex-wrap:wrap;gap:0 .22em;overflow:hidden;padding-bottom:.08em}
+.ldname span{display:inline-block;animation:up .9s cubic-bezier(.2,.8,.2,1) backwards}
+.ldname em{font-family:'Instrument Serif','Times New Roman',serif;letter-spacing:-.04em}
+@keyframes up{from{transform:translateY(105%);opacity:0}to{transform:none;opacity:1}}
+.ldbar{height:2px;background:var(--line);overflow:hidden}
+.ldbar i{display:block;height:100%;background:var(--ac);transform-origin:left center;animation:grow 2.3s cubic-bezier(.6,0,.2,1) both}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.ldnum{height:1.2em;overflow:hidden;font-size:13px;line-height:1.2}
+.ldstrip{display:flex;flex-direction:column;animation:count 2.3s steps(5) both}
+@keyframes count{from{transform:translateY(0)}to{transform:translateY(-83.333%)}}
+.hi{margin:0;font-weight:400;font-size:clamp(19.6px,3.24vw,47.7px);line-height:1.02;letter-spacing:-.055em;max-width:1280px;animation:rise 1s cubic-bezier(.2,.8,.2,1) 2.7s backwards}
+@keyframes rise{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+.hi em{font-family:'Instrument Serif','Times New Roman',serif;letter-spacing:-.035em;font-size:1.06em}
+.hw{font-family:'Instrument Serif','Times New Roman',serif;font-style:italic;letter-spacing:-.035em;font-size:1.06em;padding:0 .08em;border-radius:.1em;-webkit-box-decoration-break:clone;box-decoration-break:clone;transition:letter-spacing .5s cubic-bezier(.2,.8,.2,1),background-color .25s,color .25s;outline:none}
+.hw:hover,.hw:focus-visible{color:#0c0c0c;background-color:var(--h);letter-spacing:.02em}
+.ins{display:inline-block;vertical-align:middle;height:.84em;max-width:0;opacity:0;overflow:hidden;margin-left:0;border-radius:.1em;transition:max-width .6s cubic-bezier(.2,.8,.2,1) .18s,opacity .3s .18s,margin-left .4s .18s}
+.ins img{display:block;height:100%;width:auto;border-radius:.1em}
+.hw:hover .ins,.hw:focus-visible .ins{max-width:2.4em;opacity:1;margin-left:.14em;transition-delay:0s}
+.ins.note{height:auto;font-family:'Helvetica Neue',Helvetica,'Arimo',sans-serif;font-style:normal;font-size:max(11px,.17em);line-height:1.3;letter-spacing:0;background:var(--fg);color:var(--bg);white-space:normal;border-radius:4px}
+.ins.note span{display:block;width:17em;padding:.7em .9em}
+.hw:hover .ins.note,.hw:focus-visible .ins.note{max-width:17em;margin-left:.6em}
+.tg{font:inherit;display:inline-block;vertical-align:-.03em;width:1.36em;height:.66em;border-radius:999px;border:0;padding:0;margin:0 .04em;background:var(--ac);position:relative;transition:background-color .4s,transform .3s;box-shadow:inset 0 .03em .08em rgba(0,0,0,.35)}
+.tg:hover{transform:scale(1.06)}
+.tg i{position:absolute;top:.06em;left:.06em;width:.54em;height:.54em;border-radius:50%;background:#fff;box-shadow:0 .03em .1em rgba(0,0,0,.45);transition:transform .5s cubic-bezier(.3,1.5,.4,1)}
+.dark .tg i{transform:translateX(.7em)}
+.tg2{font-family:'DM Mono',ui-monospace,Menlo,monospace;text-transform:uppercase;letter-spacing:.04em;font-size:11px;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--fg);background:transparent;color:var(--fg);transition:background-color .25s,color .25s}
+.tg2:hover{background:var(--fg);color:var(--bg)}
+.td{display:none}.dark .td{display:inline}.dark .tl{display:none}
+.spin{animation:spin 14s linear infinite;transform-origin:50% 50%}
+@keyframes spin{to{transform:rotate(360deg)}}
+.bob{animation:bob 1.8s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(-4px)}50%{transform:translateY(5px)}}
+.nl{font-size:12px;text-decoration:none;padding:14px 0;display:inline-block;position:relative}
+.nl::after{content:"";position:absolute;left:0;right:0;bottom:10px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .35s}
+.nl:hover::after{transform:scaleX(1)}
+.sh{margin:0;font-weight:400;font-size:clamp(19.6px,3.26vw,47px);line-height:.95;letter-spacing:-.06em}
+.sh em{font-family:'Instrument Serif','Times New Roman',serif;letter-spacing:-.035em;font-size:1.06em}
+.plist{display:flex;flex-direction:column}
+.proj{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:clamp(12px,3vw,40px);align-items:baseline;padding:clamp(18px,2.6vw,34px) 0;border-top:1px solid var(--line);color:var(--fg);text-decoration:none;transition:opacity .35s}
+.proj:hover{color:var(--fg)}
+.plist:hover .proj:not(:hover){opacity:.28}
+.pt{margin:0;font-weight:400;font-size:clamp(21.8px,4.46vw,71.3px);line-height:.92;letter-spacing:-.05em;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.proj:hover .pt{font-style:italic;transform:translateX(18px)}
+.more{max-height:0;opacity:0;overflow:hidden;transition:max-height .6s cubic-bezier(.2,.8,.2,1),opacity .45s}
+.proj:hover .more,.proj:focus-visible .more{max-height:200px;opacity:1}
+.pm{font-size:12px;text-align:right;line-height:1.7;display:flex;flex-direction:column;align-items:flex-end}
+.go i{display:inline-block;font-style:normal;transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.proj:hover .go i{transform:translateX(10px)}
+.pin{display:none}
+@media (max-width:720px){.proj{grid-template-columns:36px minmax(0,1fr)}.pm{display:none}}
+@media (hover:none){.more{max-height:none;opacity:1}.pin{display:block;width:100%;max-width:520px;margin-top:14px;border-radius:6px}}
+.fp{position:fixed;left:0;top:0;width:clamp(280px,30vw,460px);aspect-ratio:4 / 3;margin:-130px 0 0 40px;border-radius:8px;overflow:hidden;background:#fff;box-shadow:0 30px 80px rgba(0,0,0,.3);pointer-events:none;z-index:80;opacity:0;scale:.82;transition:opacity .3s,scale .45s cubic-bezier(.2,.8,.2,1)}
+.fp.on{opacity:1;scale:1}
+.fp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;opacity:0;transition:opacity .35s}
+.fp img.fit{object-fit:contain;padding:16px}
+.fp img.on{opacity:1}
+.tabd{font-family:'DM Mono',ui-monospace,Menlo,monospace;text-transform:uppercase;letter-spacing:.04em;font-size:12px;min-height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--fg);background:transparent;color:var(--fg);transition:background-color .25s,color .25s,transform .25s}
+.tabd:hover{transform:translateY(-3px);background:var(--acs)}
+.tabd.on{background:var(--fg);color:var(--bg)}
+.panel{animation:fade .55s cubic-bezier(.2,.8,.2,1) both}
+@keyframes fade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.tilt{display:block;width:100%;border-radius:4px;box-shadow:0 14px 40px rgba(0,0,0,.25);transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.tilt:hover{transform:translateY(-12px) scale(1.03)}
+.gal{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(180px,44%),1fr));gap:16px;align-items:start}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(380px,100%),1fr));gap:24px;align-items:end}
+.vh{margin:0;font-weight:400;font-size:clamp(21.8px,2.64vw,36.9px);line-height:.98;letter-spacing:-.04em}
+.vp{margin:0;font-size:15.6px;line-height:1.55;color:var(--fg2)}
+.mq{display:flex;gap:56px;white-space:nowrap;animation:mq 36s linear infinite;width:max-content}
+.mqw:hover .mq{animation-play-state:paused}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.mail{font-size:clamp(18px,3.66vw,56.1px);line-height:1;letter-spacing:-.045em;text-decoration:none;display:inline-block;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.mail:hover{font-style:italic;transform:translateX(14px)}
+.rv{transition:opacity 1s cubic-bezier(.2,.8,.2,1),filter 1s cubic-bezier(.2,.8,.2,1)}
+.rv.pre{opacity:0;filter:blur(18px)}
+@media (prefers-reduced-motion:reduce){.hi,.ldname span,.spin,.bob,.mq,.panel{animation:none}.loader{animation-delay:.6s}.rv.pre{opacity:1;filter:none}}
+.hw.uwh:hover,.hw.uwh:focus-visible{background-color:transparent;color:inherit}
+.ins.uwi{border-radius:0;overflow:visible}
+.ins.uwi img{height:100%;width:auto;border-radius:0}
+.hw:hover .ins.uwi,.hw:focus-visible .ins.uwi{max-width:1.6em;margin-left:.22em}
+</style>
+
+<style>[hidden]{display:none!important}</style>
+</head>
+<body>
+
+<div class="root">
+<div class="cur" aria-hidden="true"></div>
+<div class="ring" aria-hidden="true"><span>Open</span></div>
+<div class="fp" aria-hidden="true"><img class="fit" src="assets/life_trio.webp" alt=""><img src="assets/g_collage.jpg" alt=""><img src="assets/m_after.jpg" alt=""><img src="assets/scr_home.jpg" alt=""></div>
+
+<div data-if="loading" style="display:contents">
+<div class="loader" aria-hidden="true">
+<div class="mono" style="display: flex; justify-content: space-between; font-size: 12px"><span>Portfolio</span><span>Loading</span></div>
+<div class="ldname"><span style="animation-delay: .15s">Charlene</span><span style="animation-delay: .32s"><em>Siswanto</em></span></div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div class="ldbar"><i></i></div>
+<div class="mono ldnum"><div class="ldstrip"><span>000</span><span>019</span><span>042</span><span>067</span><span>088</span><span>100</span></div></div>
+</div>
+</div>
+</div>
+
+<section id="top" class="wrap" style="min-height: min(100vh, 860px); display: flex; flex-direction: column; justify-content: space-between; gap: 40px; padding-top: 10px; padding-bottom: clamp(20px,3vw,36px); position: relative; z-index: 2">
+<header class="mono" style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap">
+<span style="font-size: 12px">Charlene Siswanto</span>
+<nav style="display: flex; gap: 24px; align-items: center; flex-wrap: wrap">
+<a class="nl" href="#work">Projects</a>
+<a class="nl" href="#visual">Visual</a>
+<a class="nl" href="#contact">Contact</a>
+<button type="button" class="tg2" data-click="toggle" aria-pressed="false" aria-label="Switch between light and dark mode"><span class="tl">Dark mode</span><span class="td">Light mode</span></button>
+</nav>
+</header>
+
+<h1 class="hi">Hi, I'm <em>Charlene Siswanto</em>, a <span style="white-space: nowrap">Pr<button type="button" class="tg" data-click="toggle" aria-pressed="false" aria-label="Switch between light and dark mode" data-cur="Flip"><i></i></button>duct</span> Designer studying <span class="hw k1 uwh" tabindex="0">Human-Centered Design &amp; Engineering<span class="ins uwi"><img src="assets/uw_w.png" alt="University of Washington"></span></span>. I design digital experiences around <span class="hw k3" tabindex="0">how people think<span class="ins note"><span>A 35-person survey for a museum, a 26-person survey for LifeLine, usage data from a live app.</span></span></span>, behave, and <span class="hw k4" tabindex="0">get things done<span class="ins"><img src="assets/life_trio.webp" alt="LifeLine app screens"></span></span>.</h1>
+
+<div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap">
+<div class="mono" style="font-size: 12px; line-height: 1.7; max-width: 380px; color: var(--mut)">Flip the "o" in product for dark mode<br>Hover the italic words to open them</div>
+<a href="#work" data-cur="Scroll" aria-label="Scroll to projects" style="position: relative; width: 132px; height: 132px; display: block; text-decoration: none; color: var(--fg)">
+<svg class="spin" viewBox="0 0 132 132" width="132" height="132" style="position: absolute; inset: 0">
+<defs><path id="circ" d="M66,66 m-52,0 a52,52 0 1,1 104,0 a52,52 0 1,1 -104,0"></path></defs>
+<text fill="currentColor" style="font-family: 'DM Mono', monospace; font-size: 11.5px; letter-spacing: 2.4px"><textPath href="#circ">SCROLL TO PROJECTS · SCROLL TO PROJECTS · </textPath></text>
+</svg>
+<svg class="bob" viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; left: 51px; top: 51px; color: var(--ac)"><path d="M12 4v16M5 13l7 7 7-7"></path></svg>
+</a>
+</div>
+</section>
+
+<section id="work" class="wrap" style="padding-top: clamp(28px,4vw,56px); display: flex; flex-direction: column; position: relative; z-index: 2">
+<div class="rv" style="display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; padding-bottom: clamp(24px,3vw,40px)">
+<h2 class="sh">Selected <em>Projects</em></h2>
+<div class="mono" style="font-size: 12px">04 projects · Hover to preview · Click to open</div>
+</div>
+
+<div class="plist">
+<a class="proj rv" href="lifeline.html" data-cur="Open" data-p="0">
+<span class="mono" style="font-size: 12px">01</span>
+<span style="display: flex; flex-direction: column; gap: 12px; align-items: flex-start; min-width: 0">
+<h3 class="serif pt">LifeLine</h3>
+<span class="more"><span style="display: block; font-size: 16.6px; line-height: 1.5; max-width: 520px; padding-bottom: 6px">A first aid app shaped by a 26-person survey, built to be read quickly in an emergency.</span></span>
+<img class="pin" src="assets/life_trio.webp" alt="LifeLine first aid app screens">
+</span>
+<span class="mono pm"><span>Mobile app</span><span>Survey, user flow, UI</span><span class="go">Open <i>→</i></span></span>
+</a>
+<a class="proj rv" href="getangie.html" data-cur="Open" data-p="1">
+<span class="mono" style="font-size: 12px">02</span>
+<span style="display: flex; flex-direction: column; gap: 12px; align-items: flex-start; min-width: 0">
+<h3 class="serif pt">GetAngie</h3>
+<span class="more"><span style="display: block; font-size: 16.6px; line-height: 1.5; max-width: 520px; padding-bottom: 6px">A live date-night app for long-distance couples. I rebuilt its photobooth and shipped six new activities.</span></span>
+<img class="pin" src="assets/g_collage.jpg" alt="Angie photobooth frame picker">
+</span>
+<span class="mono pm"><span>Live product</span><span>Product design, shipped</span><span class="go">Open <i>→</i></span></span>
+</a>
+<a class="proj rv" href="museum.html" data-cur="Open" data-p="2">
+<span class="mono" style="font-size: 12px">03</span>
+<span style="display: flex; flex-direction: column; gap: 12px; align-items: flex-start; min-width: 0">
+<h3 class="serif pt" style="font-size: clamp(20.1px,3.27vw,53.2px)">Shoreline Historical Museum</h3>
+<span class="more"><span style="display: block; font-size: 16.6px; line-height: 1.5; max-width: 520px; padding-bottom: 6px">A redesign of a community museum's website, led by a 35-person survey and an accessibility scan.</span></span>
+<img class="pin" src="assets/m_after.jpg" alt="Redesigned Shoreline Historical Museum homepage">
+</span>
+<span class="mono pm"><span>Website redesign</span><span>Survey, accessibility, UI</span><span class="go">Open <i>→</i></span></span>
+</a>
+<a class="proj rv" href="aruna.html" data-cur="Open" style="border-bottom: 1px solid var(--line)" data-p="3">
+<span class="mono" style="font-size: 12px">04</span>
+<span style="display: flex; flex-direction: column; gap: 12px; align-items: flex-start; min-width: 0">
+<h3 class="serif pt">Aruna</h3>
+<span class="more"><span style="display: block; font-size: 16.6px; line-height: 1.5; max-width: 520px; padding-bottom: 6px">A tourism website for a coastal town rebrand: one place to discover, book and plan a trip.</span></span>
+<img class="pin" src="assets/poster.jpg" alt="Aruna tourism website homepage">
+</span>
+<span class="mono pm"><span>Tourism website</span><span>Research, identity, prototype</span><span class="go">Open <i>→</i></span></span>
+</a>
+</div>
+</section>
+
+<div class="mqw" style="overflow: hidden; padding: clamp(40px,6vw,88px) 0 0; position: relative; z-index: 2">
+<div class="mq" style="font-size: clamp(28.8px,4.5vw,63.4px); letter-spacing: -0.06em; line-height: 1.1">
+<span>Posters</span><span style="color: #ff9ad5">✺</span><span class="serif" style="letter-spacing: -0.035em"><em>Social campaigns</em></span><span style="color: #ffb37a">✺</span><span>Event identity</span><span style="color: #8fd3ff">✺</span><span class="serif" style="letter-spacing: -0.035em"><em>Instagram series</em></span><span style="color: #b9f27c">✺</span>
+<span>Posters</span><span style="color: #ff9ad5">✺</span><span class="serif" style="letter-spacing: -0.035em"><em>Social campaigns</em></span><span style="color: #ffb37a">✺</span><span>Event identity</span><span style="color: #8fd3ff">✺</span><span class="serif" style="letter-spacing: -0.035em"><em>Instagram series</em></span><span style="color: #b9f27c">✺</span>
+</div>
+</div>
+
+<section id="visual" class="wrap" style="padding-top: clamp(40px,6vw,80px); display: flex; flex-direction: column; gap: clamp(24px,3vw,40px); position: relative; z-index: 2">
+<div class="rv" style="display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap">
+<h2 class="sh">Visual <em>Design</em></h2>
+<div class="mono" style="font-size: 12px">04 bodies of work · Pick one</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<button type="button" data-class="vc0" class="" data-pressed="vs0" aria-pressed="false" data-click="vp0">Shoreline Student Life</button>
+<button type="button" data-class="vc1" class="" data-pressed="vs1" aria-pressed="false" data-click="vp1">SunFest</button>
+<button type="button" data-class="vc2" class="" data-pressed="vs2" aria-pressed="false" data-click="vp2">Nusameta</button>
+<button type="button" data-class="vc3" class="" data-pressed="vs3" aria-pressed="false" data-click="vp3">Solar Chapter USA</button>
+</div>
+
+<div data-if="v0" style="display:contents">
+<div class="panel" style="display: flex; flex-direction: column; gap: 32px">
+<div class="two">
+<h3 class="serif vh">Student Life <em>Graphic Designer</em>, Shoreline Community College</h3>
+<p class="vp">Posters, screen graphics and merchandise for Student Life and the Associated Student Government: elections, hiring, game days, cultural events, wellness weeks and commencement.</p>
+</div>
+<div class="gal">
+<img class="tilt" src="assets/aerecruit.jpg" alt="ASG and Arts and Entertainment Board recruitment poster" loading="lazy">
+<img class="tilt" src="assets/hiring.jpg" alt="Student Life hiring poster" loading="lazy">
+<img class="tilt" src="assets/ballot.jpg" alt="ASG election ballot poster" loading="lazy">
+<img class="tilt" src="assets/remembrance.jpg" alt="Day of Remembrance poster" loading="lazy">
+<img class="tilt" src="assets/basketball.jpg" alt="Pack the Stands basketball game poster" loading="lazy">
+<img class="tilt" src="assets/softball.jpg" alt="Pack the Stands softball and baseball poster" loading="lazy">
+<img class="tilt" src="assets/sippaint.jpg" alt="Sip and Paint event poster" loading="lazy">
+<img class="tilt" src="assets/sushi.jpg" alt="Relaxation Station ramen and sushi poster" loading="lazy">
+<img class="tilt" src="assets/cooking.jpg" alt="Pocket Friendly Plates cooking class poster" loading="lazy">
+<img class="tilt" src="assets/blood.jpg" alt="Blood drive poster" loading="lazy">
+<img class="tilt" src="assets/clubfair.jpg" alt="Spring club and resource fair poster" loading="lazy">
+<img class="tilt" src="assets/commence.jpg" alt="Commencement speaker search poster" loading="lazy">
+<img class="tilt" src="assets/gradcap.jpg" alt="Grad cap decorating contest poster" loading="lazy">
+<img class="tilt" src="assets/relax.jpg" alt="Relaxation Station winter poster" loading="lazy">
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<p class="vp" style="font-size: 15px"><strong>Officer Introduction Series.</strong> A personalised series of introduction posts, one per officer.</p>
+<img src="assets/officer_series.jpg" alt="Officer introduction series, three clipboard-style posts" style="display: block; width: 100%; border-radius: 4px">
+</div>
+</div>
+</div>
+
+<div data-if="v1" style="display:contents">
+<div class="panel" style="display: flex; flex-direction: column; gap: 32px">
+<div class="two">
+<h3 class="serif vh">SunFest, a two-day <em>event identity</em></h3>
+<p class="vp">Event branding and promotional graphics for a Student Life celebration welcoming the start of summer: teaser, key visual, activity guide, food truck poster and schedule.</p>
+</div>
+<div class="gal">
+<img class="tilt" src="assets/sun_soon.jpg" alt="SunFest Coming Soon teaser">
+<img class="tilt" src="assets/sun_main.jpg" alt="SunFest key visual">
+<img class="tilt" src="assets/sun_collage.jpg" alt="SunFest activities poster">
+<img class="tilt" src="assets/sun_food.jpg" alt="SunFest food truck poster">
+<img class="tilt" src="assets/sun_sched.jpg" alt="SunFest schedule">
+</div>
+</div>
+</div>
+
+<div data-if="v2" style="display:contents">
+<div class="panel" style="display: flex; flex-direction: column; gap: 32px">
+<div class="two">
+<h3 class="serif vh">Nusameta, <em>Graphic Design Intern</em></h3>
+<p class="vp">Social media graphics made in Adobe Illustrator and Photoshop: Instagram content for multiple brands and campaigns, each adapted to its own visual identity.</p>
+</div>
+<div class="gal">
+<img class="tilt" src="assets/nusa_a.jpg" alt="Nusamarket Instagram post, Two Is Better Than One">
+<img class="tilt" src="assets/nusa_b.jpg" alt="Nusamarket Instagram post on asset utility">
+<img class="tilt" src="assets/nusa_c.jpg" alt="Nusamarket Instagram post, Connecting Real World and Metaverse">
+<img class="tilt" src="assets/nusa_d.jpg" alt="Nusamarket Instagram post on digital assets">
+</div>
+<div class="gal">
+<img class="tilt" src="assets/juki_a.jpg" alt="Si Juki collaboration cover, Choose Your Side">
+<img class="tilt" src="assets/juki_b.jpg" alt="Si Juki collaboration cover, Meet The Captain">
+<img class="tilt" src="assets/juki_c.jpg" alt="Si Juki collaboration cover, More Fun to Discover">
+</div>
+</div>
+</div>
+
+<div data-if="v3" style="display:contents">
+<div class="panel" style="display: flex; flex-direction: column; gap: 32px">
+<div class="two">
+<h3 class="serif vh">Solar Chapter USA, <em>Instagram marketing</em></h3>
+<p class="vp">Instagram marketing materials for Solar Chapter USA, with visuals aligned to the organisation's branding and outreach goals.</p>
+</div>
+<img src="assets/solar_journey.jpg" alt="Solar Chapter USA journey carousel covering village projects from 2022 to 2024" style="display: block; width: 100%; border-radius: 4px">
+<div class="gal">
+<img class="tilt" src="assets/solar_a.jpg" alt="Donation carousel slide, Visit our Kitabisa">
+<img class="tilt" src="assets/solar_b.jpg" alt="Donation carousel slide, How to Support">
+<img class="tilt" src="assets/solar_c.jpg" alt="Donation carousel closing slide">
+</div>
+</div>
+</div>
+</section>
+
+<footer id="contact" class="wrap" style="padding-top: clamp(80px,11vw,160px); padding-bottom: 40px; display: flex; flex-direction: column; gap: 36px; position: relative; z-index: 2">
+<div class="rv" style="display: flex; flex-direction: column; align-items: flex-start; gap: 22px">
+<h2 class="sh">Let's <em>talk</em></h2>
+<a class="serif mail" href="mailto:siswantocharlene@gmail.com" data-cur="Email">siswantocharlene@gmail.com</a>
+</div>
+<div class="mono" style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-size: 11px; border-top: 1px solid var(--line); padding-top: 6px">
+<span>Charlene Siswanto</span>
+<span>Human-Centered Design &amp; Engineering, University of Washington</span>
+<a class="nl" href="#top" style="font-size: 11px">Back to top ↑</a>
+</div>
+</footer>
+
+</div>
+
+
+<script>
+class DCLogic{constructor(p){this.props=p||{};this.state={}}setState(o){Object.assign(this.state,typeof o==='function'?o(this.state):o);__render()}forceUpdate(){__render()}}
+</script>
+<script>
+
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+this.state = { loading: true, v: 0 };
+var self = this;
+this._toggle = function () { self._setTheme(null); };
+}
+_setTheme(want) {
+var r = document.querySelector('.root');
+if (!r) return;
+var d = want === null ? !r.classList.contains('dark') : want;
+if (d) r.classList.add('dark'); else r.classList.remove('dark');
+try { document.body.style.background = d ? '#131313' : '#f6f5f1'; } catch (e) {}
+try { localStorage.setItem('cs-theme', d ? 'dark' : 'light'); } catch (e) {}
+var bs = document.querySelectorAll('.tg,.tg2');
+for (var i = 0; i < bs.length; i++) bs[i].setAttribute('aria-pressed', d ? 'true' : 'false');
+}
+componentDidMount() {
+var self = this;
+try { if (localStorage.getItem('cs-theme') === 'dark') this._setTheme(true); } catch (e) {}
+this._t = setTimeout(function () { self.setState({ loading: false }); }, 3500);
+try { this._reveal(); } catch (e) {}
+try { this._cursor(); } catch (e) {}
+try {
+this._wheel = function (e) {
+if (self._jumped || !(e.deltaY > 0)) return;
+var y = window.scrollY || document.documentElement.scrollTop || 0;
+var w = document.getElementById('work');
+if (y < 60 && w) {
+self._jumped = true;
+w.scrollIntoView({ behavior: 'smooth', block: 'start' });
+setTimeout(function () { self._jumped = false; }, 1400);
+}
+};
+window.addEventListener('wheel', this._wheel, { passive: true });
+} catch (e) {}
+}
+_reveal() {
+if (!('IntersectionObserver' in window)) return;
+var els = document.querySelectorAll('.rv');
+var vh = window.innerHeight || 800;
+var io = new IntersectionObserver(function (entries) {
+entries.forEach(function (e) {
+if (e.isIntersecting) { e.target.classList.remove('pre'); io.unobserve(e.target); }
+});
+}, { threshold: 0.06 });
+for (var i = 0; i < els.length; i++) {
+if (els[i].getBoundingClientRect().top > vh * 0.92) { els[i].classList.add('pre'); io.observe(els[i]); }
+}
+this._io = io;
+}
+_cursor() {
+var html = document.documentElement;
+var dot = document.querySelector('.cur');
+var ring = document.querySelector('.ring');
+if (!dot || !ring || !window.matchMedia) return;
+if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+var lab = ring.querySelector('span');
+var x = -200, y = -200, rx = -200, ry = -200, on = false, self = this;
+var fp = document.querySelector('.fp'), fimgs = fp ? fp.querySelectorAll('img') : [], fcur = -1, fx = -900, fy = -900;
+this._mm = function (e) {
+x = e.clientX; y = e.clientY;
+if (!on) { on = true; rx = x; ry = y; html.classList.add('hascur'); }
+var tg = e.target && e.target.closest ? e.target : null;
+var t = tg ? tg.closest('[data-cur]') : null;
+if (t) {
+if (lab) lab.textContent = t.getAttribute('data-cur');
+ring.classList.add('big'); ring.classList.remove('mid');
+} else {
+ring.classList.remove('big');
+var l = tg ? tg.closest('a,button,.hw,.tilt') : null;
+if (l) ring.classList.add('mid'); else ring.classList.remove('mid');
+}
+var pr = tg ? tg.closest('.proj') : null;
+if (fp) {
+if (pr) {
+var k = parseInt(pr.getAttribute('data-p'), 10);
+if (k !== fcur) { fcur = k; for (var q = 0; q < fimgs.length; q++) { if (q === k) fimgs[q].classList.add('on'); else fimgs[q].classList.remove('on'); } }
+if (!fp.classList.contains('on')) { fx = x; fy = y; }
+fp.classList.add('on');
+} else { fp.classList.remove('on'); }
+}
+var hw = tg ? tg.closest('.hw') : null;
+if (hw) {
+var p = hw.querySelector('.pop');
+var b = hw.getBoundingClientRect();
+if (p) p.style.translate = ((x - (b.left + b.width / 2)) * 0.4) + 'px ' + ((y - (b.top + b.height / 2)) * 0.4) + 'px';
+}
+};
+this._ml = function () { on = false; html.classList.remove('hascur'); };
+var tick = function () {
+var dx = x - rx, dy = y - ry;
+rx += dx * 0.16; ry += dy * 0.16;
+var big = ring.classList.contains('big');
+var sp = big ? 0 : Math.min(Math.sqrt(dx * dx + dy * dy) / 90, 0.55);
+var ang = big ? 0 : Math.atan2(dy, dx) * 180 / Math.PI;
+dot.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)';
+if (fp) { fx += (x - fx) * 0.14; fy += (y - fy) * 0.14; var flip = x > window.innerWidth * 0.58 ? -(fp.offsetWidth + 80) : 0; fp.style.transform = 'translate3d(' + (fx + flip) + 'px,' + fy + 'px,0)'; }
+ring.style.transform = 'translate3d(' + rx + 'px,' + ry + 'px,0) rotate(' + ang + 'deg) scale(' + (1 + sp) + ',' + (1 - sp * 0.5) + ')';
+self._raf = requestAnimationFrame(tick);
+};
+document.addEventListener('mousemove', this._mm);
+html.addEventListener('mouseleave', this._ml);
+this._raf = requestAnimationFrame(tick);
+}
+componentWillUnmount() {
+if (this._t) clearTimeout(this._t);
+if (this._io) this._io.disconnect();
+if (this._raf) cancelAnimationFrame(this._raf);
+if (this._mm) document.removeEventListener('mousemove', this._mm);
+if (this._ml) document.documentElement.removeEventListener('mouseleave', this._ml);
+if (this._wheel) window.removeEventListener('wheel', this._wheel);
+}
+renderVals() {
+var s = this.state || { loading: false, v: 0 };
+var out = { loading: !!s.loading, toggle: this._toggle };
+var self = this;
+for (var i = 0; i < 4; i++) {
+(function (i) {
+var on = s.v === i;
+out['v' + i] = on;
+out['vc' + i] = on ? 'tabd on' : 'tabd';
+out['vs' + i] = on ? 'true' : 'false';
+out['vp' + i] = function () { self.setState({ v: i }); };
+})(i);
+}
+return out;
+}
+}
+
+</script>
+
+<script>
+var __c=new Component({});var __v={};
+function __render(){__v=__c.renderVals()||{};
+document.querySelectorAll('[data-if]').forEach(function(e){e.hidden=!__v[e.getAttribute('data-if')]});
+document.querySelectorAll('[data-class]').forEach(function(e){var v=__v[e.getAttribute('data-class')];if(v!=null)e.className=v});
+document.querySelectorAll('[data-pressed]').forEach(function(e){var v=__v[e.getAttribute('data-pressed')];if(v!=null)e.setAttribute('aria-pressed',v)});}
+document.addEventListener('click',function(ev){var t=ev.target.closest&&ev.target.closest('[data-click]');if(!t)return;var f=__v[t.getAttribute('data-click')];if(typeof f==='function')f(ev)});
+__render();__c.componentDidMount&&__c.componentDidMount();
+</script>
+</body>
+</html>

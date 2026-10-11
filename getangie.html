@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GetAngie project</title>
+<meta name="description" content="Charlene Siswanto, product designer studying Human-Centered Design and Engineering at the University of Washington.">
+
+<link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;500;600&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#f6f5f1}
+html{scroll-behavior:smooth}
+a{color:inherit}a:hover{color:var(--ac)}
+.root{--bg:#f6f5f1;--fg:#0c0c0c;--fg2:#2a2a2a;--mut:#6a6a6a;--line:rgba(12,12,12,.22);--ac:#2f4bff;--acfg:#fff;--acs:rgba(47,75,255,.12);background:#f6f5f1 url(assets/light3.jpg) center top / max(100%,900px) auto repeat-y;color:var(--fg);font-family:'Helvetica Neue',Helvetica,'Arimo',sans-serif;overflow-x:clip;position:relative;transition:background-color .5s,color .5s}
+.root.dark{--bg:#111;--fg:#f2f0ec;--fg2:#e4e1db;--mut:#b9b5ae;--line:rgba(242,240,236,.3);--ac:#d9f45a;--acfg:#111;--acs:rgba(217,244,90,.16);background:#131313 url(assets/dark3.jpg) center top / max(100%,900px) auto repeat-y}
+.root::before{content:none}
+.root.dark::before{opacity:0}
+.root>*{position:relative;z-index:2}
+.tg2{font-family:'DM Mono',ui-monospace,Menlo,monospace;text-transform:uppercase;letter-spacing:.04em;font-size:11px;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--fg);background:transparent;color:var(--fg);transition:background-color .25s,color .25s}
+.tg2:hover{background:var(--fg);color:var(--bg)}
+.td{display:none}.dark .td{display:inline}.dark .tl{display:none}
+.root *{box-sizing:border-box}
+.hascur,.hascur *{cursor:none!important}
+.serif{font-family:'Instrument Serif','Times New Roman',serif}
+.mono{font-family:'DM Mono',ui-monospace,Menlo,monospace;text-transform:uppercase;letter-spacing:.04em}
+.wrap{max-width:1320px;margin:0 auto;padding-left:clamp(16px,4vw,44px);padding-right:clamp(16px,4vw,44px)}
+.cur{position:fixed;left:0;top:0;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--ac);pointer-events:none;z-index:90;opacity:0}
+.ring{position:fixed;left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;border:1px solid var(--fg);pointer-events:none;z-index:89;opacity:0;display:flex;align-items:center;justify-content:center;transition:width .3s,height .3s,margin .3s,background .3s,border-color .3s}
+.ring span{font-family:'DM Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--acfg);opacity:0;transition:opacity .2s}
+.ring.mid{width:68px;height:68px;margin:-34px 0 0 -34px;background:var(--acs);border-color:var(--ac)}
+.ring.big{width:108px;height:108px;margin:-54px 0 0 -54px;background:var(--ac);border-color:var(--ac)}
+.ring.big span{opacity:1}
+.hascur .cur,.hascur .ring{opacity:1}
+.nl{font-size:12px;text-decoration:none;padding:14px 0;display:inline-block;position:relative}
+.nl::after{content:"";position:absolute;left:0;right:0;bottom:10px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .35s}
+.nl:hover::after{transform:scaleX(1)}
+.up{display:inline-block;animation:up 1s cubic-bezier(.2,.8,.2,1) backwards}
+@keyframes up{from{transform:translateY(60%);opacity:0}to{transform:none;opacity:1}}
+.sec{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.3fr);gap:clamp(20px,4vw,64px);padding:clamp(32px,5vw,72px) 0;border-top:1px solid var(--line)}
+@media (max-width:820px){.sec{grid-template-columns:minmax(0,1fr)}}
+.sl{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.sl h2{margin:0;font-weight:400;font-size:clamp(27.2px,3vw,40.3px);line-height:.98;letter-spacing:-.04em;transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.sec:hover .sl h2{transform:translateX(10px)}
+.sb{display:flex;flex-direction:column;gap:22px}
+.sb p{margin:0;font-size:16.6px;line-height:1.55;color:var(--fg2);max-width:760px}
+.row{display:grid;grid-template-columns:150px 1fr;gap:14px;padding:13px 0;border-top:1px solid var(--line);font-size:16px;line-height:1.5;color:var(--fg2);transition:padding .3s,border-color .3s}
+.row:hover{padding-left:10px;border-color:var(--ac)}
+.row .mono{font-size:11px;padding-top:4px;color:var(--fg)}
+.shot{display:block;width:100%;border-radius:4px}
+.todo{font-family:'DM Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.04em;text-transform:uppercase;border:1px dashed var(--ac);color:var(--ac);padding:14px 16px;line-height:1.5}
+.pan{height:480px;overflow:hidden;border-radius:4px;background:#fff;position:relative}
+.pan img{width:100%;display:block;transition:transform 5s ease-in-out}
+.pan:hover img{transform:translateY(calc(-100% + 480px))}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:16px}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:16px;align-items:start}
+.sw{height:64px;border-radius:4px;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.sw:hover{transform:translateY(-10px) scaleY(1.12)}
+.track{height:8px;background:var(--line);border-radius:999px;overflow:hidden}
+.bar{height:100%;background:var(--ac);border-radius:999px;transform-origin:left center;transition:transform 1.3s cubic-bezier(.2,.8,.2,1) .2s}
+.rv.pre .bar{transform:scaleX(0)}
+.mq{display:flex;gap:56px;white-space:nowrap;animation:mq 34s linear infinite;width:max-content}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.next{display:flex;flex-direction:column;gap:10px;align-items:flex-start;text-decoration:none;padding:clamp(40px,6vw,88px) 0}
+.next .serif{font-size:clamp(24.2px,4.5vw,69.1px);line-height:.9;letter-spacing:-.05em;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.next:hover .serif{font-style:italic;transform:translateX(18px)}
+.rv{transition:opacity 1s cubic-bezier(.2,.8,.2,1),filter 1s cubic-bezier(.2,.8,.2,1)}
+.rv.pre{opacity:0;filter:blur(18px)}
+@media (prefers-reduced-motion:reduce){.up,.mq{animation:none}.rv.pre{opacity:1;filter:none}.pan img{transition:none}}
+.k1{--h:#f4ff7a}.k2{--h:#ffb37a}.k3{--h:#ff9ad5}.k4{--h:#8fd3ff}.k5{--h:#b9f27c}
+.sl{position:sticky;top:24px;align-self:start}
+@media (max-width:820px){.sl{position:static}}
+.big{margin:0;font-family:'Instrument Serif','Times New Roman',serif;font-size:clamp(24px,2.85vw,40.3px);line-height:1.04;letter-spacing:-.035em;color:var(--fg);max-width:900px}
+.big mark{background:var(--h,#f4ff7a);color:#0c0c0c;padding:0 .12em;border-radius:.1em}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:'DM Mono',ui-monospace,Menlo,monospace;text-transform:uppercase;letter-spacing:.04em;font-size:11px;min-height:44px;display:inline-flex;align-items:center;padding:0 16px;border-radius:999px;border:1px solid var(--line);text-decoration:none;transition:background-color .25s,color .25s,transform .25s,border-color .25s}
+.chip:hover{background:var(--fg);color:var(--bg);border-color:var(--fg);transform:translateY(-3px)}
+.find{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:12px}
+.fc{border:1px solid var(--line);border-radius:6px;padding:18px;display:flex;flex-direction:column;gap:10px;font-size:16px;line-height:1.45;color:var(--fg2);transition:transform .4s cubic-bezier(.2,.8,.2,1),background-color .3s,color .3s,border-color .3s}
+.fc{background:linear-gradient(var(--h),var(--h)) no-repeat left bottom / 100% 0;transition:background-size .5s cubic-bezier(.2,.8,.2,1),color .3s,border-color .3s}
+.fc:hover{background-size:100% 100%;color:#0c0c0c;border-color:var(--h)}
+.fc .mono{font-size:11px}
+.fc strong{font-family:'Instrument Serif','Times New Roman',serif;font-weight:400;font-size:20.8px;line-height:1.05;letter-spacing:-.03em;color:inherit}
+.cc{display:flex;flex-direction:column;transition:transform .4s cubic-bezier(.2,.8,.2,1),box-shadow .4s}
+.cc:hover{transform:translateY(-8px)}
+.cc .ci{height:170px;overflow:hidden;border-radius:6px}
+.cc .ci img{display:block;width:100%;height:100%;object-fit:cover;object-position:left top;transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
+.cc:hover .ci img{transform:scale(1.08)}
+.cc .cb{padding:16px 0 0;display:flex;flex-direction:column;gap:14px;font-size:15px;line-height:1.45;color:var(--fg2)}
+.cc h3{margin:0;font-family:'Instrument Serif','Times New Roman',serif;font-weight:400;font-size:25.6px;letter-spacing:-.03em;line-height:1;color:var(--fg)}
+.tag{display:inline-block;font-family:'DM Mono',ui-monospace,Menlo,monospace;text-transform:uppercase;letter-spacing:.04em;font-size:10px;padding:4px 8px;border-radius:999px;background:var(--h);color:#0c0c0c;margin-bottom:6px}
+.tag.out{background:transparent;border:1px solid var(--line);color:var(--fg)}
+.dec{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr));gap:clamp(18px,3vw,40px);align-items:center;padding:clamp(22px,3vw,40px) 0;border-top:1px solid var(--line)}
+.dec h3{margin:0 0 12px;font-family:'Instrument Serif','Times New Roman',serif;font-weight:400;font-size:clamp(22.4px,2.25vw,30.2px);line-height:1;letter-spacing:-.035em}
+.dec p{font-size:16px}
+.dimg{display:block;width:100%;border-radius:4px;transition:transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .5s}
+.dec:hover .dimg{transform:scale(1.04)}
+.vidw{border:1px solid var(--fg);border-radius:10px;overflow:hidden;background:#111}
+.vbar{display:flex;align-items:center;gap:7px;padding:10px 14px;background:var(--fg);color:var(--bg)}
+.vbar i{width:10px;height:10px;border-radius:50%;background:var(--bg);opacity:.55}
+.vid{display:block;width:100%;aspect-ratio:16 / 9;background:#111}
+.cta{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 22px;border-radius:999px;background:var(--fg);color:var(--bg);text-decoration:none;font-family:'DM Mono',ui-monospace,Menlo,monospace;text-transform:uppercase;letter-spacing:.04em;font-size:12px;transition:background-color .25s,color .25s,transform .25s}
+.cta:hover{background:var(--ac);color:var(--acfg);transform:translateY(-3px)}
+.float{animation:float 6s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-10px) rotate(1deg)}}
+@media (prefers-reduced-motion:reduce){.float{animation:none}}
+.sec{grid-template-columns:56px minmax(0,1fr)}
+@media (max-width:820px){.sec{grid-template-columns:minmax(0,1fr)}}
+.big{font-weight:400}
+.zoom{overflow:hidden;border-radius:6px}
+.zoom img{display:block;width:100%;transition:transform 1.6s cubic-bezier(.2,.8,.2,1)}
+.zoom:hover img{transform:scale(1.07)}
+.g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr));gap:14px}
+.cc .ci.tall{height:280px}
+.cc .ci.tall img{object-position:center top}
+.g5{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(150px,44%),1fr));gap:14px}
+.lift{display:block;width:100%;transition:transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s}
+.lift:hover{transform:translateY(-16px) scale(1.03)}
+.phv{max-width:320px;width:100%;margin:0 auto;border-radius:26px;overflow:hidden;background:#fff}
+.dark .dkinv{filter:invert(1) hue-rotate(180deg)}
+.root:not(.dark) .shot,.root:not(.dark) .dimg,.root:not(.dark) .zoom img,.root:not(.dark) .cc .ci img{mix-blend-mode:multiply}
+</style>
+
+<style>[hidden]{display:none!important}</style>
+</head>
+<body>
+
+<div class="root">
+<div class="cur" aria-hidden="true"></div>
+<div class="ring" aria-hidden="true"><span>Open</span></div>
+
+<header class="wrap mono" style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; padding-top: 10px">
+<a class="nl" href="index.html">← Index</a>
+<button type="button" class="tg2" data-click="toggle" aria-pressed="false" aria-label="Switch between light and dark mode"><span class="tl">Dark mode</span><span class="td">Light mode</span></button>
+<a class="nl" href="museum.html">Next: Shoreline Historical Museum →</a>
+</header>
+
+<section class="wrap" style="padding-top: clamp(40px,7vw,96px); padding-bottom: clamp(32px,5vw,64px); display: flex; flex-direction: column; gap: 28px">
+<div class="mono" style="font-size: 12px">02 / Project / Live product</div>
+<h1 class="serif" style="margin: 0; font-weight: 400; font-size: clamp(28.5px,6.19vw,95px); line-height: .82; letter-spacing: -0.055em; overflow: hidden; padding-bottom: .08em"><span class="up">GetAngie</span></h1>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr)); gap: clamp(20px,4vw,64px); align-items: end">
+<p class="serif" style="margin: 0; font-size: clamp(20.8px,2.25vw,28.8px); line-height: 1.08; letter-spacing: -0.03em">A date-night app for long-distance couples. In two months I rebuilt its photobooth, and people made more photo strips than in all the time before.</p>
+<div class="mono" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 16px; font-size: 11px; line-height: 1.6">
+<div><div style="color: var(--mut)">Role</div>Product Designer</div>
+<div><div style="color: var(--mut)">When</div>1 August to 29 September 2026</div>
+<div><div style="color: var(--mut)">How</div>Designed and shipped to production, built with AI coding tools</div>
+</div>
+</div>
+<div class="vidw" data-cur="Play">
+<div class="vbar" aria-hidden="true"><i></i><i></i><i></i><span class="mono" style="font-size: 10px; margin-left: 10px">getangie.com</span></div>
+<video class="vid" src="assets/getangie_demo.mp4" poster="assets/angie_poster.jpg" controls="controls" preload="metadata" aria-label="Demo of GetAngie, from the home page through the photobooth to the wallpaper editor" style="aspect-ratio: 16 / 10"></video>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap">
+<div class="mono" style="font-size: 11px; color: var(--mut)">Demo of the live product, from home page to lock screen</div>
+<a class="cta" href="https://getangie.com" data-cur="Visit">Open getangie.com ↗</a>
+</div>
+<nav class="chips" aria-label="Sections">
+<a class="chip" href="#why">Why</a>
+<a class="chip" href="#problem">Problem</a>
+<a class="chip" href="#bet">The bet</a>
+<a class="chip" href="#decisions">Decisions</a>
+<a class="chip" href="#results">Results</a>
+<a class="chip" href="#built">How it was built</a>
+</nav>
+</section>
+
+<div class="wrap">
+
+<section class="sec rv" id="why">
+<div class="sl"><span class="mono" style="font-size: 12px">01</span></div>
+<div class="sb">
+<h2 class="big k3">Long-distance couples can call each other. What they can't do is <mark>go on a date</mark>.</h2>
+<p>Angie started as one person's fix for that: a small hub of games and activities he made for his long-distance girlfriend, Angie. It grew into a product where two people open a shared room and do something together at the same second: a quiz, a drawing, a photobooth.</p>
+<p>The photobooth is the centre of it. It works like the four-cut photo booths couples visit in person, except the countdown fires on both screens at once, and the strip has both of you in it.</p>
+</div>
+</section>
+
+<section class="sec rv" id="problem">
+<div class="sl"><span class="mono" style="font-size: 12px">02</span></div>
+<div class="sb">
+<h2 class="big k2">The photobooth was what people came for and what they paid for. It had <mark>one layout</mark>.</h2>
+<p>When I joined, every strip was the same shape: four photos in a vertical column on a plain or patterned background. There were 27 themes and no way to put your photos inside artwork. A couple who had made one strip had little reason to make a second.</p>
+<p>That mattered to the business, because unlocking a strip is the main thing people buy. Of 1,519 orders in my two months, 1,031 were strip unlocks.</p>
+<div class="find">
+<div class="fc k2"><strong style="font-size: 43.2px">1</strong><span>strip layout</span></div>
+<div class="fc k4"><strong style="font-size: 43.2px">0</strong><span>frames with artwork around the photos</span></div>
+<div class="fc k3"><strong style="font-size: 43.2px">68%</strong><span>of orders are strip unlocks</span></div>
+</div>
+</div>
+</section>
+
+<section class="sec rv" id="bet">
+<div class="sl"><span class="mono" style="font-size: 12px">03</span></div>
+<div class="sb">
+<h2 class="big k4">The bet: give couples <mark>a reason to make another strip</mark>, and a reason to keep it.</h2>
+<div>
+<div class="row"><span class="mono">More to choose</span><span>If a strip can look like a bistro table, a bakery or a meme, tonight's strip is different from last week's.</span></div>
+<div class="row"><span class="mono">More to keep</span><span>A strip that ends up on your lock screen or your fridge is worth paying to unlock.</span></div>
+<div class="row"><span class="mono">More to do</span><span>New activities give a couple something to open the app for between photo nights.</span></div>
+</div>
+</div>
+</section>
+
+<section class="sec rv" id="decisions">
+<div class="sl"><span class="mono" style="font-size: 12px">04</span></div>
+<div class="sb">
+<h2 class="big k1">What I <mark>changed</mark>.</h2>
+<div>
+<div class="dec k3">
+<div><h3>Frames you sit <em>inside</em></h3><p>The biggest change. A frame is now artwork with transparent windows, so photos sit inside hearts, gilt picture frames or a camera screen. Frame themes went from 0 to 83, and the catalogue from 27 themes to 110 across 12 packs.</p></div>
+<div class="zoom" data-cur="Frames"><img src="assets/g_collage.jpg" alt="Pick a frame screen showing the Collage pack"></div>
+</div>
+<div class="dec k2">
+<div class="zoom" data-cur="Sizes"><img src="assets/g_size.jpg" alt="Pick a size screen: 4 cut, 2 by 2, 2 cut and Polaroid"></div>
+<div><h3>Four sizes, <em>not one</em></h3><p>The single vertical strip became four layouts: the classic 4 cut, a 2 × 2 card, a 2 cut and a Polaroid. Each is drawn as its own outline, so the choice reads without words.</p></div>
+</div>
+<div class="dec k4">
+<div><h3>Simple stays <em>first</em></h3><p>Packs are tabs with a count on each, and Simple is the first tab. Plain colours are what most people pick, so new artwork was added beside them, not in front of them.</p></div>
+<div class="zoom" data-cur="Simple"><img src="assets/g_simple.jpg" alt="Pick a frame screen showing the Simple pack of plain colours"></div>
+</div>
+<div class="dec k5">
+<div class="g2" style="gap: 10px">
+<div class="zoom" data-cur="Food"><img src="assets/g_food.jpg" alt="Food pack: Market, Sushi, Ramen, Grocery, Bakery"></div>
+<div class="zoom" data-cur="Memes"><img src="assets/g_memes.jpg" alt="Memes pack: Croc, Boom, Donkey, Hug"></div>
+</div>
+<div><h3>Packs with a <em>mood</em></h3><p>Collage, Travel, Food, Fall, Winter and Memes each give a couple a theme for the night. In the Memes pack the photo windows are circles and tilted Polaroids, so the frame decides how many photos you take.</p></div>
+</div>
+<div class="dec k1">
+<div><h3>One step <em>at a time</em></h3><p>The booth is a five-step path shown at the top of every screen: Frame, Shoot, Pick, Style, Done. Either partner can make the choice, Back works at every step, and a shot can be retaken before the strip is final.</p></div>
+<div class="zoom" data-cur="Booth"><img src="assets/g_booth.jpg" alt="Pick a booth screen with eight room styles"></div>
+</div>
+<div class="dec k3">
+<div class="g2" style="gap: 10px">
+<div class="zoom" data-cur="Wallpaper"><img src="assets/g_wall.jpg" alt="Wallpaper editor with a strip on a striped background"></div>
+<div class="zoom" data-cur="Decor"><img src="assets/g_walldecor.jpg" alt="Wallpaper editor decor drawer with flowers, bows and stickers"></div>
+</div>
+<div><h3>From strip to <em>lock screen</em></h3><p>A new wallpaper editor turns a finished strip into a phone lock screen. Shuffle gives a composed starting point, then fabric backgrounds, pressed flowers, stickers and your own words can be dragged and resized.</p></div>
+</div>
+<div class="dec k2">
+<div><h3>Six new <em>activities</em></h3><p>Letters to the Future, Digital Scrapbook, Birthday Gift Page, Truth or Dare, Color Match and Relationship Wrapped took the shelf from 15 activities to 21. Two that weren't earning their place, Fashion Show and the Date Creator, came off it on 20 August.</p></div>
+<div class="pan" data-cur="Scroll" style="height: 420px"><img src="assets/g_full.jpg" alt="The full Angie landing page" style="transition-duration: 12s"></div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="sec rv" id="results">
+<div class="sl"><span class="mono" style="font-size: 12px">05</span></div>
+<div class="sb">
+<h2 class="big k5">In two months, couples made <mark>more strips than in all the time before</mark>.</h2>
+<div class="find">
+<div class="fc k3"><strong style="font-size: 43.2px">129,951</strong><span>strips saved in the two months, against 110,134 before</span></div>
+<div class="fc k2"><strong style="font-size: 43.2px">20%</strong><span>of those strips used the new frame themes, which did not exist on 1 August</span></div>
+<div class="fc k4"><strong style="font-size: 43.2px">4.5×</strong><span>finished games: 102,004 against 29,222 before</span></div>
+<div class="fc k5"><strong style="font-size: 43.2px">4.4×</strong><span>Couples Hubs, from 615 to 2,734</span></div>
+</div>
+<div class="g2">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<div class="mono" style="font-size: 11px; color: var(--mut)">Strips saved per month</div>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="display: flex; justify-content: space-between; font-size: 15px"><span>August</span><span class="mono" style="font-size: 13px">62,049</span></div><div class="track"><div class="bar" style="width: 91.4%"></div></div></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="display: flex; justify-content: space-between; font-size: 15px"><span>September, to the 29th</span><span class="mono" style="font-size: 13px">67,902</span></div><div class="track"><div class="bar" style="width: 100%"></div></div></div>
+<div class="mono" style="font-size: 11px">Up 9.4% month on month</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px">
+<div class="mono" style="font-size: 11px; color: var(--mut)">Revenue, September against August</div>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="display: flex; justify-content: space-between; font-size: 15px"><span>US dollar sales</span><span class="mono" style="font-size: 13px">+21%</span></div><div class="track"><div class="bar" style="width: 70%"></div></div></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="display: flex; justify-content: space-between; font-size: 15px"><span>Indonesian rupiah sales</span><span class="mono" style="font-size: 13px">+30%</span></div><div class="track"><div class="bar" style="width: 100%"></div></div></div>
+<div class="mono" style="font-size: 11px">September counted to the 29th</div>
+</div>
+</div>
+<div>
+<div class="row"><span class="mono">Reach</span><span>Accounts grew from 384,150 to 902,897.</span></div>
+<div class="row"><span class="mono">Top frames</span><span>Darling, Scrapbook and Shutter led the new frames. Cream, black and pink still lead overall.</span></div>
+<div class="row"><span class="mono">New games</span><span>Truth or Dare reached 9,793 plays in its first two months.</span></div>
+</div>
+</div>
+</section>
+
+<section class="sec rv">
+<div class="sl"><span class="mono" style="font-size: 12px">06</span></div>
+<div class="sb">
+<h2 class="big k1">What the numbers <mark>don't prove</mark>.</h2>
+<div>
+<div class="row"><span class="mono">Shared credit</span><span>An ads funnel and an affiliate program launched in the same window. Growth in accounts and revenue is the team's, not only the redesign's.</span></div>
+<div class="row"><span class="mono">My clearest signal</span><span>Frame themes going from zero to a fifth of all strips, because nothing else changed there.</span></div>
+<div class="row"><span class="mono">Not measured</span><span>Retention. There is no record of active users yet, so I can't say how many couples came back.</span></div>
+<div class="row"><span class="mono">Not done</span><span>Interviews. These decisions came from usage data and from using the product, not from talking to couples.</span></div>
+</div>
+</div>
+</section>
+
+<section class="sec rv" id="built">
+<div class="sl"><span class="mono" style="font-size: 12px">07</span></div>
+<div class="sb">
+<h2 class="big k4">Shipping it myself meant <mark>every idea met real users</mark> within days.</h2>
+<p>I built these changes with AI coding tools, which let me design in the product instead of handing off mockups. A frame pack could go from a sketch to the live booth in an afternoon, and the strip counts the next morning showed whether couples were picking it.</p>
+</div>
+</section>
+
+<section class="sec rv">
+<div class="sl"><span class="mono" style="font-size: 12px">08</span></div>
+<div class="sb">
+<h2 class="big k3">Next: find out <mark>who comes back</mark>, and ask them why.</h2>
+<div>
+<div class="row"><span class="mono">Measure</span><span>Record sessions so returning couples can be counted.</span></div>
+<div class="row"><span class="mono">Ask</span><span>Interview couples who made five or more strips, and couples who made one and left.</span></div>
+<div class="row"><span class="mono">Test</span><span>Whether a frame pack on the first screen changes how many strips get unlocked.</span></div>
+</div>
+</div>
+</section>
+
+</div>
+
+<div style="overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 14px 0">
+<div class="mq serif" style="font-size: 24px; letter-spacing: -0.03em">
+<span>Frame</span><span style="color: var(--ac)">✺</span><span><em>Shoot</em></span><span style="color: var(--ac)">✺</span><span>Pick</span><span style="color: var(--ac)">✺</span><span><em>Style</em></span><span style="color: var(--ac)">✺</span><span>Done</span><span style="color: var(--ac)">✺</span>
+<span>Frame</span><span style="color: var(--ac)">✺</span><span><em>Shoot</em></span><span style="color: var(--ac)">✺</span><span>Pick</span><span style="color: var(--ac)">✺</span><span><em>Style</em></span><span style="color: var(--ac)">✺</span><span>Done</span><span style="color: var(--ac)">✺</span>
+</div>
+</div>
+
+<div class="wrap">
+<a class="next" href="museum.html" data-cur="Next">
+<span class="mono" style="font-size: 12px">Next project</span>
+<span class="serif">Shoreline Historical Museum →</span>
+</a>
+</div>
+
+</div>
+
+
+<script>
+class DCLogic{constructor(p){this.props=p||{};this.state={}}setState(o){Object.assign(this.state,typeof o==='function'?o(this.state):o);__render()}forceUpdate(){__render()}}
+</script>
+<script>
+
+class Component extends DCLogic {
+_setTheme(want) {
+var r = document.querySelector('.root');
+if (!r) return;
+var d = want === null ? !r.classList.contains('dark') : want;
+if (d) r.classList.add('dark'); else r.classList.remove('dark');
+try { document.body.style.background = d ? '#131313' : '#f6f5f1'; } catch (e) {}
+try { localStorage.setItem('cs-theme', d ? 'dark' : 'light'); } catch (e) {}
+var bs = document.querySelectorAll('.tg2');
+for (var i = 0; i < bs.length; i++) bs[i].setAttribute('aria-pressed', d ? 'true' : 'false');
+}
+componentDidMount() {
+try { if (localStorage.getItem('cs-theme') === 'dark') this._setTheme(true); } catch (e) {}
+try {
+var v = document.querySelector('.vid');
+if (v) {
+v.muted = true; v.loop = true; v.playsInline = true;
+if ('IntersectionObserver' in window) {
+this._vio = new IntersectionObserver(function (es) {
+es.forEach(function (e) { if (e.isIntersecting) { var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); } else { v.pause(); } });
+}, { threshold: 0.35 });
+this._vio.observe(v);
+}
+}
+} catch (e) {}
+try { this._reveal(); } catch (e) {}
+try { this._cursor(); } catch (e) {}
+}
+_reveal() {
+if (!('IntersectionObserver' in window)) return;
+var els = document.querySelectorAll('.rv');
+var vh = window.innerHeight || 800;
+var io = new IntersectionObserver(function (entries) {
+entries.forEach(function (e) {
+if (e.isIntersecting) { e.target.classList.remove('pre'); io.unobserve(e.target); }
+});
+}, { threshold: 0.06 });
+for (var i = 0; i < els.length; i++) {
+if (els[i].getBoundingClientRect().top > vh * 0.92) { els[i].classList.add('pre'); io.observe(els[i]); }
+}
+this._io = io;
+}
+_cursor() {
+var root = document.documentElement;
+var dot = document.querySelector('.cur');
+var ring = document.querySelector('.ring');
+if (!root || !dot || !ring || !window.matchMedia) return;
+if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+var lab = ring.querySelector('span');
+var x = -200, y = -200, rx = -200, ry = -200, on = false, self = this;
+this._mm = function (e) {
+x = e.clientX; y = e.clientY;
+if (!on) { on = true; rx = x; ry = y; root.classList.add('hascur'); }
+var t = e.target && e.target.closest ? e.target.closest('[data-cur]') : null;
+if (t) {
+if (lab) lab.textContent = t.getAttribute('data-cur');
+ring.classList.add('big'); ring.classList.remove('mid');
+} else {
+ring.classList.remove('big');
+var l = e.target && e.target.closest ? e.target.closest('a,button,.row,.sw,.fc,.cc,.dec,.lift') : null;
+if (l) ring.classList.add('mid'); else ring.classList.remove('mid');
+}
+};
+this._ml = function () { on = false; root.classList.remove('hascur'); };
+var tick = function () {
+var dx = x - rx, dy = y - ry;
+rx += dx * 0.16; ry += dy * 0.16;
+var big = ring.classList.contains('big');
+var sp = big ? 0 : Math.min(Math.sqrt(dx * dx + dy * dy) / 90, 0.55);
+var ang = big ? 0 : Math.atan2(dy, dx) * 180 / Math.PI;
+dot.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)';
+ring.style.transform = 'translate3d(' + rx + 'px,' + ry + 'px,0) rotate(' + ang + 'deg) scale(' + (1 + sp) + ',' + (1 - sp * 0.5) + ')';
+self._raf = requestAnimationFrame(tick);
+};
+document.addEventListener('mousemove', this._mm);
+document.documentElement.addEventListener('mouseleave', this._ml);
+this._raf = requestAnimationFrame(tick);
+}
+componentWillUnmount() {
+if (this._io) this._io.disconnect();
+if (this._vio) this._vio.disconnect();
+if (this._raf) cancelAnimationFrame(this._raf);
+if (this._mm) document.removeEventListener('mousemove', this._mm);
+if (this._ml) document.documentElement.removeEventListener('mouseleave', this._ml);
+}
+renderVals() {
+var self = this;
+if (!this._toggle) this._toggle = function () { self._setTheme(null); };
+return { toggle: this._toggle };
+}
+}
+
+</script>
+
+<script>
+var __c=new Component({});var __v={};
+function __render(){__v=__c.renderVals()||{};
+document.querySelectorAll('[data-if]').forEach(function(e){e.hidden=!__v[e.getAttribute('data-if')]});
+document.querySelectorAll('[data-class]').forEach(function(e){var v=__v[e.getAttribute('data-class')];if(v!=null)e.className=v});
+document.querySelectorAll('[data-pressed]').forEach(function(e){var v=__v[e.getAttribute('data-pressed')];if(v!=null)e.setAttribute('aria-pressed',v)});}
+document.addEventListener('click',function(ev){var t=ev.target.closest&&ev.target.closest('[data-click]');if(!t)return;var f=__v[t.getAttribute('data-click')];if(typeof f==='function')f(ev)});
+__render();__c.componentDidMount&&__c.componentDidMount();
+</script>
+</body>
+</html>
