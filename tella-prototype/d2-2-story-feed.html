@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>D2 Story Feed</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared/listing.css">
+  <style>
+    /* ---------- Search results (mobile Etsy app) ---------- */
+    .search-top { position: sticky; top: 0; z-index: 20; background: var(--bg); padding: 58px var(--pad) 0; }
+    .search-row { display: flex; align-items: center; gap: 10px; }
+    .search-row .back { width: 28px; flex: none; display: grid; place-items: center; }
+    .search-box { flex: 1; height: 46px; border: 1.5px solid var(--field); border-radius: 24px; display: flex; align-items: center; padding: 0 16px; font-size: 16.5px; }
+    .filter-btn { width: 46px; height: 46px; border-radius: 50%; border: 1.5px solid var(--field); display: grid; place-items: center; flex: none; }
+    .chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 14px calc(-1 * var(--pad)) 0; padding: 0 var(--pad) 12px; }
+    .chips::-webkit-scrollbar { display: none; }
+    .chips span { flex: none; background: var(--chip); border-radius: 10px; padding: 9px 13px; font-weight: 600; font-size: 14.5px; }
+    .sort-row { display: flex; align-items: center; justify-content: space-between; padding: 6px var(--pad) 10px; font-weight: 600; font-size: 15px; }
+    .sort-row .ship { display: flex; align-items: center; gap: 10px; }
+    .toggle { width: 52px; height: 30px; border-radius: 16px; border: 1.5px solid var(--ink); display: flex; align-items: center; justify-content: space-between; padding: 0 8px 0 4px; }
+    .toggle i { width: 20px; height: 20px; border-radius: 50%; background: var(--ink); display: block; }
+
+    /* Stories row */
+    .stories { padding: 10px 0 22px; }
+    .stories-head { display: flex; align-items: flex-end; justify-content: space-between; padding: 0 var(--pad) 10px; }
+    .stories-head h2 { margin: 0; font-size: 19px; font-weight: 600; letter-spacing: -.2px; }
+    .stories-head .sub { font-size: 13px; color: var(--ink-2); margin-top: 2px; }
+    .stories-head a { font-size: 14px; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 4px; }
+    .story-row { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; padding: 0 var(--pad); scroll-snap-type: x mandatory; scroll-padding: 0 var(--pad); }
+    .story-row::-webkit-scrollbar { display: none; }
+    .story-tile {
+      flex: none; width: 124px; aspect-ratio: 9 / 16; border-radius: 12px; overflow: hidden; position: relative;
+      scroll-snap-align: start; background: #2a2622; color: #fff; text-align: left;
+    }
+    .story-tile video, .story-tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .story-tile::after { content: ""; position: absolute; inset: 0; background: linear-gradient(transparent 50%, rgba(0,0,0,.65)); }
+    .story-tile .who { position: absolute; left: 8px; right: 8px; bottom: 8px; z-index: 1; font-size: 12px; font-weight: 600; line-height: 1.25; }
+    .story-tile .who img { width: 26px; height: 26px; border-radius: 50%; border: 2px solid #F1641E; margin-bottom: 4px; object-fit: cover; }
+    .story-tile .len { position: absolute; top: 7px; right: 7px; z-index: 1; font-size: 11px; font-weight: 700; background: rgba(0,0,0,.5); border-radius: 8px; padding: 2px 6px; display: flex; gap: 3px; align-items: center; }
+    .story-tile .tile-price { display: block; font-weight: 500; opacity: .85; }
+
+    /* Product grid */
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 12px; padding: 0 var(--pad); }
+    .item .img { position: relative; aspect-ratio: 4 / 5; border-radius: 12px; overflow: hidden; background: #E9E6E0; }
+    .item .img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .item .viewed { position: absolute; top: 8px; left: 8px; background: #fff; border-radius: 10px; padding: 3px 9px; font-size: 13px; font-weight: 600; }
+    .item .fav { position: absolute; top: 8px; right: 8px; width: 34px; height: 34px; border-radius: 50%; background: #fff; display: grid; place-items: center; }
+    .item .fav.on svg path { fill: #D52C2C; stroke: #D52C2C; }
+    .item .pager { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); display: flex; gap: 4px; align-items: center; padding: 4px 8px; border-radius: 10px; background: rgba(34,34,34,.6); }
+    .item .pager i { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,.7); }
+    .item .pager i:first-child { width: 14px; border-radius: 3px; background: #fff; }
+    .item .shop { display: flex; gap: 8px; align-items: center; margin-top: 8px; font-size: 13px; }
+    .item .shop img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; flex: none; }
+    .item .shop b { display: flex; align-items: center; gap: 3px; font-size: 13.5px; }
+    .item .shop b .star-seller { width: 14px; height: 14px; }
+    .item .shop span { color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+    .item .sw { display: flex; gap: 4px; margin-top: 6px; align-items: center; font-size: 12px; color: var(--ink-2); }
+    .item .sw i { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(0,0,0,.2); }
+    .item .t { font-size: 14.5px; margin-top: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.35; }
+    .item .best { color: #8A3FD1; font-size: 14px; }
+    .item .p { font-weight: 700; font-size: 16px; margin-top: 2px; }
+    .item .ad { font-size: 12.5px; color: var(--ink-2); }
+
+    /* ---------- Reels viewer ---------- */
+    .reels { position: fixed; inset: 0; z-index: 60; max-width: 480px; margin: 0 auto; background: #000; color: #fff; display: none; }
+    .reels.open { display: block; }
+    .reels-feed { height: 100%; overflow-y: auto; scroll-snap-type: y mandatory; scrollbar-width: none; }
+    .reels-feed::-webkit-scrollbar { display: none; }
+    .reel { height: 100%; scroll-snap-align: start; scroll-snap-stop: always; position: relative; overflow: hidden; }
+    .slides { display: flex; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+    .slides::-webkit-scrollbar { display: none; }
+    .slide { flex: none; width: 100%; height: 100%; scroll-snap-align: start; position: relative; }
+    .slide video, .slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .reel::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(rgba(0,0,0,.45), transparent 22%, transparent 55%, rgba(0,0,0,.75)); }
+
+    .reels-top { position: absolute; top: 0; left: 0; right: 0; z-index: 5; padding: 56px var(--pad) 0; display: flex; align-items: center; gap: 12px; pointer-events: none; }
+    .reels-top > * { pointer-events: auto; }
+    .reels-top .back, .reels-top .mute { width: 36px; height: 36px; display: grid; place-items: center; color: #fff; }
+    .reels-top .ttl { flex: 1; font-weight: 600; font-size: 16px; }
+    .reels-top .ttl span { font-weight: 500; opacity: .75; }
+    .reel-bars { position: absolute; top: 102px; left: var(--pad); right: var(--pad); z-index: 4; display: flex; gap: 4px; }
+    .reel-bars i { flex: 1; height: 3px; border-radius: 2px; background: rgba(255,255,255,.35); }
+    .reel-bars i.on { background: #fff; }
+    .slide-tag { position: absolute; top: 116px; left: var(--pad); z-index: 4; font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; background: rgba(255,255,255,.92); color: #A0522D; border-radius: 10px; padding: 3px 9px; }
+    .swipe-hint { position: absolute; right: 70px; top: 50%; z-index: 4; font-size: 12.5px; font-weight: 600; background: rgba(0,0,0,.45); border-radius: 14px; padding: 5px 10px; display: flex; gap: 4px; align-items: center; pointer-events: none; }
+
+    .rail { position: absolute; right: 10px; bottom: 150px; z-index: 5; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+    .rail button { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 12.5px; font-weight: 600; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.5); }
+    .rail svg { filter: drop-shadow(0 1px 3px rgba(0,0,0,.4)); }
+    .rail .liked svg path { fill: #FF3B5C; stroke: #FF3B5C; }
+    .rail .saved svg path { fill: #fff; }
+    .rail .avatar { position: relative; margin-bottom: 6px; }
+    .rail .avatar img { width: 46px; height: 46px; border-radius: 50%; border: 2px solid #fff; object-fit: cover; display: block; }
+    .rail .avatar .plus { position: absolute; left: 50%; bottom: -9px; transform: translateX(-50%); width: 20px; height: 20px; border-radius: 50%; background: #F1641E; display: grid; place-items: center; font-size: 15px; font-weight: 700; line-height: 1; }
+    .rail .avatar.following .plus { background: #fff; color: #222; font-size: 12px; }
+
+    .reel-info { position: absolute; left: var(--pad); right: 76px; bottom: 26px; z-index: 5; }
+    .reel-info .name { font-weight: 700; font-size: 15.5px; display: flex; align-items: center; gap: 6px; }
+    .reel-info .name .star-seller { width: 16px; height: 16px; }
+    .reel-info .name small { font-weight: 500; opacity: .75; font-size: 13px; }
+    .reel-info .cap { font-size: 14.5px; line-height: 1.4; margin: 6px 0 12px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .reel-info .cap.open { -webkit-line-clamp: unset; }
+    .reel-info .cap b { font-weight: 600; opacity: .8; cursor: pointer; }
+    .product-chip { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,.95); color: var(--ink); border-radius: 14px; padding: 8px; width: 100%; text-align: left; }
+    .product-chip img { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; flex: none; }
+    .product-chip .pt { flex: 1; min-width: 0; font-size: 13.5px; line-height: 1.3; }
+    .product-chip .pt span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .product-chip .pt b { font-size: 14.5px; }
+    .product-chip .go { flex: none; background: var(--ink); color: #fff; border-radius: 18px; padding: 8px 12px; font-weight: 600; font-size: 13.5px; }
+
+    .toast { position: fixed; left: 50%; bottom: 120px; transform: translate(-50%, 20px); z-index: 80; background: rgba(34,34,34,.92); color: #fff; font-size: 14px; font-weight: 500; padding: 9px 14px; border-radius: 18px; opacity: 0; transition: all .25s; pointer-events: none; white-space: nowrap; }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+  </style>
+</head>
+<body class="tabs-visible">
+  <div id="app"></div>
+  <div class="reels" id="reels"></div>
+  <div class="toast" id="toast"></div>
+  <script type="module">
+    // DESIGN DECISION 2 · PROTOTYPE 2: Story feed (the story finds the buyer)
+    // Searching "ceramic" shows a row of 9:16 maker stories above the usual results. Tapping one opens a
+    // Reels-style viewer: swipe up/down between makers, left/right through a story's clips or photos,
+    // like / comment / share / save, and "View item" goes to the listing. The HollowPineClay story tells
+    // the decision 1 Labor story (same three stages as prototypes 1 and 3), so only the discovery point changes.
+    // Clips: Mixkit free stock footage (Mixkit License), standing in for sellers' own phone videos.
+    import { renderListing, statusBar, tabBar, icons } from "./shared/listing.js";
+
+    const [{ listing: BOWL, seller: SELLER }, { listings }] = await Promise.all([
+      fetch("data/product.json").then(r => r.json()),
+      fetch("data/listings.json").then(r => r.json()),
+    ]);
+    const byId = Object.fromEntries(listings.map(l => [l.id, l]));
+    const ph = (id, w = 800) => `https://images.unsplash.com/photo-${id}?w=${w}&q=80&auto=format&fit=crop`;
+    const vid = id => ({ type: "video", src: `https://assets.mixkit.co/videos/${id}/${id}-720.mp4`, low: `https://assets.mixkit.co/videos/${id}/${id}-360.mp4`, poster: `https://assets.mixkit.co/videos/${id}/${id}-thumb-360-0.jpg` });
+    const img = src => ({ type: "photo", src });
+
+    // The story feed. First story = our bowl (links to its listing); others are other makers in the results.
+    const STORIES = [
+      { shop: SELLER.shopName, maker: SELLER.owner, avatar: SELLER.avatar, star: true, length: "0:45", likes: 2481, comments: 136,
+        product: { title: BOWL.title, price: BOWL.price, img: BOWL.images[0], linked: true },
+        caption: "What goes into one bowl: three stages and about three weeks.",
+        slides: [
+          { ...vid(1974), tag: "Stage 1 of 3 · 25 min", text: "Throwing on the wheel: I wedge 2 lbs of red stoneware by hand, then throw and shape each bowl on the wheel." },
+          { ...vid(32170), tag: "Stage 2 of 3 · 40 min", text: "Cutting the facets: Once it's leather-hard, I cut the facets with a wire and carve the foot, then dry it for a week." },
+          { ...vid(13251), tag: "Stage 3 of 3 · 20 hrs", text: "Glazing & two firings: Each bowl is dipped in glaze by hand and fired twice in my kiln, the last time to 2,232°F." },
+        ] },
+      { shop: byId["celadon-green-bowl"].shop.name, maker: byId["celadon-green-bowl"].maker.name, avatar: byId["celadon-green-bowl"].maker.photo, star: true, length: "0:18", likes: 5120, comments: 241,
+        product: { title: byId["celadon-green-bowl"].title, price: byId["celadon-green-bowl"].price, img: byId["celadon-green-bowl"].images[0] },
+        caption: byId["celadon-green-bowl"].maker.story, slides: [vid(9765)] },
+      { shop: byId["matte-black-ramen-bowl"].shop.name, maker: byId["matte-black-ramen-bowl"].maker.name, avatar: byId["matte-black-ramen-bowl"].maker.photo, star: true, length: "0:22", likes: 3307, comments: 188,
+        product: { title: byId["matte-black-ramen-bowl"].title, price: byId["matte-black-ramen-bowl"].price, img: byId["matte-black-ramen-bowl"].images[0] },
+        caption: byId["matte-black-ramen-bowl"].maker.story, slides: [vid(1973)] },
+      { shop: byId["abstract-painted-mug"].shop.name, maker: byId["abstract-painted-mug"].maker.name, avatar: byId["abstract-painted-mug"].maker.photo, star: false, length: "4 photos", likes: 912, comments: 47,
+        product: { title: byId["abstract-painted-mug"].title, price: byId["abstract-painted-mug"].price, img: byId["abstract-painted-mug"].images[0] },
+        caption: byId["abstract-painted-mug"].maker.story,
+        slides: [img(ph("1780736309211-85721a0702c2")), img(ph("1771523351104-03d9c2cc347c")), img(ph("1781150363945-51a8d892b2bf")), img(ph("1763824372146-95e9b6d90926"))] },
+      { shop: byId["terracotta-bud-vases"].shop.name, maker: byId["terracotta-bud-vases"].maker.name, avatar: byId["terracotta-bud-vases"].maker.photo, star: true, length: "0:30", likes: 1764, comments: 92,
+        product: { title: byId["terracotta-bud-vases"].title, price: byId["terracotta-bud-vases"].price, img: byId["terracotta-bud-vases"].images[0] },
+        caption: byId["terracotta-bud-vases"].maker.story, slides: [vid(30186)] },
+    ];
+
+    const money = n => `$${n.toFixed(2)}`;
+    const k = n => n >= 1000 ? `${(n / 1000).toFixed(1).replace(/\.0$/, "")}k` : `${n}`;
+    const ic = {
+      back: `<svg width="22" height="22" viewBox="0 0 24 24"><path d="M15 4 7 12l8 8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      sliders: `<svg width="22" height="22" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M3 6h9M17 6h4M3 12h4M12 12h9M3 18h11M19 18h2"/><circle cx="14.5" cy="6" r="2.4" fill="currentColor"/><circle cx="9.5" cy="12" r="2.4" fill="currentColor"/><circle cx="16.5" cy="18" r="2.4" fill="currentColor"/></svg>`,
+      sort: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M3 8l4-4 4 4M17 20V4M13 16l4 4 4-4"/></svg>`,
+      play: `<svg width="10" height="10" viewBox="0 0 24 24"><path fill="currentColor" d="M6 4v16l14-8z"/></svg>`,
+      photos: `<svg width="11" height="11" viewBox="0 0 24 24"><rect x="3" y="5" width="14" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M7 3h12a2 2 0 0 1 2 2v12" fill="none" stroke="currentColor" stroke-width="2.6"/></svg>`,
+      heart: `<svg width="32" height="32" viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-9.8-9C.6 8.2 2.5 4.6 6 4.3c2.2-.2 4 .9 6 3.1 2-2.2 3.8-3.3 6-3.1 3.5.3 5.4 3.9 3.8 7.2-2.3 4.4-9.8 9-9.8 9z" fill="#fff" stroke="#fff" stroke-width="1"/></svg>`,
+      comment: `<svg width="32" height="32" viewBox="0 0 24 24"><path d="M12 3C6.5 3 2.5 6.6 2.5 11c0 2.4 1.2 4.6 3.2 6.1L5 21l4.3-2.3c.9.2 1.8.3 2.7.3 5.5 0 9.5-3.6 9.5-8S17.5 3 12 3z" fill="#fff"/><circle cx="8" cy="11" r="1.3" fill="#222"/><circle cx="12" cy="11" r="1.3" fill="#222"/><circle cx="16" cy="11" r="1.3" fill="#222"/></svg>`,
+      share: `<svg width="30" height="30" viewBox="0 0 24 24"><path d="M14 4v4C7 9 4 13.5 3 19c2.5-3.3 5.8-5 11-5v4l7-7z" fill="#fff"/></svg>`,
+      save: `<svg width="28" height="28" viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4.5L6 21z" fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/></svg>`,
+      muted: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="m16 9 5 6M21 9l-5 6"/></svg>`,
+      sound: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>`,
+      chev: `<svg width="14" height="14" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      favOutline: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-width="2.4" d="M12 20s-7-4.3-9.3-8.6C1.2 8.4 2.9 5 6.2 4.7c2.1-.2 3.8.9 5.8 3.1 2-2.2 3.7-3.3 5.8-3.1 3.3.3 5 3.7 3.5 6.7C19 15.7 12 20 12 20z"/></svg>`,
+    };
+
+    const toastEl = document.getElementById("toast");
+    let toastT;
+    function toast(msg) {
+      toastEl.textContent = msg; toastEl.classList.add("show");
+      clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove("show"), 1800);
+    }
+
+    // ---------- Search results ----------
+    function gridItem(l, i) {
+      const shopName = l.shop.name ?? l.shop;
+      return `
+        <div class="item">
+          <div class="img"><img src="${l.img}" alt="">${l.viewed ? `<span class="viewed">Viewed</span>` : ""}
+            <button class="fav ${l.fav ? "on" : ""}" aria-label="Favorite">${ic.favOutline}</button>
+            <span class="pager"><i></i><i></i><i></i><i></i></span></div>
+          <div class="shop"><img src="${l.avatar}" alt=""><div style="min-width:0"><b>${shopName}${l.star ? icons.starSeller : ""}</b><span>by ${l.maker.split(" ")[0]} · ${l.rating.toFixed(1)} ★ (${k(l.reviews)})</span></div></div>
+          ${l.colors?.length ? `<div class="sw">${l.colors.slice(0, 4).map(c => `<i style="background:${c}"></i>`).join("")}${l.colors.length > 4 ? `+${l.colors.length - 4}` : ""}</div>` : ""}
+          <div class="t">${l.title}</div>
+          ${l.badge === "Bestseller" ? `<div class="best">Bestseller</div>` : ""}
+          <div class="p">${money(l.price)}</div>
+          ${l.ad ? `<div class="ad">Ad by Etsy Seller</div>` : ""}
+        </div>`;
+    }
+
+    function renderSearch() {
+      const results = [
+        { title: BOWL.title, price: BOWL.price, img: BOWL.images[0], avatar: SELLER.avatar, shop: SELLER.shopName, maker: SELLER.owner, star: true,
+          rating: 4.9, reviews: 3500, colors: ["#FFFFFF", "#C9806A", "#8C8C8C", "#D9453B", "#3E9B4F", "#E2B04A"], viewed: true, fav: true, ad: true },
+        ...listings.filter(l => l.id !== "speckled-cereal-bowl").map(l => ({
+          title: l.title, price: l.price, img: l.images[0], avatar: l.maker.photo, shop: l.shop.name, maker: l.maker.name, star: l.shop.starSeller,
+          rating: l.rating, reviews: l.reviewCount, colors: l.colors, badge: l.badge, ad: l.isAd })),
+      ];
+      const tile = (s, i) => `
+        <button class="story-tile" data-story="${i}" aria-label="${s.shop} story">
+          ${s.slides[0].type === "video"
+            ? `<video muted playsinline loop preload="metadata" poster="${s.slides[0].poster}"><source src="${s.slides[0].low}" type="video/mp4"></video>`
+            : `<img src="${s.slides[0].src.replace(/w=\d+/, "w=300")}" alt="">`}
+          <span class="len">${s.slides[0].type === "video" ? ic.play : ic.photos}${s.length}</span>
+          <span class="who"><img src="${s.avatar}" alt="">${s.shop}<span class="tile-price">${money(s.product.price)}</span></span>
+        </button>`;
+
+      document.getElementById("app").innerHTML = `
+        ${statusBar()}
+        <div class="search-top">
+          <div class="search-row">
+            <button class="back" aria-label="Back">${ic.back}</button>
+            <div class="search-box">ceramic</div>
+            <button class="filter-btn" aria-label="Filters">${ic.sliders}</button>
+          </div>
+          <div class="chips"><span>Ships from US</span><span>Etsy's Picks</span><span>Vintage</span><span>Under $50</span><span>Handmade</span></div>
+        </div>
+        <div class="sort-row"><span style="display:flex;gap:6px;align-items:center">Best match ${ic.sort}</span><span class="ship">Add shipping <span class="toggle"><i></i>✕</span></span></div>
+        <section class="stories">
+          <div class="stories-head">
+            <div><h2>Stories from makers</h2><div class="sub">See how these ceramics are made</div></div>
+            <a href="#" data-story="0">Watch all ${ic.chev}</a>
+          </div>
+          <div class="story-row">${STORIES.map(tile).join("")}</div>
+        </section>
+        <section class="grid">${results.map(gridItem).join("")}</section>
+        <div style="height:110px"></div>
+        ${tabBar("Shop")}`;
+
+      document.querySelectorAll("[data-story]").forEach(el => el.addEventListener("click", e => { e.preventDefault(); location.hash = `stories/${el.dataset.story}`; }));
+      document.querySelectorAll(".item .fav").forEach(b => b.addEventListener("click", () => b.classList.toggle("on")));
+      document.querySelectorAll(".item").forEach((el, i) => el.querySelector(".img img").addEventListener("click", () => {
+        if (i === 0) location.hash = "listing"; else toast("In this prototype, only the HollowPineClay bowl is linked");
+      }));
+
+      // Preview the stories that are on screen, like Instagram does
+      const io = new IntersectionObserver(es => es.forEach(e => {
+        const v = e.target.querySelector("video");
+        if (v) e.isIntersecting ? v.play().catch(() => {}) : v.pause();
+      }), { root: document.querySelector(".story-row"), threshold: 0.6 });
+      document.querySelectorAll(".story-tile").forEach(t => io.observe(t));
+    }
+
+    // ---------- Reels viewer ----------
+    const reelsEl = document.getElementById("reels");
+    let muted = true;
+
+    function reelHTML(s, i) {
+      const multi = s.slides.length > 1;
+      return `
+        <article class="reel" data-reel="${i}">
+          <div class="slides">${s.slides.map(sl => `
+            <div class="slide" data-tag="${sl.tag || ""}" data-text="${sl.text || ""}">
+              ${sl.type === "video"
+                ? `<video muted playsinline loop preload="metadata" poster="${sl.poster}"><source src="${sl.src}" type="video/mp4"><source src="${sl.low}" type="video/mp4"></video>`
+                : `<img src="${sl.src}" alt="">`}
+            </div>`).join("")}
+          </div>
+          ${multi ? `<div class="reel-bars">${s.slides.map((_, j) => `<i class="${j === 0 ? "on" : ""}"></i>`).join("")}</div>` : ""}
+          ${s.slides[0].tag ? `<span class="slide-tag">${s.slides[0].tag}</span>` : ""}
+          ${multi ? `<span class="swipe-hint">Swipe ${ic.chev}</span>` : ""}
+          <div class="rail">
+            <button class="avatar" data-act="follow" aria-label="Follow ${s.shop}"><img src="${s.avatar}" alt=""><span class="plus">+</span></button>
+            <button data-act="like">${ic.heart}<span>${k(s.likes)}</span></button>
+            <button data-act="comment">${ic.comment}<span>${s.comments}</span></button>
+            <button data-act="save">${ic.save}<span>Save</span></button>
+            <button data-act="share">${ic.share}<span>Share</span></button>
+          </div>
+          <div class="reel-info">
+            <div class="name">${s.shop}${s.star ? icons.starSeller : ""}<small>· ${s.maker}</small></div>
+            <div class="cap">${s.slides[0].text || s.caption} <b data-act="more">more</b></div>
+            <button class="product-chip" data-act="view">
+              <img src="${s.product.img.replace(/w=\d+/, "w=120")}" alt="">
+              <span class="pt"><span>${s.product.title}</span><b>${money(s.product.price)}</b></span>
+              <span class="go">View item</span>
+            </button>
+          </div>
+        </article>`;
+    }
+
+    function openReels(start) {
+      reelsEl.innerHTML = `
+        <div class="reels-feed">${STORIES.map(reelHTML).join("")}</div>
+        <div class="reels-top">
+          <button class="back" aria-label="Back to results">${ic.back}</button>
+          <div class="ttl">Stories <span>· "ceramic"</span></div>
+          <button class="mute" aria-label="Sound">${muted ? ic.muted : ic.sound}</button>
+        </div>`;
+      reelsEl.classList.add("open");
+      document.body.style.overflow = "hidden";
+      const feed = reelsEl.querySelector(".reels-feed");
+      feed.scrollTop = start * feed.clientHeight;
+
+      reelsEl.querySelector(".reels-top .back").addEventListener("click", () => history.back());
+      const muteBtn = reelsEl.querySelector(".mute");
+      muteBtn.addEventListener("click", () => {
+        muted = !muted;
+        muteBtn.innerHTML = muted ? ic.muted : ic.sound;
+        reelsEl.querySelectorAll("video").forEach(v => v.muted = muted);
+      });
+
+      reelsEl.querySelectorAll(".reel").forEach(reel => {
+        const s = STORIES[+reel.dataset.reel];
+        const slides = reel.querySelector(".slides"), bars = [...reel.querySelectorAll(".reel-bars i")];
+        const tag = reel.querySelector(".slide-tag"), cap = reel.querySelector(".cap");
+        slides.addEventListener("scroll", () => {
+          const j = Math.round(slides.scrollLeft / slides.clientWidth);
+          bars.forEach((b, n) => b.classList.toggle("on", n <= j));
+          const sl = slides.children[j];
+          if (tag && sl.dataset.tag) tag.textContent = sl.dataset.tag;
+          if (sl.dataset.text) cap.innerHTML = `${sl.dataset.text} <b data-act="more">more</b>`;
+          reel.querySelector(".swipe-hint")?.remove();
+          playActive();
+        }, { passive: true });
+        reel.addEventListener("click", e => {
+          const act = e.target.closest("[data-act]")?.dataset.act;
+          if (!act) return;
+          const btn = e.target.closest("[data-act]");
+          if (act === "like") {
+            const on = btn.classList.toggle("liked");
+            btn.querySelector("span").textContent = k(s.likes + (on ? 1 : 0));
+          } else if (act === "save") { btn.classList.toggle("saved"); toast(btn.classList.contains("saved") ? "Saved to Favorites" : "Removed from Favorites"); }
+          else if (act === "share") toast("Link copied");
+          else if (act === "comment") toast(`${s.comments} comments`);
+          else if (act === "follow") { btn.classList.add("following"); btn.querySelector(".plus").textContent = "✓"; toast(`Following ${s.shop}`); }
+          else if (act === "more") cap.classList.toggle("open");
+          else if (act === "view") s.product.linked ? (location.hash = "listing") : toast("In this prototype, only the HollowPineClay bowl is linked");
+        });
+      });
+
+      // Only the story on screen plays; everything else pauses
+      function playActive() {
+        const r = Math.round(feed.scrollTop / feed.clientHeight);
+        reelsEl.querySelectorAll(".reel").forEach((reel, i) => {
+          const slides = reel.querySelector(".slides");
+          const j = Math.round(slides.scrollLeft / slides.clientWidth);
+          reel.querySelectorAll(".slide").forEach((sl, n) => {
+            const v = sl.querySelector("video");
+            if (!v) return;
+            v.muted = muted;
+            if (i === r && n === j) v.play().catch(() => {}); else v.pause();
+          });
+        });
+      }
+      feed.addEventListener("scroll", playActive, { passive: true });
+      playActive();
+    }
+
+    function closeReels() {
+      reelsEl.querySelectorAll("video").forEach(v => v.pause());
+      reelsEl.classList.remove("open");
+      reelsEl.innerHTML = "";
+      document.body.style.overflow = "";
+    }
+
+    // ---------- Routing: results → stories → listing ----------
+    let view = null;
+    async function route() {
+      const h = location.hash.slice(1);
+      if (h === "listing") {
+        closeReels();
+        await renderListing();
+        document.querySelector(".top-actions [aria-label=Back]")?.addEventListener("click", () => history.back());
+        window.scrollTo(0, 0);
+        view = "listing";
+        return;
+      }
+      if (view !== "search") { renderSearch(); view = "search"; }
+      if (h.startsWith("stories/")) openReels(+h.split("/")[1] || 0);
+      else closeReels();
+    }
+    window.addEventListener("hashchange", route);
+    route();
+  </script>
+</body>
+</html>

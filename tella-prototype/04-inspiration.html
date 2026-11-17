@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Prototype 3 Inspiration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Caveat:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared/listing.css">
+</head>
+<body>
+  <div id="app"></div>
+  <script type="module">
+    // PROTOTYPE 3 · INSPIRATION: Why did the maker create it this way?
+    // A short first-person story paired with sketches and a product photo.
+    import { renderListing } from "./shared/listing.js";
+    import { storyCard, wireStory, photo } from "./shared/story.js";
+    import { memorySketch, shapeSketch } from "./shared/sketches.js";
+
+    const items = [
+      { title: "Sunday noodles", media: memorySketch, chip: "From my sketchbook",
+        caption: "My grandpa served noodles every Sunday in one heavy, chipped bowl. I wanted to make that bowl for someone else." },
+      { title: "Drawing the shape", media: shapeSketch, chip: "From my sketchbook",
+        caption: "I sketched it wide enough to rest chopsticks on the rim and deep enough to keep the broth hot." },
+      { title: "October colors", media: `<img src="${photo("1762922425155-d03e6997e33e")}" alt="The finished bowls">`, chip: "The finished bowls",
+        caption: "The sage, rust and charcoal glazes are the Blue Ridge in October, the view outside my studio." },
+    ];
+    const story = {
+      mode: "story", items,
+      eyebrow: "Why I made it",
+      heading: "“I made the bowl I remember.”",
+      media: i => items[i].media,
+      chip: i => items[i].chip,
+    };
+
+    await renderListing({ layout: "story-first", slots: { story: storyCard(story) } });
+    wireStory(story);
+  </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Prototype 2 Craftsmanship</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Caveat:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared/listing.css">
+</head>
+<body>
+  <div id="app"></div>
+  <script type="module">
+    // PROTOTYPE 2 · CRAFT: What makes it special?
+    // Three static close-up photos of the product, one per detail. Swipe or use the arrows to move between them.
+    import { renderListing } from "./shared/listing.js";
+    import { storyCard, wireStory } from "./shared/story.js";
+
+    // Close-ups cropped from the product's own main photo (original is 6000×4000).
+    const crop = rect => `https://images.unsplash.com/photo-1762922425155-d03e6997e33e?rect=${rect}&w=800&h=600&fit=crop&q=80&auto=format`;
+    const items = [
+      { title: "Hand-cut facets", img: crop("3040,2470,1200,900"),
+        caption: "I cut each facet with a wire while the clay is soft, so no two bowls have quite the same angles." },
+      { title: "Two-layer glaze", img: crop("1920,1750,1200,900"),
+        caption: "Sage is dipped over a charcoal base. Where it thins at the edges, the darker layer shows through." },
+      { title: "Thin, rounded rim", img: crop("3000,1750,1200,900"),
+        caption: "Rims are thrown to about 3 mm, then smoothed with a damp sponge so they feel soft on your lips." },
+    ];
+    const story = {
+      mode: "detail", items,
+      eyebrow: "Look closer",
+      heading: "3 details you might miss",
+      media: i => `<img src="${items[i].img}" alt="Close-up: ${items[i].title}">`,
+      chip: i => `Detail ${i + 1} of 3 · ${items[i].title}`,
+    };
+
+    await renderListing({ layout: "story-first", slots: { story: storyCard(story) } });
+    wireStory(story);
+  </script>
+</body>
+</html>

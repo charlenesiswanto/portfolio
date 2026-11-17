@@ -1,0 +1,172 @@
+{
+  "_meta": {
+    "description": "Mock product page for the mobile listing prototype. Shop, seller and reviews are fictional; photos from Unsplash (free license)."
+  },
+  "listing": {
+    "id": "ramen-bowl-hollowpine",
+    "badge": "Bestseller",
+    "price": 67.0,
+    "title": "Handmade Ceramic Bowl for Ramen or Pho - Unique Stoneware Dinnerware by HollowPineClay",
+    "images": [
+      "https://images.unsplash.com/photo-1762922425155-d03e6997e33e?w=900&q=80&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1577576223085-3eb295cd414f?w=900&q=80&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1785895102471-a421598c2fad?w=900&q=80&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1590605103416-230704277b05?w=900&q=80&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1771523350533-a831d1f703a7?w=900&q=80&auto=format&fit=crop"
+    ],
+    "videoIndex": 1,
+    "estDelivery": "Oct 27–Nov 14",
+    "shipping": "Free",
+    "ratingsCount": "3.5k",
+    "shopRating": 4.9,
+    "options": [
+      {
+        "label": "Glaze Color",
+        "choices": [
+          "Sea Green",
+          "Honey",
+          "Rust",
+          "Charcoal",
+          "Speckled White"
+        ]
+      },
+      {
+        "label": "Style",
+        "choices": [
+          "Ramen bowl (32 oz)",
+          "Pho bowl (40 oz)",
+          "Set of 2"
+        ]
+      }
+    ],
+    "itemDetails": [
+      {
+        "icon": "material",
+        "label": "Material",
+        "value": "Ceramic"
+      },
+      {
+        "icon": "order",
+        "label": "Made to order",
+        "value": "Yes"
+      },
+      {
+        "icon": "material",
+        "label": "Materials",
+        "value": "Red stoneware clay"
+      }
+    ],
+    "description": "Handmade Ramen Bowl. This listing is for one handmade ramen bowl, thrown from iron-red stoneware clay. Each bowl is unique, with slight variations in shape, glaze and speckling. That's part of the charm of handmade pottery.\n\nSize: about 7.5\" wide and 3.5\" tall, holds 32 oz.\n\nCare: Dishwasher and microwave safe. Avoid sudden temperature changes.\n\nBecause each bowl is made to order, please allow 2–3 weeks for it to be made before it ships.",
+    "shippingPolicies": [
+      {
+        "icon": "calendar",
+        "text": "Estimated delivery: Oct 27-Nov 14"
+      },
+      {
+        "icon": "truck",
+        "text": "Only ships to United States from North Carolina."
+      },
+      {
+        "icon": "returns",
+        "text": "Returns & exchanges accepted"
+      }
+    ]
+  },
+  "reviews": {
+    "average": 5.0,
+    "count": 440,
+    "breakdown": [
+      {
+        "label": "Item quality",
+        "value": 5.0
+      },
+      {
+        "label": "Shipping",
+        "value": 4.9
+      },
+      {
+        "label": "Customer service",
+        "value": 4.9
+      }
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1594761077405-876e6bf97b50?w=400&q=80&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1780149925330-188a8ca702ff?w=400&q=80&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1572003414130-d1b4632a0d73?w=400&q=80&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1610128361323-6e941c97f023?w=400&q=80&auto=format&fit=crop"
+    ],
+    "tags": [
+      "Appearance (216)",
+      "Quality (184)",
+      "Shipping & Packaging (97)",
+      "Seller service (88)"
+    ],
+    "items": [
+      {
+        "stars": 5,
+        "text": "So happy with these bowls! They're heavier than I expected in the best way.",
+        "author": "Priya",
+        "when": "7 days ago"
+      },
+      {
+        "stars": 5,
+        "text": "Perfect size for ramen with room for toppings. The rust glaze is gorgeous in person.",
+        "author": "Marcus",
+        "when": "2 weeks ago"
+      },
+      {
+        "stars": 5,
+        "text": "Packed really carefully and arrived early. Ordering two more for my sister.",
+        "author": "Elena",
+        "when": "1 month ago"
+      }
+    ]
+  },
+  "seller": {
+    "shopName": "HollowPineClay",
+    "starSeller": true,
+    "avatar": "https://images.unsplash.com/photo-1598815272841-4e85a77e0a67?w=300&h=300&q=80&auto=format&fit=crop&crop=faces",
+    "rating": 4.9,
+    "sales": "20.9k",
+    "owner": "Maya Holt",
+    "location": "Asheville, North Carolina",
+    "facts": [
+      {
+        "icon": "etsy",
+        "text": "11 years on Etsy"
+      },
+      {
+        "icon": "truck",
+        "text": "95% or more orders shipped on time"
+      },
+      {
+        "icon": "medal",
+        "text": "Bestselling shop in Bowls"
+      }
+    ],
+    "followers": "18k"
+  },
+  "moreFromShop": [
+    {
+      "image": "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=500&q=80&auto=format&fit=crop",
+      "price": 34.0,
+      "title": "Speckled Stoneware Tumbler Set",
+      "viewed": true
+    },
+    {
+      "image": "https://images.unsplash.com/photo-1587560555570-4d3f84dcee05?w=500&q=80&auto=format&fit=crop",
+      "price": 38.0,
+      "title": "Speckled Cereal Bowl"
+    },
+    {
+      "image": "https://images.unsplash.com/photo-1780149925330-188a8ca702ff?w=500&q=80&auto=format&fit=crop",
+      "price": 26.0,
+      "title": "Small Speckled Tea Bowl"
+    },
+    {
+      "image": "https://images.unsplash.com/photo-1530006498959-b7884e829a04?w=500&q=80&auto=format&fit=crop",
+      "price": 58.0,
+      "title": "Pair of Breakfast Bowls"
+    }
+  ]
+}

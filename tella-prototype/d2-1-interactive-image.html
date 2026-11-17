@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>D2 Interactive Image</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared/listing.css">
+  <script type="importmap">
+    { "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    } }
+  </script>
+  <style>
+    /* Entry button on the listing photo */
+    .explore-3d {
+      position: absolute; left: var(--pad); bottom: 38px; height: 38px; padding: 0 14px 0 10px; border-radius: 20px;
+      display: flex; align-items: center; gap: 7px; font-weight: 600; font-size: 14px; z-index: 3;
+    }
+    .explore-3d .pulse { width: 8px; height: 8px; border-radius: 50%; background: #F1641E; box-shadow: 0 0 0 0 rgba(241,100,30,.6); animation: pulse 1.8s infinite; }
+    @keyframes pulse { 70% { box-shadow: 0 0 0 8px rgba(241,100,30,0); } 100% { box-shadow: 0 0 0 0 rgba(241,100,30,0); } }
+
+    /* Full-screen 3D viewer */
+    .viewer {
+      position: fixed; inset: 0; z-index: 50; max-width: 480px; margin: 0 auto;
+      background: radial-gradient(120% 80% at 50% 40%, #F1EFEB 0%, #DEDBD5 70%, #D3CFC8 100%);
+      opacity: 0; pointer-events: none; transition: opacity .25s ease;
+    }
+    .viewer.open { opacity: 1; pointer-events: auto; }
+    .viewer canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+    .v-top { position: relative; z-index: 2; display: flex; align-items: center; gap: 10px; padding: 64px var(--pad) 0; pointer-events: none; }
+    .v-top > * { pointer-events: auto; }
+    .v-top h2 { flex: 1; margin: 0; font-size: 16px; font-weight: 600; text-align: center; }
+    .v-top .sub { display: block; font-size: 12.5px; font-weight: 500; color: var(--ink-2); margin-top: 2px; }
+    .v-btn { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; flex: none; transition: opacity .2s; }
+    .v-btn:disabled { opacity: .35; }
+
+    .hotspot {
+      position: absolute; z-index: 2; width: 30px; height: 30px; margin: -15px 0 0 -15px; border-radius: 50%;
+      display: grid; place-items: center; background: rgba(255,255,255,.95); color: var(--ink);
+      font-size: 13px; font-weight: 700; box-shadow: 0 2px 8px rgba(0,0,0,.25); transition: opacity .2s, transform .2s;
+    }
+    .hotspot::after { content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid rgba(255,255,255,.8); animation: ring 2s ease-out infinite; }
+    @keyframes ring { from { transform: scale(.7); opacity: 1; } to { transform: scale(1.5); opacity: 0; } }
+    .hotspot.hidden { opacity: 0; pointer-events: none; transform: scale(.6); }
+    .hotspot.on { background: var(--ink); color: #fff; }
+    .hotspot.on::after { display: none; }
+
+    .v-bottom { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 0 var(--pad) 28px; display: flex; flex-direction: column; gap: 12px; align-items: center; pointer-events: none; }
+    .v-bottom > * { pointer-events: auto; }
+    .hint { font-size: 13px; font-weight: 500; color: var(--ink-2); background: rgba(255,255,255,.7); border-radius: 16px; padding: 6px 12px; display: flex; gap: 8px; align-items: center; transition: opacity .2s; }
+    .story-pop {
+      width: 100%; background: #fff; border-radius: 16px; padding: 16px 16px 14px; box-shadow: 0 8px 28px rgba(0,0,0,.16);
+      transform: translateY(20px); opacity: 0; pointer-events: none; transition: all .25s ease;
+    }
+    .story-pop.show { transform: none; opacity: 1; pointer-events: auto; }
+    .story-pop .row1 { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .story-pop .kind { font-size: 11.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #A0522D; background: #F6EDE6; border-radius: 10px; padding: 2px 8px; }
+    .story-pop .meta { font-size: 12.5px; font-weight: 600; color: var(--ink-2); margin-left: auto; }
+    .story-pop h3 { margin: 0 0 4px; font-size: 17px; }
+    .story-pop p { margin: 0; font-size: 14.5px; line-height: 1.45; color: var(--ink-2); }
+    .story-pop .by { display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 12.5px; color: var(--ink-3); }
+    .story-pop .by img { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
+    .capture { font-size: 12px; color: var(--ink-3); }
+    .loading { position: absolute; inset: 0; display: grid; place-items: center; font-size: 14px; color: var(--ink-2); z-index: 1; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script type="module">
+    // DESIGN DECISION 2 · PROTOTYPE 1: Interactive detail on the listing image
+    // A "Tap to explore in 3D" button on the main photo opens a 360° model of a single bowl on a plain
+    // background (standing in for the seller's 360° capture). Buyers rotate and zoom; tapping a dot or
+    // zooming in close to it pops up that stage of the Labor story (decision 1's choice).
+    import { renderListing } from "./shared/listing.js";
+
+    const MAKER = { name: "Maya Holt", avatar: "https://images.unsplash.com/photo-1598815272841-4e85a77e0a67?w=80&h=80&q=80&auto=format&fit=crop&crop=faces" };
+
+    const DETAILS = [   // the decision 1 Labor story: three stages, placed where each one shows on the bowl
+      { kind: "Stage 1 of 3", meta: "25 min", title: "Throwing on the wheel",
+        text: "I wedge 2 lbs of red stoneware by hand, then throw and shape each bowl on the wheel.",
+        angle: 4.0, y: 0.68, surface: "wall" },
+      { kind: "Stage 2 of 3", meta: "40 min", title: "Cutting the facets",
+        text: "Once it's leather-hard, I cut the facets with a wire and carve the foot, then dry it for a week.",
+        angle: 1.3, y: 0.42, surface: "wall" },
+      { kind: "Stage 3 of 3", meta: "20 hrs", title: "Glazing & two firings",
+        text: "Each bowl is dipped in glaze by hand and fired twice in my kiln, the last time to 2,232°F.",
+        angle: 2.6, y: 0.86, surface: "wall" },
+    ];
+
+    const explore = `
+      <button class="explore-3d glass" id="open-3d">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 3 7v10l9 5 9-5V7z"/><path d="m3 7 9 5 9-5M12 12v10"/></svg>
+        Tap to explore in 3D <span class="pulse"></span>
+      </button>`;
+
+    await renderListing({ slots: { heroOverlay: explore } });
+
+    // ---------- Viewer shell ----------
+    const viewer = document.createElement("div");
+    viewer.className = "viewer";
+    viewer.innerHTML = `
+      <div class="loading" id="v-loading">Loading 3D view…</div>
+      <div class="v-top">
+        <button class="v-btn glass" id="v-close" aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></button>
+        <h2>See how it's made<span class="sub">${DETAILS.length} stages, about 3 weeks</span></h2>
+        <button class="v-btn glass" id="v-reset" aria-label="Zoom out" disabled><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5M7.5 10.5h6"/></svg></button>
+      </div>
+      ${DETAILS.map((d, i) => `<button class="hotspot hidden" data-i="${i}" aria-label="${d.title}">${i + 1}</button>`).join("")}
+      <div class="v-bottom">
+        <div class="story-pop" id="v-pop">
+          <div class="row1"><span class="kind"></span><span class="meta"></span></div>
+          <h3></h3><p></p>
+          <div class="by"><img src="${MAKER.avatar}" alt="">${MAKER.name} · HollowPineClay</div>
+        </div>
+        <div class="hint" id="v-hint">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg>
+          Drag to rotate · Pinch to zoom · Tap a dot
+        </div>
+        <div class="capture">360° view captured by HollowPineClay from 36 photos</div>
+      </div>`;
+    document.body.appendChild(viewer);
+
+    let scene;  // created on first open
+    document.getElementById("open-3d").addEventListener("click", async () => {
+      viewer.classList.add("open");
+      document.body.style.overflow = "hidden";
+      if (!scene) scene = await createScene();
+      scene.reset(true);
+      scene.start();
+    });
+    document.getElementById("v-close").addEventListener("click", () => {
+      viewer.classList.remove("open");
+      document.body.style.overflow = "";
+      scene?.stop();
+    });
+
+    // ---------- 3D scene ----------
+    async function createScene() {
+      const THREE = await import("three");
+      const { OrbitControls } = await import("three/addons/controls/OrbitControls.js");
+      const { RoomEnvironment } = await import("three/addons/environments/RoomEnvironment.js");
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      viewer.prepend(renderer.domElement);
+      document.getElementById("v-loading").remove();
+
+      const scene3 = new THREE.Scene();
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      scene3.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+      const camera = new THREE.PerspectiveCamera(45, 1, 0.05, 50);
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.enablePan = false;
+      controls.minDistance = 1.2;
+      controls.maxDistance = 9;
+      controls.maxPolarAngle = Math.PI * 0.92;   // allow tipping it over to see the foot
+      controls.autoRotate = true;
+      controls.autoRotateSpeed = 1.2;
+
+      scene3.add(new THREE.HemisphereLight(0xffffff, 0xb8b0a5, 0.9));
+      const key = new THREE.DirectionalLight(0xffffff, 1.6);
+      key.position.set(3, 5, 4);
+      scene3.add(key);
+      const rim = new THREE.DirectionalLight(0xfff1e0, 0.7);
+      rim.position.set(-4, 2, -3);
+      scene3.add(rim);
+      const fill = new THREE.DirectionalLight(0xffffff, 0.9);   // lights the underside when the bowl is tipped over
+      fill.position.set(1, -4, 2);
+      scene3.add(fill);
+
+      const { bowl, profileAt } = buildBowl(THREE);
+      scene3.add(bowl);
+      scene3.add(contactShadow(THREE));
+
+      // Hotspot anchors in world space
+      const anchors = DETAILS.map(d => {
+        if (d.surface === "foot") {
+          const r = 0.2;   // matches the stamp position
+          return { pos: new THREE.Vector3(Math.cos(d.angle) * r, -0.002, Math.sin(d.angle) * r), normal: new THREE.Vector3(0, -1, 0) };
+        }
+        const { r, nr, ny } = profileAt(d.y);
+        const c = Math.cos(d.angle), s = Math.sin(d.angle);
+        return { pos: new THREE.Vector3(c * r, d.y, s * r), normal: new THREE.Vector3(c * nr, ny, s * nr).normalize() };
+      });
+
+      const dots = [...viewer.querySelectorAll(".hotspot")];
+      const pop = document.getElementById("v-pop"), hint = document.getElementById("v-hint"), resetBtn = document.getElementById("v-reset");
+      const HOME_TARGET = new THREE.Vector3(0, 0.38, 0);
+      const HOME_POS = new THREE.Vector3(0, 2.7, 5.9);
+      let active = -1, running = false, tween = null;
+
+      function showCard(i) {
+        if (i === active) return;
+        active = i;
+        dots.forEach((el, j) => el.classList.toggle("on", j === i));
+        if (i < 0) { pop.classList.remove("show"); hint.style.opacity = 1; return; }
+        const d = DETAILS[i];
+        pop.querySelector(".kind").textContent = d.kind;
+        pop.querySelector(".meta").textContent = d.meta;
+        pop.querySelector("h3").textContent = d.title;
+        pop.querySelector("p").textContent = d.text;
+        pop.classList.add("show");
+        hint.style.opacity = 0;
+      }
+
+      function flyTo(pos, target, ms = 700) {
+        tween = { fromP: camera.position.clone(), toP: pos, fromT: controls.target.clone(), toT: target, t0: performance.now(), ms };
+      }
+
+      function focus(i) {
+        controls.autoRotate = false;
+        const a = anchors[i];
+        const toPos = a.pos.clone().add(a.normal.clone().multiplyScalar(2.1)).add(new THREE.Vector3(0, a.normal.y < -0.5 ? -0.2 : 0.25, 0));
+        flyTo(toPos, a.pos.clone());
+        showCard(i);
+      }
+
+      function reset(instant = false) {
+        controls.autoRotate = true;
+        showCard(-1);
+        if (instant) { camera.position.copy(HOME_POS); controls.target.copy(HOME_TARGET); tween = null; }
+        else flyTo(HOME_POS.clone(), HOME_TARGET.clone());
+      }
+
+      dots.forEach((el, i) => el.addEventListener("click", e => { e.stopPropagation(); focus(i); }));
+      resetBtn.addEventListener("click", () => reset());
+      controls.addEventListener("start", () => { controls.autoRotate = false; tween = null; });
+
+      function resize() {
+        const w = viewer.clientWidth, h = viewer.clientHeight;
+        renderer.setSize(w, h, false);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+      }
+      window.addEventListener("resize", resize);
+
+      const tmp = new THREE.Vector3(), toCam = new THREE.Vector3();
+      function frame(now) {
+        if (!running) return;
+        requestAnimationFrame(frame);
+        if (tween) {
+          const k = Math.min(1, (now - tween.t0) / tween.ms), e = 1 - Math.pow(1 - k, 3);
+          camera.position.lerpVectors(tween.fromP, tween.toP, e);
+          controls.target.lerpVectors(tween.fromT, tween.toT, e);
+          if (k >= 1) tween = null;
+        }
+        controls.update();
+        renderer.render(scene3, camera);
+
+        // Place the dots on screen; hide the ones facing away from the camera
+        const w = viewer.clientWidth, h = viewer.clientHeight;
+        let best = -1, bestDist = Infinity;
+        anchors.forEach((a, i) => {
+          tmp.copy(a.pos).project(camera);
+          const x = (tmp.x * 0.5 + 0.5) * w, y = (-tmp.y * 0.5 + 0.5) * h;
+          toCam.copy(camera.position).sub(a.pos).normalize();
+          const facing = a.normal.dot(toCam) > 0.2 && tmp.z < 1;
+          dots[i].style.left = `${x}px`;
+          dots[i].style.top = `${y}px`;
+          dots[i].classList.toggle("hidden", !facing);
+          const dc = Math.hypot(x - w / 2, y - h * 0.45);
+          if (facing && dc < bestDist) { bestDist = dc; best = i; }
+        });
+
+        // Zooming in close to a detail pops up its story; zooming back out hides it
+        const dist = camera.position.distanceTo(controls.target);
+        const zoomed = dist < 3.4;
+        resetBtn.disabled = !zoomed && !tween && controls.autoRotate;
+        if (!tween) {
+          if (zoomed && best >= 0 && bestDist < w * 0.38) showCard(best);
+          else if (!zoomed || (active >= 0 && dots[active].classList.contains("hidden"))) showCard(-1);
+        }
+      }
+
+      return {
+        reset, focus,
+        start() { resize(); if (!running) { running = true; requestAnimationFrame(frame); } },
+        stop() { running = false; },
+      };
+    }
+
+    // A wheel-thrown ramen bowl: 12 hand-cut facets outside, smooth glazed inside,
+    // sage glaze breaking to charcoal at the rim, raw iron-red foot. Units: 1 = rim radius.
+    function buildBowl(THREE) {
+      const smooth = (keys, n) => new THREE.SplineCurve(keys.map(([r, y]) => new THREE.Vector2(r, y))).getPoints(n);
+      const outerPts = smooth([[0.00, 0.000], [0.40, 0.000], [0.43, 0.035], [0.43, 0.075], [0.50, 0.095],
+                               [0.66, 0.18], [0.80, 0.32], [0.90, 0.50], [0.96, 0.70], [0.995, 0.88], [1.0, 0.93]], 60);
+      const rimPts = [[1.0, 0.93], [0.995, 0.945], [0.98, 0.952], [0.965, 0.945], [0.958, 0.93]].map(([r, y]) => new THREE.Vector2(r, y));
+      const innerPts = smooth([[0.958, 0.93], [0.93, 0.74], [0.86, 0.55], [0.74, 0.37], [0.56, 0.22], [0.32, 0.14], [0.0, 0.12]], 50);
+
+      // Speckle texture: iron spots bleeding through the glaze
+      const cv = document.createElement("canvas"); cv.width = cv.height = 512;
+      const g = cv.getContext("2d");
+      g.fillStyle = "#fff"; g.fillRect(0, 0, 512, 512);
+      for (let i = 0; i < 2200; i++) {
+        const r = Math.random() < 0.9 ? Math.random() * 0.9 + 0.3 : Math.random() * 1.6 + 0.8;
+        g.fillStyle = `rgba(${60 + Math.random() * 30},${40 + Math.random() * 20},30,${0.35 + Math.random() * 0.45})`;
+        g.beginPath(); g.arc(Math.random() * 512, Math.random() * 512, r, 0, Math.PI * 2); g.fill();
+      }
+      const speckle = new THREE.CanvasTexture(cv);
+      speckle.colorSpace = THREE.SRGBColorSpace;
+      speckle.wrapS = speckle.wrapT = THREE.RepeatWrapping;
+      speckle.repeat.set(6, 3);
+
+      const SAGE = new THREE.Color("#8F9E87"), CHAR = new THREE.Color("#3C3B38"), CLAY = new THREE.Color("#9C5A3A");
+      const outerColor = y => {
+        if (y < 0.08) return CLAY.clone();
+        if (y < 0.10) return CLAY.clone().lerp(SAGE, (y - 0.08) / 0.02);
+        if (y < 0.78) return SAGE.clone();
+        return SAGE.clone().lerp(CHAR, Math.min(1, (y - 0.78) / 0.12));
+      };
+      const innerColor = y => y > 0.84 ? SAGE.clone().lerp(CHAR, Math.min(1, (y - 0.84) / 0.09)) : SAGE.clone().offsetHSL(0, 0, 0.04);
+      const paint = (geo, colorAt) => {
+        const pos = geo.attributes.position, col = new Float32Array(pos.count * 3);
+        for (let i = 0; i < pos.count; i++) { const c = colorAt(pos.getY(i)); col.set([c.r, c.g, c.b], i * 3); }
+        geo.setAttribute("color", new THREE.BufferAttribute(col, 3));
+        return geo;
+      };
+
+      const outer = new THREE.Mesh(paint(new THREE.LatheGeometry(outerPts, 12), outerColor),   // 12 segments = 12 flat facets
+        new THREE.MeshPhysicalMaterial({ vertexColors: true, map: speckle, roughness: 0.42, clearcoat: 0.5, clearcoatRoughness: 0.35, flatShading: true, side: THREE.DoubleSide }));
+      const rim = new THREE.Mesh(new THREE.LatheGeometry(rimPts, 96),
+        new THREE.MeshPhysicalMaterial({ color: CHAR, roughness: 0.35, clearcoat: 0.6, side: THREE.DoubleSide }));
+      const inner = new THREE.Mesh(paint(new THREE.LatheGeometry(innerPts, 96), innerColor),
+        new THREE.MeshPhysicalMaterial({ vertexColors: true, map: speckle, roughness: 0.3, clearcoat: 0.8, clearcoatRoughness: 0.2, side: THREE.DoubleSide }));
+
+      const bowl = new THREE.Group();
+      bowl.add(outer, rim, inner, stamp(THREE, 4.4));
+
+      // Radius and outward normal of the outer wall at height y (for placing hotspots)
+      const profileAt = y => {
+        let i = outerPts.findIndex(p => p.y >= y);
+        if (i <= 0) i = 1;
+        const a = outerPts[i - 1], b = outerPts[i], t = (y - a.y) / ((b.y - a.y) || 1);
+        const dx = b.x - a.x, dy = b.y - a.y, len = Math.hypot(dx, dy) || 1;
+        return { r: a.x + dx * t + 0.01, nr: dy / len, ny: -dx / len };
+      };
+      return { bowl, profileAt };
+    }
+
+    // The maker's "HP" stamp pressed into the raw foot (seen when the bowl is tipped over)
+    function stamp(THREE, angle) {
+      const cv = document.createElement("canvas"); cv.width = cv.height = 256;
+      const g = cv.getContext("2d");
+      g.strokeStyle = g.fillStyle = "rgba(70,30,18,.85)";
+      g.lineWidth = 12; g.beginPath(); g.arc(128, 128, 100, 0, Math.PI * 2); g.stroke();
+      g.font = "bold 110px Georgia, serif"; g.textAlign = "center"; g.textBaseline = "middle"; g.fillText("HP", 128, 136);
+      const m = new THREE.Mesh(new THREE.CircleGeometry(0.11, 48), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(cv), transparent: true, depthWrite: false }));
+      m.rotation.x = Math.PI / 2;            // face down
+      m.position.set(Math.cos(angle) * 0.2, -0.003, Math.sin(angle) * 0.2);
+      return m;
+    }
+
+    function contactShadow(THREE) {
+      const cv = document.createElement("canvas"); cv.width = cv.height = 256;
+      const g = cv.getContext("2d");
+      const grd = g.createRadialGradient(128, 128, 10, 128, 128, 128);
+      grd.addColorStop(0, "rgba(0,0,0,.32)"); grd.addColorStop(0.45, "rgba(0,0,0,.12)"); grd.addColorStop(1, "rgba(0,0,0,0)");
+      g.fillStyle = grd; g.fillRect(0, 0, 256, 256);
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(2.6, 2.6), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(cv), transparent: true, depthWrite: false }));
+      m.rotation.x = -Math.PI / 2;
+      m.position.y = -0.004;
+      return m;
+    }
+  </script>
+</body>
+</html>

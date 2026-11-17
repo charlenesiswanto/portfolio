@@ -137,6 +137,48 @@ a{color:inherit}a:hover{color:var(--ac)}
 .crit div{padding:10px 10px 10px 0;border-bottom:1px solid var(--line);color:var(--fg2)}
 .crit .mono{font-size:10px;color:var(--fg)}
 @media (max-width:560px){.crit{font-size:13px}}
+
+.stage{position:relative;border-radius:10px;overflow:hidden;background:#1e1e1e radial-gradient(#3a3a3a 1px,transparent 1px) 0 0/22px 22px;color:#fff;padding:14px clamp(12px,2vw,24px) 22px}
+.stbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.stbar .mono{font-size:11px;color:#c9c9c9}
+.stbtns{display:flex;gap:6px;align-items:center}
+.stbtn{font-family:'DM Mono',ui-monospace,Menlo,monospace;text-transform:uppercase;letter-spacing:.04em;font-size:11px;min-height:36px;padding:0 14px;border-radius:999px;border:1px solid #555;background:#2c2c2c;color:#fff;cursor:pointer;transition:background-color .25s,border-color .25s}
+.stbtn:hover{background:#3d3d3d}
+.stbtn[aria-pressed=true]{background:#fff;color:#111;border-color:#fff}
+.sttabs{display:none;gap:6px}
+.stphones{display:flex;justify-content:center;align-items:flex-start;gap:clamp(20px,5vw,72px);padding-top:16px}
+.dev{display:flex;flex-direction:column;align-items:center;gap:10px}
+.dev .lab{font-size:11px;color:#c9c9c9}
+.phwrap{position:relative}
+.frame{position:absolute;left:0;top:0;width:414px;height:868px;border-radius:56px;padding:12px;background:#0b0b0b;box-shadow:0 0 0 2px #3a3a3a,0 30px 80px rgba(0,0,0,.45);transform-origin:0 0}
+.frame iframe{display:block;width:390px;height:844px;border:0;border-radius:44px;background:#fff}
+.sthint{margin:14px 0 0;text-align:center;font-size:11px;color:#a9a9a9}
+@media (max-width:700px){.sttabs{display:flex}.stphones .dev.off{display:none}}
+html.inframe.hascur,html.inframe.hascur *,html.mopen.hascur,html.mopen.hascur *{cursor:auto!important}
+html.inframe .cur,html.inframe .ring,html.mopen .cur,html.mopen .ring{opacity:0!important}
+.phc[data-try]{cursor:pointer}
+.phc[data-try] .pf{position:relative}
+.phc[data-try] .pf::after{content:"Try it ↗";position:absolute;left:50%;bottom:10px;transform:translate(-50%,6px);font-family:'DM Mono',ui-monospace,Menlo,monospace;text-transform:uppercase;letter-spacing:.04em;font-size:10px;padding:6px 10px;border-radius:999px;background:var(--fg);color:var(--bg);white-space:nowrap;opacity:0;transition:opacity .25s,transform .25s}
+.phc[data-try]:hover .pf::after,.phc[data-try]:focus-visible .pf::after{opacity:1;transform:translate(-50%,0)}
+@media (hover:none){.phc[data-try] .pf::after{opacity:1;transform:translate(-50%,0)}}
+.phc[data-try]:focus-visible{outline:2px solid var(--ac);outline-offset:4px;border-radius:12px}
+.tryhint{font-family:'DM Mono',ui-monospace,Menlo,monospace;text-transform:uppercase;letter-spacing:.04em;font-size:11px;color:var(--mut)}
+.pmod{position:fixed;inset:0;z-index:120;background:rgba(14,14,14,.95);display:flex;align-items:center;justify-content:center;padding:16px;color:#fff;font-family:'Helvetica Neue',Helvetica,'Arimo',sans-serif}
+.pmod *{box-sizing:border-box}
+.pmod[hidden]{display:none!important}
+.pmbox{display:flex;gap:clamp(20px,4vw,56px);align-items:center;max-width:1100px;width:100%;justify-content:center}
+.pmtext{flex:0 1 340px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.pmtext .mono{font-size:11px;color:#bbb}
+.pmtext h3{margin:0;font-family:'Instrument Serif','Times New Roman',serif;font-weight:400;font-size:clamp(28px,3vw,42px);line-height:1;letter-spacing:-.035em}
+.pmtext p{margin:0;font-size:15px;line-height:1.5;color:#ddd}
+.pmtabs{display:flex;flex-wrap:wrap;gap:6px}
+.pmtabs button{font-family:'DM Mono',ui-monospace,Menlo,monospace;text-transform:uppercase;letter-spacing:.04em;font-size:11px;min-height:36px;padding:0 12px;border-radius:999px;border:1px solid #666;background:transparent;color:#fff;cursor:pointer}
+.pmtabs button[aria-pressed=true]{background:#fff;color:#111;border-color:#fff}
+.pmx{position:fixed;top:14px;right:14px;width:44px;height:44px;border-radius:50%;border:1px solid #666;background:#1e1e1e;color:#fff;font-size:22px;line-height:1;cursor:pointer;z-index:2}
+.pmx:hover{background:#333}
+.pmrow{display:flex;gap:8px;flex-wrap:wrap}
+.pmrow a,.pmrow button{font-family:'DM Mono',ui-monospace,Menlo,monospace;text-transform:uppercase;letter-spacing:.04em;font-size:11px;color:#fff;background:none;border:0;padding:0;text-decoration:underline;cursor:pointer}
+@media (max-width:760px){.pmbox{flex-direction:column;gap:12px}.pmtext{flex:none;width:100%;max-width:420px;gap:8px}.pmtext p{font-size:13px}.pmtext h3{font-size:26px}}
 </style>
 
 <style>[hidden]{display:none!important}</style>
@@ -165,11 +207,19 @@ a{color:inherit}a:hover{color:var(--ac)}
 <div><div style="color: var(--mut)">Built with</div>HTML, CSS and JavaScript, using Claude Code</div>
 </div>
 </div>
-<div class="ph4">
-<div class="phc"><div class="pf"><img src="assets/t_s_log.jpg" alt="Maker's process log: a timeline of moments captured while making a batch of bowls"></div><span class="mono">Maker · Process log</span></div>
-<div class="phc"><div class="pf"><img src="assets/t_b_search.jpg" alt="Search results for ceramic with a row of Tella process videos above the listings"></div><span class="mono">Buyer · Search</span></div>
-<div class="phc"><div class="pf"><img src="assets/t_b_reel.jpg" alt="Full-screen Tella video showing the throwing stage, with a See details button"></div><span class="mono">Buyer · Tella</span></div>
-<div class="phc"><div class="pf"><img src="assets/t_b_listing_story.jpg" alt="Listing page with a How it's made card: 3 stages, about 3 weeks per bowl"></div><span class="mono">Buyer · Listing</span></div>
+<div class="stage" id="stage">
+<div class="stbar">
+<span class="mono">Working prototype · click and scroll inside the phones</span>
+<div class="stbtns">
+<div class="sttabs" role="group" aria-label="Show phone"><button type="button" class="stbtn" data-show="s" aria-pressed="true">Maker</button><button type="button" class="stbtn" data-show="b" aria-pressed="false">Buyer</button></div>
+<button type="button" class="stbtn" id="stRestart">↺ Restart</button>
+</div>
+</div>
+<div class="stphones">
+<div class="dev" data-side="s"><span class="mono lab">Maker · Etsy Seller app</span><div class="phwrap"><div class="frame"><iframe id="liveS" title="Tella maker prototype" src="tella-prototype/final-seller.html"></iframe></div></div></div>
+<div class="dev" data-side="b"><span class="mono lab">Buyer · Etsy app</span><div class="phwrap"><div class="frame"><iframe id="liveB" title="Tella buyer prototype" src="tella-prototype/final-buyer.html"></iframe></div></div></div>
+</div>
+<p class="mono sthint">Tap Start a Tella on the maker phone and publish it, then search the buyer phone for "ceramic".</p>
 </div>
 <nav class="chips" aria-label="Sections">
 <a class="chip" href="#problem">Problem</a>
@@ -228,6 +278,7 @@ a{color:inherit}a:hover{color:var(--ac)}
 <div class="sb">
 <h2 class="big k1">Three decisions, made in order, with <mark>one variable changed</mark> at a time.</h2>
 <p>Instead of designing a whole feature at once, we split the problem into three questions and answered them in sequence. For each question we built three working prototypes on the same product, the same fictional shop and the same amount of content, so the only difference between them was the option being compared.</p>
+<p class="tryhint">Every phone on this page is a working prototype. Click one to try it.</p>
 <div>
 <div class="row"><span class="mono">Decision 1</span><span>What kind of story makes a handmade piece feel worth its price?</span></div>
 <div class="row"><span class="mono">Decision 2</span><span>Where should buyers first come across that story?</span></div>
@@ -245,9 +296,9 @@ a{color:inherit}a:hover{color:var(--ac)}
 <div class="dec" style="align-items: start">
 <div><span class="mono" style="font-size: 11px; color: var(--mut)">Decision 1 · The story</span><h3>Labor over craft <em>or inspiration</em></h3><p>The same story card, in the same position on the listing, told three ways: the stages and hours behind the bowl, close-ups of its details, or the maker's inspiration. We chose labor. Time and effort explain a price directly, every handmade piece has a process even without a personal backstory, and it is the hardest story to fake.</p></div>
 <div class="ph3">
-<div class="phc pick"><div class="pf"><img src="assets/t_d1-labor.jpg" alt="Labor prototype: 3 stages, about 3 weeks per bowl, with time per stage" loading="lazy"></div><span class="mono">Labor <span class="won">Chosen</span></span></div>
-<div class="phc"><div class="pf"><img src="assets/t_d1-craft.jpg" alt="Craft prototype: 3 details you might miss" loading="lazy"></div><span class="mono">Craft</span></div>
-<div class="phc"><div class="pf"><img src="assets/t_d1-insp.jpg" alt="Inspiration prototype: a first-person story with sketches" loading="lazy"></div><span class="mono">Inspiration</span></div>
+<div role="button" tabindex="0" data-try="d1" data-i="0" class="phc pick"><div class="pf"><img src="assets/t_d1-labor.jpg" alt="Labor prototype: 3 stages, about 3 weeks per bowl, with time per stage" loading="lazy"></div><span class="mono">Labor <span class="won">Chosen</span></span></div>
+<div role="button" tabindex="0" data-try="d1" data-i="1" class="phc"><div class="pf"><img src="assets/t_d1-craft.jpg" alt="Craft prototype: 3 details you might miss" loading="lazy"></div><span class="mono">Craft</span></div>
+<div role="button" tabindex="0" data-try="d1" data-i="2" class="phc"><div class="pf"><img src="assets/t_d1-insp.jpg" alt="Inspiration prototype: a first-person story with sketches" loading="lazy"></div><span class="mono">Inspiration</span></div>
 </div>
 </div>
 
@@ -261,9 +312,9 @@ a{color:inherit}a:hover{color:var(--ac)}
 </div>
 <p style="margin-top: 14px">Video also suited a process that unfolds over weeks better than a still image.</p></div>
 <div class="ph3">
-<div class="phc"><div class="pf"><img src="assets/t_d2-3d.jpg" alt="Interactive 3D view on the listing image" loading="lazy"></div><span class="mono">3D view</span></div>
-<div class="phc pick"><div class="pf"><img src="assets/t_d2-feed.jpg" alt="Stories from makers row above ceramic search results" loading="lazy"></div><span class="mono">Story feed <span class="won">Chosen</span></span></div>
-<div class="phc"><div class="pf"><img src="assets/t_d2-gallery.jpg" alt="Maker's gallery linked from the listing" loading="lazy"></div><span class="mono">Maker's gallery</span></div>
+<div role="button" tabindex="0" data-try="d2" data-i="0" class="phc"><div class="pf"><img src="assets/t_d2-3d.jpg" alt="Interactive 3D view on the listing image" loading="lazy"></div><span class="mono">3D view</span></div>
+<div role="button" tabindex="0" data-try="d2" data-i="1" class="phc pick"><div class="pf"><img src="assets/t_d2-feed.jpg" alt="Stories from makers row above ceramic search results" loading="lazy"></div><span class="mono">Story feed <span class="won">Chosen</span></span></div>
+<div role="button" tabindex="0" data-try="d2" data-i="2" class="phc"><div class="pf"><img src="assets/t_d2-gallery.jpg" alt="Maker's gallery linked from the listing" loading="lazy"></div><span class="mono">Maker's gallery</span></div>
 </div>
 </div>
 
@@ -277,9 +328,9 @@ a{color:inherit}a:hover{color:var(--ac)}
 </div>
 <p style="margin-top: 14px">The AI draft asked the least of makers, but it had nothing to work with except photos of the finished bowl. For a labor story, the footage has to be captured during the work.</p></div>
 <div class="ph3">
-<div class="phc pick"><div class="pf"><img src="assets/t_d3-log.jpg" alt="Process log: a timeline of captured moments with a capture bar" loading="lazy"></div><span class="mono">Process log <span class="won">Chosen</span></span></div>
-<div class="phc"><div class="pf"><img src="assets/t_d3-builder.jpg" alt="Story builder: three questions, one per screen" loading="lazy"></div><span class="mono">Story builder</span></div>
-<div class="phc"><div class="pf"><img src="assets/t_d3-draft.jpg" alt="AI story draft: the sources Etsy AI used, each with a switch" loading="lazy"></div><span class="mono">AI draft</span></div>
+<div role="button" tabindex="0" data-try="d3" data-i="0" class="phc pick"><div class="pf"><img src="assets/t_d3-log.jpg" alt="Process log: a timeline of captured moments with a capture bar" loading="lazy"></div><span class="mono">Process log <span class="won">Chosen</span></span></div>
+<div role="button" tabindex="0" data-try="d3" data-i="1" class="phc"><div class="pf"><img src="assets/t_d3-builder.jpg" alt="Story builder: three questions, one per screen" loading="lazy"></div><span class="mono">Story builder</span></div>
+<div role="button" tabindex="0" data-try="d3" data-i="2" class="phc"><div class="pf"><img src="assets/t_d3-draft.jpg" alt="AI story draft: the sources Etsy AI used, each with a switch" loading="lazy"></div><span class="mono">AI draft</span></div>
 </div>
 </div>
 
@@ -295,12 +346,12 @@ a{color:inherit}a:hover{color:var(--ac)}
 <h2 class="big k2">The maker records a few seconds per step. <mark>Etsy builds the story.</mark></h2>
 <p>Tella starts from the maker's existing listing in the Etsy Seller app. While working, the maker captures short clips or photos and adds context in whichever way is fastest. When the batch is done, Etsy suggests the key moments and groups them into stages with times. The maker edits captions in their own words, approves, and publishes.</p>
 <div class="ph6">
-<div class="phc"><div class="pf"><img src="assets/t_s0_listing.jpg" alt="Seller app listing with a Tella card and Start a Tella button" loading="lazy"></div><span class="mono">01 Start</span><span class="cap">Start a Tella from the listing it belongs to.</span></div>
-<div class="phc"><div class="pf"><img src="assets/t_s_new.jpg" alt="Start a Tella: project name, linked listing and what you're making" loading="lazy"></div><span class="mono">02 Set up</span><span class="cap">Name the batch and pick what you're making.</span></div>
-<div class="phc"><div class="pf"><img src="assets/t_s_camera_sheet.jpg" alt="Moment saved sheet with caption field, suggested captions and voice note" loading="lazy"></div><span class="mono">03 Capture</span><span class="cap">Type a caption, tap a suggestion, or record a voice note.</span></div>
-<div class="phc"><div class="pf"><img src="assets/t_s_log.jpg" alt="Process log timeline with moments grouped by day" loading="lazy"></div><span class="mono">04 Log</span><span class="cap">Every moment lands on the batch timeline.</span></div>
-<div class="phc"><div class="pf"><img src="assets/t_s_select.jpg" alt="Pick the moments to share, with Etsy-suggested moments marked" loading="lazy"></div><span class="mono">05 Select</span><span class="cap">Etsy suggests moments that cover the whole process.</span></div>
-<div class="phc"><div class="pf"><img src="assets/t_s_review.jpg" alt="Review your story: moments grouped into stages with times" loading="lazy"></div><span class="mono">06 Review</span><span class="cap">Stages and times are grouped for you. Edit, approve, publish.</span></div>
+<div role="button" tabindex="0" data-try="maker" data-i="0" class="phc"><div class="pf"><img src="assets/t_s0_listing.jpg" alt="Seller app listing with a Tella card and Start a Tella button" loading="lazy"></div><span class="mono">01 Start</span><span class="cap">Start a Tella from the listing it belongs to.</span></div>
+<div role="button" tabindex="0" data-try="maker" data-i="1" class="phc"><div class="pf"><img src="assets/t_s_new.jpg" alt="Start a Tella: project name, linked listing and what you're making" loading="lazy"></div><span class="mono">02 Set up</span><span class="cap">Name the batch and pick what you're making.</span></div>
+<div role="button" tabindex="0" data-try="maker" data-i="2" class="phc"><div class="pf"><img src="assets/t_s_camera_sheet.jpg" alt="Moment saved sheet with caption field, suggested captions and voice note" loading="lazy"></div><span class="mono">03 Capture</span><span class="cap">Type a caption, tap a suggestion, or record a voice note.</span></div>
+<div role="button" tabindex="0" data-try="maker" data-i="3" class="phc"><div class="pf"><img src="assets/t_s_log.jpg" alt="Process log timeline with moments grouped by day" loading="lazy"></div><span class="mono">04 Log</span><span class="cap">Every moment lands on the batch timeline.</span></div>
+<div role="button" tabindex="0" data-try="maker" data-i="4" class="phc"><div class="pf"><img src="assets/t_s_select.jpg" alt="Pick the moments to share, with Etsy-suggested moments marked" loading="lazy"></div><span class="mono">05 Select</span><span class="cap">Etsy suggests moments that cover the whole process.</span></div>
+<div role="button" tabindex="0" data-try="maker" data-i="5" class="phc"><div class="pf"><img src="assets/t_s_review.jpg" alt="Review your story: moments grouped into stages with times" loading="lazy"></div><span class="mono">06 Review</span><span class="cap">Stages and times are grouped for you. Edit, approve, publish.</span></div>
 </div>
 </div>
 </section>
@@ -311,9 +362,9 @@ a{color:inherit}a:hover{color:var(--ac)}
 <h2 class="big k4">Buyers meet the process <mark>in search</mark>, before they choose.</h2>
 <p>Searching for "ceramic" now opens with a row of Tella videos above the results. A buyer can swipe through a maker's stages, scroll to other makers, and go straight to the listing, where a "How it's made" card shows each stage again next to the price.</p>
 <div class="ph3 narrow">
-<div class="phc"><div class="pf"><img src="assets/t_b_search.jpg" alt="Tella row above the ceramic search results" loading="lazy"></div><span class="mono">01 Discover</span><span class="cap">A Tella row sits above the search results.</span></div>
-<div class="phc"><div class="pf"><img src="assets/t_b_reel.jpg" alt="Full-screen Tella video with stage label and See details" loading="lazy"></div><span class="mono">02 Watch</span><span class="cap">Swipe through stages, or scroll to other makers.</span></div>
-<div class="phc"><div class="pf"><img src="assets/t_b_listing_story.jpg" alt="How it's made card on the listing" loading="lazy"></div><span class="mono">03 Decide</span><span class="cap">The listing repeats each stage beside the price.</span></div>
+<div role="button" tabindex="0" data-try="buyer" data-i="0" class="phc"><div class="pf"><img src="assets/t_b_search.jpg" alt="Tella row above the ceramic search results" loading="lazy"></div><span class="mono">01 Discover</span><span class="cap">A Tella row sits above the search results.</span></div>
+<div role="button" tabindex="0" data-try="buyer" data-i="1" class="phc"><div class="pf"><img src="assets/t_b_reel.jpg" alt="Full-screen Tella video with stage label and See details" loading="lazy"></div><span class="mono">02 Watch</span><span class="cap">Swipe through stages, or scroll to other makers.</span></div>
+<div role="button" tabindex="0" data-try="buyer" data-i="2" class="phc"><div class="pf"><img src="assets/t_b_listing_story.jpg" alt="How it's made card on the listing" loading="lazy"></div><span class="mono">03 Decide</span><span class="cap">The listing repeats each stage beside the price.</span></div>
 </div>
 </div>
 </section>
@@ -395,6 +446,135 @@ a{color:inherit}a:hover{color:var(--ac)}
 
 </div>
 
+
+
+<div class="pmod" id="pmod" hidden role="dialog" aria-modal="true" aria-labelledby="pmT">
+<button type="button" class="pmx" id="pmX" aria-label="Close prototype">×</button>
+<div class="pmbox">
+<div class="pmtext">
+<span class="mono" id="pmK"></span>
+<h3 id="pmT"></h3>
+<div class="pmtabs" id="pmTabs" role="group" aria-label="Prototype"></div>
+<p id="pmH"></p>
+<div class="pmrow"><button type="button" id="pmR">↺ Restart</button><a id="pmO" href="#" target="_blank" rel="noopener">Open full screen ↗</a></div>
+</div>
+<div class="phwrap" id="pmW"><div class="frame"><iframe id="pmF" title="Prototype"></iframe></div></div>
+</div>
+</div>
+<script>
+(function () {
+var P = 'tella-prototype/';
+var G = {
+  d1: { k: 'Decision 1 · The story', items: [
+    ['Labor', '02-labor.html', 'Scroll down to the How it\u2019s made card and tap through the three stages and their times.'],
+    ['Craft', '03-craftsmanship.html', 'Scroll down to the Look closer card and swipe through the details.'],
+    ['Inspiration', '04-inspiration.html', 'Scroll down to the Why I made it card to see the maker\u2019s sketches and story.'] ] },
+  d2: { k: 'Decision 2 · The placement', items: [
+    ['3D view', 'd2-1-interactive-image.html', 'Tap \u201cTap to explore in 3D\u201d on the photo, then drag to spin the bowl and scroll or pinch to zoom. Tap a pin to see each stage.'],
+    ['Story feed', 'd2-2-story-feed.html', 'Tap a video in the row above the search results, then scroll between makers and tap through each story.'],
+    ['Maker\u2019s gallery', 'd2-3-makers-gallery.html', 'Tap \u201cSee maker\u2019s gallery\u201d on the listing photo to open the maker\u2019s page.'] ] },
+  d3: { k: 'Decision 3 · The input', items: [
+    ['Process log', 'd3-1-process-log.html', 'Open the Process log card, capture a moment with the camera, then make the story.'],
+    ['Story builder', 'd3-2-story-builder.html', 'Open the Story builder card and answer the three questions, typed or spoken.'],
+    ['AI draft', 'd3-3-ai-draft.html', 'Open the drafted story and switch each source on or off before reviewing it.'] ] },
+  maker: { k: 'Final design · Maker', items: [
+    ['Start', 'final-seller.html', 'The maker\u2019s listing in the Seller app. Tap Start a Tella.'],
+    ['Set up', 'final-seller.html#new', 'Name the batch, pick what you\u2019re making, then Start my Tella.'],
+    ['Capture', 'final-seller.html?snap#camera', 'Add a caption, tap a suggestion or record a voice note, then save.'],
+    ['Log', 'final-seller.html#log', 'Every moment lands on the timeline. Tap Make my Tella when the batch is done.'],
+    ['Select', 'final-seller.html#select', 'Etsy suggests moments that cover the process. Tap to add or remove.'],
+    ['Review', 'final-seller.html#review', 'Moments are grouped into stages with times. Edit a caption, then approve and publish.'] ] },
+  buyer: { k: 'Final design · Buyer', items: [
+    ['Discover', 'final-buyer.html', 'Tella videos sit above the results for \u201cceramic\u201d. Tap one.'],
+    ['Watch', 'final-buyer.html#stories/1', 'Tap through the stages, scroll to other makers, or tap See details.'],
+    ['Decide', 'final-buyer.html#listing-story', 'The How it\u2019s made card repeats each stage next to the price.'] ] }
+};
+var html = document.documentElement;
+function fitFrame(wrap, s) {
+  var f = wrap.querySelector('.frame');
+  f.style.transform = 'scale(' + s + ')';
+  wrap.style.width = (414 * s) + 'px'; wrap.style.height = (868 * s) + 'px';
+}
+function hoverFrames(root) {
+  root.querySelectorAll('.frame').forEach(function (f) {
+    f.addEventListener('mouseenter', function () { html.classList.add('inframe'); });
+    f.addEventListener('mouseleave', function () { html.classList.remove('inframe'); });
+  });
+}
+/* live prototype at the top */
+var stage = document.getElementById('stage');
+var KEY = 'etsy-final-published';
+try { localStorage.removeItem(KEY); } catch (e) {}
+var show = 's';
+function fitStage() {
+  var narrow = window.innerWidth <= 700;
+  var devs = stage.querySelectorAll('.dev');
+  devs.forEach(function (d) { d.classList.toggle('off', narrow && d.getAttribute('data-side') !== show); });
+  var n = narrow ? 1 : 2, w = stage.clientWidth - 48 - (n - 1) * 72;
+  var s = Math.min(0.8, w / (414 * n), (window.innerHeight - 150) / 868);
+  s = Math.max(s, 0.42);
+  devs.forEach(function (d) { fitFrame(d.querySelector('.phwrap'), s); });
+}
+stage.querySelectorAll('[data-show]').forEach(function (b) {
+  b.addEventListener('click', function () {
+    show = b.getAttribute('data-show');
+    stage.querySelectorAll('[data-show]').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+    fitStage();
+  });
+});
+document.getElementById('stRestart').addEventListener('click', function () {
+  try { localStorage.removeItem(KEY); } catch (e) {}
+  document.getElementById('liveS').src = P + 'final-seller.html?t=' + Date.now();
+  document.getElementById('liveB').src = P + 'final-buyer.html?t=' + Date.now();
+});
+hoverFrames(stage);
+/* pop-up prototypes */
+var pm = document.getElementById('pmod'), F = document.getElementById('pmF'), W = document.getElementById('pmW');
+var cur = null, idx = 0, last = null;
+function fitModal() {
+  var narrow = window.innerWidth <= 760;
+  var s = Math.min(1, (window.innerHeight - (narrow ? 230 : 60)) / 868, (window.innerWidth - 32) / 414);
+  fitFrame(W, Math.max(s, 0.3));
+}
+function src(i) { var u = G[cur].items[i][1]; return P + u; }
+function select(i) {
+  idx = i;
+  var it = G[cur].items[i];
+  document.getElementById('pmT').textContent = it[0];
+  document.getElementById('pmH').textContent = it[2];
+  document.getElementById('pmO').href = src(i);
+  var u = src(i); F.src = u.indexOf('#') > -1 ? u.replace('#', (u.indexOf('?') > -1 ? '&' : '?') + 't=' + Date.now() + '#') : u + (u.indexOf('?') > -1 ? '&' : '?') + 't=' + Date.now();
+  document.querySelectorAll('#pmTabs button').forEach(function (b, k) { b.setAttribute('aria-pressed', k === i ? 'true' : 'false'); });
+}
+function open(g, i, from) {
+  cur = g; last = from;
+  document.getElementById('pmK').textContent = G[g].k;
+  var tabs = document.getElementById('pmTabs'); tabs.innerHTML = '';
+  G[g].items.forEach(function (it, k) {
+    var b = document.createElement('button'); b.type = 'button'; b.textContent = it[0];
+    b.addEventListener('click', function () { select(k); }); tabs.appendChild(b);
+  });
+  pm.hidden = false; html.classList.add('mopen'); document.body.style.overflow = 'hidden';
+  fitModal(); select(i);
+  document.getElementById('pmX').focus();
+}
+function close() {
+  pm.hidden = true; F.src = 'about:blank'; html.classList.remove('mopen'); document.body.style.overflow = '';
+  if (last) last.focus();
+}
+document.querySelectorAll('[data-try]').forEach(function (c) {
+  var go = function () { open(c.getAttribute('data-try'), +c.getAttribute('data-i'), c); };
+  c.addEventListener('click', go);
+  c.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+});
+document.getElementById('pmX').addEventListener('click', close);
+document.getElementById('pmR').addEventListener('click', function () { select(idx); });
+pm.addEventListener('click', function (e) { if (e.target === pm || e.target.classList.contains('pmbox')) close(); });
+addEventListener('keydown', function (e) { if (e.key === 'Escape' && !pm.hidden) close(); });
+addEventListener('resize', function () { fitStage(); if (!pm.hidden) fitModal(); });
+fitStage();
+})();
+</script>
 
 <script>
 class DCLogic{constructor(p){this.props=p||{};this.state={}}setState(o){Object.assign(this.state,typeof o==='function'?o(this.state):o);__render()}forceUpdate(){__render()}}

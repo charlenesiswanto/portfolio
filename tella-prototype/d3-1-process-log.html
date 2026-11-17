@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>D3 Process Log</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared/seller-app.css">
+  <style>
+    /* Timeline */
+    .pl-meta { display: flex; gap: 8px; margin: 0 var(--pad) 14px; flex-wrap: wrap; }
+    .pl-meta span { font-size: 12.5px; font-weight: 600; background: var(--s-soft); border-radius: 10px; padding: 3px 9px; }
+    .pl-meta .ok { background: var(--s-green); color: var(--s-green-ink); }
+    .tl { margin: 0 var(--pad); position: relative; }
+    .tl::before { content: ""; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 2px; background: var(--s-line); }
+    .tl-day { position: relative; padding-left: 26px; font-size: 12.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--s-ink-3); margin: 14px 0 8px; }
+    .tl-day::before { content: ""; position: absolute; left: 2px; top: 3px; width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 2px solid #BDBDBD; }
+    .tl-entry { position: relative; margin-left: 26px; display: flex; gap: 10px; padding: 10px; border: 1px solid var(--s-line); border-radius: 12px; margin-bottom: 8px; background: #fff; }
+    .tl-entry.fresh { border-color: var(--s-orange); box-shadow: 0 0 0 3px rgba(241,100,30,.15); }
+    .tl-thumb { position: relative; width: 72px; height: 72px; flex: none; border-radius: 9px; overflow: hidden; background: #ddd; }
+    .tl-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .tl-thumb .dur { position: absolute; left: 4px; bottom: 4px; font-size: 10.5px; font-weight: 700; color: #fff; background: rgba(0,0,0,.55); border-radius: 6px; padding: 1px 5px; display: flex; gap: 3px; align-items: center; }
+    .tl-body { flex: 1; min-width: 0; }
+    .tl-time { font-size: 12px; color: var(--s-ink-3); display: flex; align-items: center; gap: 6px; }
+    .tl-stage { font-size: 11px; font-weight: 700; color: #A0522D; background: #F6EDE6; border-radius: 8px; padding: 1px 7px; }
+    .tl-cap { font-size: 14px; margin: 3px 0 4px; }
+    .tl-cap.empty { color: var(--s-ink-3); font-style: italic; }
+    .voice { display: inline-flex; align-items: center; gap: 6px; background: var(--s-soft); border-radius: 14px; padding: 4px 10px 4px 6px; font-size: 12px; font-weight: 600; }
+    .voice .play { width: 20px; height: 20px; border-radius: 50%; background: var(--s-ink); color: #fff; display: grid; place-items: center; }
+    .wave { display: flex; gap: 2px; align-items: center; height: 14px; }
+    .wave i { width: 2px; background: #777; border-radius: 1px; }
+
+    .capture-bar { position: fixed; left: 50%; transform: translateX(-50%); bottom: 0; width: 100%; max-width: 480px; z-index: 45; background: #fff; border-top: 1px solid var(--s-line); padding: 10px var(--pad) 26px; }
+    .capture-bar .make { margin-bottom: 10px; }
+    .capture-row { display: flex; align-items: center; justify-content: space-around; }
+    .cap-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 600; color: var(--s-ink-2); width: 64px; }
+    .cap-btn .ic { width: 44px; height: 44px; border-radius: 50%; background: var(--s-soft); display: grid; place-items: center; color: var(--s-ink); }
+    .shutter { width: 66px; height: 66px; border-radius: 50%; border: 4px solid var(--s-ink); display: grid; place-items: center; }
+    .shutter i { width: 50px; height: 50px; border-radius: 50%; background: var(--s-orange); display: block; }
+
+    /* Camera */
+    .cam { background: #000; color: #fff; padding-bottom: 0; }
+    .cam .view { position: absolute; inset: 0; }
+    .cam .view img { width: 100%; height: 100%; object-fit: cover; }
+    .cam .grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.18) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.18) 1px, transparent 1px); background-size: 33.33% 33.33%; pointer-events: none; }
+    .cam .cam-top { position: absolute; top: 56px; left: 0; right: 0; display: flex; justify-content: space-between; padding: 0 var(--pad); z-index: 2; }
+    .cam .cam-top .proj { font-size: 13px; font-weight: 600; background: rgba(0,0,0,.45); border-radius: 14px; padding: 6px 12px; }
+    .cam .cam-bottom { position: absolute; left: 0; right: 0; bottom: 0; padding: 14px var(--pad) 34px; background: linear-gradient(transparent, rgba(0,0,0,.7)); z-index: 2; }
+    .cam .modes { display: flex; justify-content: center; gap: 18px; font-size: 13px; font-weight: 700; letter-spacing: .06em; margin-bottom: 14px; }
+    .cam .modes span { opacity: .6; }
+    .cam .modes span.on { opacity: 1; color: #FFC069; }
+    .cam .row { display: flex; align-items: center; justify-content: space-between; }
+    .cam .shutter { border-color: #fff; }
+    .cam .shutter i { background: #fff; }
+    .cam .last { width: 44px; height: 44px; border-radius: 10px; overflow: hidden; border: 2px solid #fff; }
+    .cam .last img { width: 100%; height: 100%; object-fit: cover; }
+    .flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; z-index: 5; }
+    .flash.go { animation: flash .35s ease; }
+    @keyframes flash { 30% { opacity: .9; } to { opacity: 0; } }
+
+    .sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 6; background: #fff; color: var(--s-ink); border-radius: 20px 20px 0 0; padding: 10px var(--pad) 30px; transform: translateY(105%); transition: transform .3s ease; }
+    .sheet.up { transform: none; }
+    .sheet .grab { width: 40px; height: 4px; border-radius: 2px; background: #D0D0D0; margin: 0 auto 12px; }
+    .saved-head { display: flex; gap: 12px; align-items: center; margin-bottom: 14px; }
+    .saved-head img { width: 64px; height: 64px; border-radius: 10px; object-fit: cover; }
+    .saved-head b { display: flex; align-items: center; gap: 6px; font-size: 16px; }
+    .saved-head .ok { width: 20px; height: 20px; border-radius: 50%; background: #2E9E4F; color: #fff; display: grid; place-items: center; }
+    .saved-head span { font-size: 13px; color: var(--s-ink-2); }
+    .sheet .pl-field { margin: 0 0 14px; }
+    .rec { display: flex; align-items: center; gap: 10px; border: 1.5px dashed #CFCFCF; border-radius: 12px; padding: 10px 12px; width: 100%; margin-bottom: 14px; }
+    .rec .dot { width: 32px; height: 32px; border-radius: 50%; background: #E5484D; display: grid; place-items: center; color: #fff; }
+    .rec.recording { border-color: #E5484D; background: #FFF1F1; }
+    .rec.recording .dot { animation: pulse-r 1s infinite; }
+    @keyframes pulse-r { 50% { box-shadow: 0 0 0 6px rgba(229,72,77,.25); } }
+    .opt { font-size: 12px; font-weight: 500; color: var(--s-ink-3); }
+
+    /* Select */
+    .sel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 0 var(--pad); }
+    .sel { position: relative; aspect-ratio: 1; border-radius: 10px; overflow: hidden; }
+    .sel img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .15s; }
+    .sel .chk { position: absolute; top: 6px; right: 6px; width: 24px; height: 24px; border-radius: 50%; border: 2px solid #fff; background: rgba(0,0,0,.25); display: grid; place-items: center; color: #fff; font-size: 12px; font-weight: 700; }
+    .sel.on img { transform: scale(.92); border-radius: 8px; }
+    .sel.on { background: var(--s-blue-soft); }
+    .sel.on .chk { background: var(--s-blue); border-color: var(--s-blue); }
+    .sel .st { position: absolute; left: 6px; bottom: 6px; font-size: 10.5px; font-weight: 700; color: #fff; background: rgba(0,0,0,.55); border-radius: 6px; padding: 1px 5px; }
+    .sel .sug { position: absolute; left: 6px; top: 6px; font-size: 10px; font-weight: 700; color: #fff; background: var(--s-orange); border-radius: 6px; padding: 1px 5px; }
+
+    /* Growing reel on the timeline (clips post to the Story feed) */
+    .reel { margin: 0 var(--pad) 12px; border-radius: 14px; background: #1E1B19; color: #fff; padding: 12px; }
+    .reel .rh { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+    .reel .rh b { flex: 1; font-size: 14.5px; }
+    .reel .rh span { font-size: 12px; opacity: .75; }
+    .reel .clips { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+    .reel .clips::-webkit-scrollbar { display: none; }
+    .reel .clip { position: relative; flex: none; width: 54px; aspect-ratio: 9 / 16; border-radius: 6px; overflow: hidden; color: #fff; }
+    .reel .clip img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .reel .clip span { position: absolute; left: 3px; bottom: 3px; font-size: 9.5px; font-weight: 700; background: rgba(0,0,0,.55); border-radius: 4px; padding: 0 3px; }
+    .reel .clip.add { border: 1.5px dashed rgba(255,255,255,.4); display: grid; place-items: center; font-size: 20px; opacity: .7; }
+    .reel .rf { display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 12px; opacity: .85; }
+    .reel .rf svg { color: #FFC069; }
+    .reel .play-reel { width: 30px; height: 30px; border-radius: 50%; background: #fff; color: #1E1B19; display: grid; place-items: center; }
+    .cam .shutter.rec i { background: #E5484D; border-radius: 8px; width: 28px; height: 28px; }
+    .cam .rec-time { position: absolute; top: 104px; left: 50%; transform: translateX(-50%); z-index: 3; background: #E5484D; color: #fff; font-weight: 700; font-size: 13px; border-radius: 10px; padding: 3px 10px; display: none; }
+    .cam .rec-time.on { display: block; }
+    .cam .modes button { color: #fff; font-weight: 700; letter-spacing: .06em; opacity: .6; }
+    .cam .modes button.on { opacity: 1; color: #FFC069; }
+
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <div class="pl-screen" id="screen"></div>
+  <div class="gen" id="gen"></div>
+  <script type="module">
+    // DESIGN DECISION 3 · PROTOTYPE 1: Process log
+    // Not every seller is a content creator. The seller documents their work in small moments over time
+    // (photo or short video, optional caption or voice note) and Etsy turns the captured media into a story.
+    // Video clips build up into a growing reel that posts to the Story feed (decision 2, prototype 2).
+    // Flow: listing overview → new project → active timeline + capture → saved entry → pick moments →
+    // Etsy generates the story → shared "Your story is ready" review (same for every decision 3 tool) → done.
+    // Add #new, #log, #camera, #select or #review to the URL to jump to a screen.
+    // Clips/photos: Mixkit & Unsplash free stock, standing in for the seller's own phone captures.
+    import { renderSellerListing, sStatus, sIcons, sToast } from "./shared/seller-app.js";
+    import { mountStoryReview, showDrafting } from "./shared/story-review.js";
+
+    const ph = (id, w = 600) => `https://images.unsplash.com/photo-${id}?w=${w}&q=80&auto=format&fit=crop`;
+    const mx = id => `https://assets.mixkit.co/videos/${id}/${id}-thumb-360-0.jpg`;
+    const IC = {
+      camera: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 8h4l2-3h6l2 3h4v11H3z"/><circle cx="12" cy="13" r="3.5"/></svg>`,
+      upload: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="m21 16-5-5-9 9"/></svg>`,
+      mic: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>`,
+      play: `<svg width="9" height="9" viewBox="0 0 24 24"><path fill="currentColor" d="M6 4v16l14-8z"/></svg>`,
+      playBig: `<svg width="13" height="13" viewBox="0 0 24 24"><path fill="currentColor" d="M6 4v16l14-8z"/></svg>`,
+      check: `<svg width="12" height="12" viewBox="0 0 24 24"><path d="m5 12 5 5 9-10" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      spark: `<svg width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l2.2 6.3L20 10l-5.8 1.7L12 18l-2.2-6.3L4 10l5.8-1.7zM19 15l1 2.6 2.5.9-2.5.9L19 22l-1-2.6-2.5-.9 2.5-.9z"/></svg>`,
+      bulb: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg>`,
+      flip: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M4 4v4h4M20 20v-4h-4"/></svg>`,
+      feed: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="m10.5 9 4 3-4 3z" fill="currentColor"/></svg>`,
+    };
+    const MAKER = { name: "Maya Holt", shop: "HollowPineClay", avatar: "https://images.unsplash.com/photo-1598815272841-4e85a77e0a67?w=80&h=80&q=80&auto=format&fit=crop&crop=faces" };
+    const LISTING = "Handmade Ceramic Bowl for Ramen or Pho";
+    const NEW_IMG = "https://images.unsplash.com/photo-1590605103416-230704277b05?w=600&q=80&auto=format&fit=crop";
+
+    // ---------- State ----------
+    const state = {
+      name: "Ramen bowls · October batch",
+      entries: [
+        { id: 1, day: "Mon, Oct 6", time: "9:02 AM", stage: "Prep", img: ph("1589051088132-06f36a22012a"), caption: "Wedging 24 lbs of red stoneware for this batch.", voice: "0:12" },
+        { id: 2, day: "Mon, Oct 6", time: "10:40 AM", stage: "Throwing", img: mx(1974), video: 12, caption: "First bowl off the wheel. Two pounds of clay each." },
+        { id: 3, day: "Wed, Oct 8", time: "4:15 PM", stage: "Trimming", img: ph("1739467516257-20c1d7f1949a"), caption: "Cutting the facets, 12 per bowl.", voice: "0:09" },
+        { id: 4, day: "Thu, Oct 9", time: "8:30 AM", stage: "Drying", img: ph("1772607407371-44031ae3b69f"), caption: "" },
+        { id: 5, day: "Mon, Oct 13", time: "2:05 PM", stage: "Glazing", img: mx(13251), video: 15, caption: "Sage over charcoal, dipped twice." },
+        { id: 6, day: "Wed, Oct 15", time: "7:48 AM", stage: "Firing", img: ph("1501917018566-8186ec861d99"), caption: "Kiln opened! 22 of 24 made it.", voice: "0:08" },
+      ],
+      fresh: null,
+      selected: new Set([1, 2, 3, 5, 6]),     // Etsy pre-selects a good spread of stages
+      suggested: new Set([1, 2, 3, 5, 6]),
+      review: null,                           // the generated story, kept while the seller edits it
+      published: null,
+    };
+    // Etsy AI fills in a caption where the seller left none (labeled "Etsy AI" on the review)
+    const AUTO = { 4: "Drying slowly for a week so the bowls don't warp.", 7: "Signing HP on the foot before the first firing." };
+    const capOf = e => e.caption || AUTO[e.id] || `${e.stage}.`;
+    const clips = () => state.entries.filter(e => e.video);
+    const secs = n => `${Math.floor(n / 60)}:${String(n % 60).padStart(2, "0")}`;
+
+    const app = document.getElementById("app"), screen = document.getElementById("screen"), gen = document.getElementById("gen");
+
+    // ---------- Screen: listing overview with the Process log card ----------
+    function entryCard() {
+      const thumbs = state.entries.slice(-2).map(e => `<img src="${e.img}" alt="">`).join("");
+      return `
+        <div class="pl-card">
+          <div class="top"><h3>Process log</h3><span class="pl-new">New</span><span class="sb-time" style="margin-left:auto">A few sec per moment</span></div>
+          <p>Snap moments while you make. Etsy AI turns them into a story for this listing, no editing needed.</p>
+          <button class="pl-project" data-go="log">
+            <span class="pl-stack">${thumbs}</span>
+            <span class="txt"><b>${state.name}</b><span>${state.entries.length} moments · ${clips().length} clips · started Oct 6</span>
+              ${state.published ? `<span class="pl-live">${IC.check} Story published</span>` : ""}</span>
+            ${sIcons.back.replace("M15 4 7 12l8 8", "m9 4 8 8-8 8")}
+          </button>
+          <div class="pl-actions"><button class="s-btn dark" data-go="camera">${IC.camera} Capture a moment</button></div>
+          <button class="pl-link" data-go="new">Start a new project</button>
+        </div>`;
+    }
+    async function renderOverview() {
+      await renderSellerListing({ slots: { afterPhotos: entryCard() } });
+      bindGo(app);
+    }
+
+    // ---------- Screen: new project ----------
+    function renderNew() {
+      return `
+        ${sStatus()}
+        <header class="s-header"><button class="s-icon" data-back aria-label="Close">${sIcons.close}</button><span class="ttl"></span></header>
+        <h1 class="pl-h1">Start a process log</h1>
+        <p class="pl-lead">Give it a name, then add a photo or short video whenever a meaningful step happens.</p>
+        <div class="pl-field"><label for="pname">Project name</label><input id="pname" placeholder="e.g. Ramen bowls · October batch" value=""></div>
+        <div class="pl-field"><label>Link to a listing <span class="opt">(optional)</span></label>
+          <div class="pl-linked"><img src="https://images.unsplash.com/photo-1762922425155-d03e6997e33e?w=120&q=80&auto=format&fit=crop" alt=""><span>${LISTING}</span>${IC.check}</div></div>
+        <div class="pl-field"><label>What are you making?</label>
+          <div class="chips">${["Bowls", "Mugs", "Vases", "Plates", "Something new"].map((c, i) => `<button class="chip ${i === 0 ? "on" : ""}" data-chip>${c}</button>`).join("")}</div></div>
+        <div class="pl-tip">${IC.bulb}<span>Three or more moments are enough for a story. Video clips also build a reel for the Story feed as you go.</span></div>
+        <div class="pl-footer"><button class="s-btn dark" id="start">Start logging</button></div>`;
+    }
+
+    // ---------- Screen: active project timeline ----------
+    const wave = () => `<span class="wave">${[6, 10, 14, 8, 12, 5, 9, 13, 7, 4, 10, 6].map(h => `<i style="height:${h}px"></i>`).join("")}</span>`;
+    function reelStrip() {
+      const c = clips(), total = c.reduce((n, e) => n + e.video, 0);
+      return `
+        <div class="reel">
+          <div class="rh"><button class="play-reel" data-toast="Playing your reel so far" aria-label="Play reel">${IC.playBig}</button><b>Your reel so far</b><span>${secs(total)} · ${c.length} clips</span></div>
+          <div class="clips">${c.map(e => `<span class="clip"><img src="${e.img}" alt=""><span>${secs(e.video)}</span></span>`).join("")}<button class="clip add" data-go="camera" data-mode="video" aria-label="Add a clip">+</button></div>
+          <div class="rf">${IC.feed} Every clip you record adds to this reel. It posts to the Story feed when you publish.</div>
+        </div>`;
+    }
+    function renderLog() {
+      const days = [];
+      state.entries.forEach(e => { let d = days.find(x => x.day === e.day); if (!d) days.push(d = { day: e.day, items: [] }); d.items.push(e); });
+      return `
+        ${sStatus()}
+        <header class="s-header"><button class="s-icon" data-back aria-label="Back">${sIcons.back}</button><span class="ttl">Process log</span><button class="s-icon" aria-label="More">${sIcons.more}</button></header>
+        <h1 class="pl-h1">${state.name}</h1>
+        <div class="pl-meta"><span>${state.entries.length} moments</span><span>${days.length} days</span><span class="ok">${IC.check.replace('width="12" height="12"', 'width="10" height="10" style="display:inline"')} Enough for a story</span></div>
+        ${reelStrip()}
+        <div class="tl">
+          ${days.map(d => `
+            <div class="tl-day">${d.day}</div>
+            ${d.items.map(e => `
+              <div class="tl-entry ${state.fresh === e.id ? "fresh" : ""}">
+                <div class="tl-thumb"><img src="${e.img}" alt="">${e.video ? `<span class="dur">${IC.play}${secs(e.video)}</span>` : ""}</div>
+                <div class="tl-body">
+                  <div class="tl-time">${state.fresh === e.id ? "Just now" : e.time}<span class="tl-stage">${e.stage}</span></div>
+                  <div class="tl-cap ${e.caption ? "" : "empty"}">${e.caption || "No caption. Etsy can suggest one."}</div>
+                  ${e.voice ? `<span class="voice"><span class="play">${IC.play}</span>${wave()}${e.voice}</span>` : ""}
+                </div>
+              </div>`).join("")}`).join("")}
+        </div>
+        <div class="capture-bar">
+          <button class="s-btn dark make" data-go="select">${IC.spark} Make my story</button>
+          <div class="capture-row">
+            <button class="cap-btn" data-toast="Opens your camera roll"><span class="ic">${IC.upload}</span>Upload</button>
+            <button class="shutter" data-go="camera" aria-label="Capture a moment"><i></i></button>
+            <button class="cap-btn" data-go="camera"><span class="ic">${IC.mic}</span>Voice note</button>
+          </div>
+        </div>`;
+    }
+
+    // ---------- Screen: camera (photo or video) + saved entry ----------
+    let camMode = "photo";
+    function renderCamera() {
+      return `
+        <div class="view"><img src="${NEW_IMG.replace("w=600", "w=800")}" alt="Camera view"></div>
+        <div class="grid"></div>
+        <div class="flash" id="flash"></div>
+        <div class="rec-time" id="recTime">● 0:00</div>
+        <div class="cam-top"><button class="s-icon" data-back aria-label="Close" style="color:#fff">${sIcons.close}</button><span class="proj">${state.name}</span><button class="s-icon" style="color:#fff" aria-label="Flip">${IC.flip}</button></div>
+        <div class="cam-bottom">
+          <div class="modes"><button data-mode="video" class="${camMode === "video" ? "on" : ""}">VIDEO</button><button data-mode="photo" class="${camMode === "photo" ? "on" : ""}">PHOTO</button></div>
+          <div class="row">
+            <span class="last"><img src="${state.entries.at(-1).img}" alt=""></span>
+            <button class="shutter" id="snap" aria-label="Capture"><i></i></button>
+            <span style="width:44px"></span>
+          </div>
+        </div>
+        <div class="sheet" id="sheet">
+          <div class="grab"></div>
+          <div class="saved-head"><img src="${NEW_IMG.replace("w=600", "w=200")}" alt="">
+            <div><b><span class="ok">${IC.check}</span><span id="savedTitle">Moment saved</span></b><span id="savedSub">Today · 3:42 PM · added to ${state.name}</span></div></div>
+          <div class="pl-field"><label for="cap">Caption <span class="opt">(optional)</span></label>
+            <input id="cap" placeholder="What's happening in this step?">
+            <div class="chips">${["Signing the foot", "Quality check", "Packing"].map(c => `<button class="chip" data-cap="${c}">${c}</button>`).join("")}</div></div>
+          <button class="rec" id="rec"><span class="dot">${IC.mic}</span><span id="recTxt"><b>Add a voice note</b> <span class="opt">(optional) · tap to record</span></span></button>
+          <button class="s-btn dark" id="saveEntry">Save moment</button>
+        </div>`;
+    }
+
+    // ---------- Screen: pick moments ----------
+    function renderSelect() {
+      const order = [...state.selected];
+      return `
+        ${sStatus()}
+        <header class="s-header"><button class="s-icon" data-back aria-label="Back">${sIcons.back}</button><span class="ttl">Make my story</span></header>
+        <h1 class="pl-h1">Pick the moments to share</h1>
+        <p class="pl-lead">Etsy suggested ${state.suggested.size} that cover your whole process. Tap to add or remove.</p>
+        <div class="sel-grid">
+          ${state.entries.map(e => `
+            <button class="sel ${state.selected.has(e.id) ? "on" : ""}" data-sel="${e.id}">
+              <img src="${e.img}" alt="">
+              ${state.suggested.has(e.id) ? `<span class="sug">Suggested</span>` : ""}
+              <span class="chk">${state.selected.has(e.id) ? order.indexOf(e.id) + 1 : ""}</span>
+              <span class="st">${e.video ? "▶ " : ""}${e.stage}</span>
+            </button>`).join("")}
+        </div>
+        <div class="pl-footer"><button class="s-btn dark" id="generate" ${state.selected.size < 3 ? "disabled" : ""}>${IC.spark} Make my story from ${state.selected.size} moments</button></div>`;
+    }
+
+    function runGenerate() {
+      const picked = state.entries.filter(e => state.selected.has(e.id));
+      state.review = {
+        title: "From clay to kiln", maker: MAKER, listingTitle: LISTING,
+        lead: `Etsy AI put your ${picked.length} moments in order and filled in missing captions.`,
+        moments: picked.map(e => ({ id: e.id, img: e.img, label: e.stage, caption: capOf(e), suggested: !e.caption, video: !!e.video })),
+        places: { listing: true, feed: true, gallery: true },
+        onBack: () => history.back(),
+        onApprove: m => { state.published = { ...m.places }; location.replace("#done"); },
+      };
+      showDrafting(gen, ["Putting your moments in order", "Writing captions from your notes", "Stitching your clips into a reel", "Matching your shop's style"],
+        () => location.hash === "#review" ? route() : go("review"));
+    }
+
+    // ---------- Screen: published ----------
+    function renderDone() {
+      const p = state.published || {};
+      const where = [p.listing && "your listing", p.feed && "the Story feed", p.gallery && "your maker's gallery"].filter(Boolean);
+      return `
+        ${sStatus()}
+        <div class="done-wrap">
+          <div class="big">${IC.check.replace('width="12" height="12"', 'width="34" height="34"')}</div>
+          <h2>Your story is published</h2>
+          <p>Buyers can now find it on ${where.join(", ").replace(/, ([^,]*)$/, " and $1")}. Keep logging and Etsy can update it with your next batch.</p>
+          ${p.feed ? `<a class="s-btn dark" href="d2-2-story-feed.html#stories/0" target="_blank">See it in the Story feed ↗</a>` : ""}
+          ${p.gallery ? `<a class="s-btn outline" href="d2-3-makers-gallery.html#maker" target="_blank">See your maker's gallery ↗</a>` : ""}
+          <button class="s-btn outline" data-go="">Back to listing</button>
+        </div>`;
+    }
+
+    // ---------- Routing & events ----------
+    const RENDER = { new: renderNew, log: renderLog, camera: renderCamera, select: renderSelect, done: renderDone, review: null };
+    function go(name) { location.hash = name; }
+    function bindGo(root) {
+      root.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => { if (b.dataset.mode) camMode = b.dataset.mode; go(b.dataset.go); }));
+      root.querySelectorAll("[data-back]").forEach(b => b.addEventListener("click", () => history.back()));
+      root.querySelectorAll("[data-toast]").forEach(b => b.addEventListener("click", () => sToast(b.dataset.toast)));
+    }
+
+    async function route() {
+      const name = location.hash.slice(1);
+      if (!(name in RENDER)) { screen.className = "pl-screen"; screen.innerHTML = ""; document.body.style.overflow = ""; await renderOverview(); return; }
+      screen.className = "pl-screen open" + (name === "camera" ? " cam" : "");
+      document.body.style.overflow = "hidden";
+      screen.scrollTop = 0;
+      if (name === "review") {
+        if (!state.review) { runGenerate(); return; }   // opened directly: generate first
+        mountStoryReview(screen, state.review);
+        return;
+      }
+      screen.innerHTML = RENDER[name]();
+      bindGo(screen);
+      wire[name]?.();
+    }
+
+    const wire = {
+      new() {
+        screen.querySelectorAll("[data-chip]").forEach(c => c.addEventListener("click", () => { screen.querySelectorAll("[data-chip]").forEach(x => x.classList.remove("on")); c.classList.add("on"); }));
+        screen.querySelector("#start").addEventListener("click", () => {
+          const v = screen.querySelector("#pname").value.trim();
+          if (v) state.name = v;
+          go("log");
+        });
+      },
+      camera() {
+        const sheet = screen.querySelector("#sheet"), cap = screen.querySelector("#cap"), rec = screen.querySelector("#rec");
+        const snap = screen.querySelector("#snap"), recTime = screen.querySelector("#recTime");
+        let voice = null, recT, clipLen = 0, clipT;
+        screen.querySelectorAll(".modes [data-mode]").forEach(b => b.addEventListener("click", () => {
+          camMode = b.dataset.mode;
+          screen.querySelectorAll(".modes [data-mode]").forEach(x => x.classList.toggle("on", x === b));
+        }));
+        const openSheet = () => {
+          if (camMode === "video") {
+            screen.querySelector("#savedTitle").textContent = "Clip saved";
+            screen.querySelector("#savedSub").textContent = `${secs(clipLen)} · added to your reel and timeline`;
+            screen.querySelector("#saveEntry").textContent = "Save clip";
+          }
+          setTimeout(() => sheet.classList.add("up"), 250);
+        };
+        snap.addEventListener("click", () => {
+          if (camMode === "video") {
+            if (!snap.classList.contains("rec")) {          // start recording
+              snap.classList.add("rec"); recTime.classList.add("on"); clipLen = 0;
+              clipT = setInterval(() => { clipLen++; recTime.textContent = `● ${secs(clipLen)}`; }, 1000);
+              return;
+            }
+            clearInterval(clipT); snap.classList.remove("rec"); recTime.classList.remove("on");
+            clipLen = Math.max(clipLen, 6);
+            openSheet(); return;
+          }
+          const f = screen.querySelector("#flash"); f.classList.remove("go"); void f.offsetWidth; f.classList.add("go");
+          openSheet();
+        });
+        screen.querySelectorAll("[data-cap]").forEach(c => c.addEventListener("click", () => { cap.value = c.dataset.cap; }));
+        rec.addEventListener("click", () => {
+          if (rec.classList.contains("recording")) {
+            clearInterval(recT); rec.classList.remove("recording");
+            rec.querySelector("#recTxt").innerHTML = `<span class="voice"><span class="play">${IC.play}</span>${wave()}${voice}</span> <span class="opt">tap to re-record</span>`;
+            return;
+          }
+          rec.classList.add("recording"); let s = 0;
+          const t = () => { voice = `0:0${Math.min(s, 9)}`; rec.querySelector("#recTxt").innerHTML = `<b>Recording… ${voice}</b> <span class="opt">tap to stop</span>`; s++; };
+          t(); recT = setInterval(t, 1000);
+        });
+        screen.querySelector("#saveEntry").addEventListener("click", () => {
+          clearInterval(recT);
+          const id = 7;
+          state.entries = state.entries.filter(e => e.id !== id);
+          state.entries.push({ id, day: "Today, Oct 17", time: "3:42 PM", stage: "Finishing", img: NEW_IMG, caption: cap.value.trim(), voice, video: camMode === "video" ? clipLen : undefined });
+          state.fresh = id;
+          state.selected.add(id);
+          state.review = null;
+          sToast(camMode === "video" ? "Clip added to your reel" : "Moment saved to your process log");
+          location.replace("#log");
+        });
+        const q = new URLSearchParams(location.search);
+        if (q.has("video")) screen.querySelector('.modes [data-mode="video"]').click();
+        if (q.has("snap")) snap.click();
+      },
+      select() {
+        screen.querySelectorAll("[data-sel]").forEach(b => b.addEventListener("click", () => {
+          const id = +b.dataset.sel;
+          state.selected.has(id) ? state.selected.delete(id) : state.selected.add(id);
+          state.review = null;
+          screen.innerHTML = renderSelect(); bindGo(screen); wire.select();
+        }));
+        screen.querySelector("#generate").addEventListener("click", runGenerate);
+      },
+    };
+
+    window.addEventListener("hashchange", route);
+    route();
+  </script>
+</body>
+</html>

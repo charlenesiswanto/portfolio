@@ -1,0 +1,1377 @@
+{
+  "_meta": {
+    "description": "Mock Etsy search results for the query 'ceramics'. Shops, makers and stories are fictional; photos are from Unsplash (free license).",
+    "query": "ceramics",
+    "resultCount": 48210,
+    "fieldsFromEtsyToday": [
+      "title",
+      "price",
+      "originalPrice",
+      "freeShipping",
+      "badge",
+      "isAd",
+      "rating",
+      "reviewCount",
+      "hasVideo",
+      "colors",
+      "images",
+      "shop"
+    ],
+    "fieldsAddedForRedesign": [
+      "maker",
+      "process",
+      "attributes",
+      "materials",
+      "hoursToMake",
+      "madeToOrder",
+      "batchSize",
+      "craftChecklist",
+      "journal"
+    ]
+  },
+  "filterChips": [
+    "Ships from US",
+    "Star Seller",
+    "Under $30",
+    "Bowl",
+    "Mug",
+    "Vase",
+    "Rustic",
+    "Wabi Sabi",
+    "Speckled",
+    "Blue",
+    "Stoneware",
+    "Handmade"
+  ],
+  "listings": [
+    {
+      "id": "speckled-cereal-bowl",
+      "title": "Handmade Speckled Cereal Bowl - Wheel Thrown Stoneware Breakfast Bowl",
+      "price": 38.0,
+      "originalPrice": null,
+      "freeShipping": true,
+      "badge": "Etsy's Pick",
+      "isAd": true,
+      "rating": 4.9,
+      "reviewCount": 3480,
+      "hasVideo": false,
+      "imageOverlayText": null,
+      "colors": [
+        "#F3EBDD",
+        "#8C8C8C",
+        "#E2B04A",
+        "#D4A017",
+        "#222222",
+        "#D9453B",
+        "#B9786A",
+        "#3E9B4F"
+      ],
+      "moreColors": 3,
+      "images": [
+        "https://images.unsplash.com/photo-1587560555570-4d3f84dcee05?w=800&q=80&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1530006498959-b7884e829a04?w=800&q=80&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1590605103416-230704277b05?w=800&q=80&auto=format&fit=crop"
+      ],
+      "shop": {
+        "name": "HollowPineClay",
+        "starSeller": true,
+        "location": "Asheville, North Carolina",
+        "sales": 21400,
+        "onEtsySince": 2016
+      },
+      "maker": {
+        "name": "Maya Holt",
+        "photo": "https://images.unsplash.com/photo-1762628727567-250080e7e9a3?w=400&q=80&auto=format&fit=crop",
+        "yearsMaking": 11,
+        "tagline": "One potter, one wheel, a garage studio in the Blue Ridge.",
+        "story": "I learned to throw at a community studio after my daughter was born and never stopped. Every bowl is thrown, trimmed and glazed by me. The speckles come from iron in a local clay I dig and blend into my stoneware."
+      },
+      "process": [
+        {
+          "step": "Wedging local clay",
+          "description": "Blending dug Blue Ridge clay into stoneware so the iron speckles come through.",
+          "photo": "https://images.unsplash.com/photo-1589051088132-06f36a22012a?w=800&q=80&auto=format&fit=crop",
+          "duration": "20 min"
+        },
+        {
+          "step": "Throwing on the wheel",
+          "description": "Each bowl is thrown by hand from a 1.5 lb ball of clay.",
+          "photo": "https://images.unsplash.com/photo-1771523350533-a831d1f703a7?w=800&q=80&auto=format&fit=crop",
+          "duration": "12 min"
+        },
+        {
+          "step": "Trimming the foot",
+          "description": "Once leather-hard, I carve the foot ring and sign the base.",
+          "photo": "https://images.unsplash.com/photo-1739467516257-20c1d7f1949a?w=800&q=80&auto=format&fit=crop",
+          "duration": "8 min"
+        },
+        {
+          "step": "Glaze firing to cone 6",
+          "description": "Dipped in my oatmeal glaze and fired for 11 hours.",
+          "photo": "https://images.unsplash.com/photo-1501917018566-8186ec861d99?w=800&q=80&auto=format&fit=crop",
+          "duration": "11 hrs"
+        }
+      ],
+      "attributes": [
+        {
+          "label": "Hand-thrown",
+          "detail": "Thrown on a wheel, not slip-cast. No two are identical.",
+          "x": 30,
+          "y": 40,
+          "type": "technique"
+        },
+        {
+          "label": "Local clay speckles",
+          "detail": "Iron from clay dug near the studio bleeds through the glaze.",
+          "x": 62,
+          "y": 30,
+          "type": "material"
+        },
+        {
+          "label": "Vegan",
+          "detail": "No bone ash. Stoneware and mineral glazes only.",
+          "x": 50,
+          "y": 70,
+          "type": "values"
+        },
+        {
+          "label": "Food & dishwasher safe",
+          "detail": "Lead-free glaze fired to 2232°F.",
+          "x": 75,
+          "y": 82,
+          "type": "care"
+        }
+      ],
+      "materials": [
+        "Stoneware clay",
+        "Locally dug iron clay",
+        "Lead-free glaze"
+      ],
+      "hoursToMake": 4,
+      "madeToOrder": false,
+      "batchSize": 24,
+      "craftChecklist": {
+        "clayBody": "Speckled stoneware",
+        "formingMethod": "Wheel thrown",
+        "glaze": "Oatmeal, lead-free",
+        "firing": "Cone 6 electric",
+        "foodSafe": true,
+        "dishwasherSafe": true,
+        "microwaveSafe": true,
+        "timeToMake": "About 2 weeks start to finish",
+        "signed": true
+      },
+      "journal": [
+        {
+          "date": "2026-09-02",
+          "note": "New batch of clay dug from the creek bank. Very red this time.",
+          "photo": "https://images.unsplash.com/photo-1589051088132-06f36a22012a?w=600&q=80&auto=format&fit=crop"
+        },
+        {
+          "date": "2026-09-05",
+          "note": "Threw 24 bowls today. Two collapsed, 22 survived.",
+          "photo": "https://images.unsplash.com/photo-1771523350533-a831d1f703a7?w=600&q=80&auto=format&fit=crop"
+        },
+        {
+          "date": "2026-09-08",
+          "note": "Trimming day. Trying a slightly taller foot.",
+          "photo": "https://images.unsplash.com/photo-1739467516257-20c1d7f1949a?w=600&q=80&auto=format&fit=crop"
+        },
+        {
+          "date": "2026-09-14",
+          "note": "Kiln opened. The speckles are the best they've been.",
+          "photo": "https://images.unsplash.com/photo-1501917018566-8186ec861d99?w=600&q=80&auto=format&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "celadon-green-bowl",
+      "title": "Celadon Green Ceramic Serving Bowl | Handmade Pottery Fruit Bowl",
+      "price": 54.0,
+      "originalPrice": 60.0,
+      "freeShipping": true,
+      "badge": "Bestseller",
+      "isAd": false,
+      "rating": 4.9,
+      "reviewCount": 13100,
+      "hasVideo": true,
+      "imageOverlayText": null,
+      "colors": [
+        "#9DBF9E",
+        "#6A8F6B",
+        "#FFFFFF",
+        "#3A6EA5",
+        "#1F3B6E",
+        "#D9453B",
+        "#E0B865"
+      ],
+      "moreColors": 0,
+      "images": [
+        "https://images.unsplash.com/photo-1601859785003-1b9760be7cd3?w=800&q=80&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1772607407371-44031ae3b69f?w=800&q=80&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1771523351104-03d9c2cc347c?w=800&q=80&auto=format&fit=crop"
+      ],
+      "shop": {
+        "name": "SaltMarshStudio",
+        "starSeller": true,
+        "location": "Portland, Maine",
+        "sales": 48200,
+        "onEtsySince": 2013
+      },
+      "maker": {
+        "name": "Theo Alvarez",
+        "photo": "https://images.unsplash.com/photo-1705459965546-c39f96f652aa?w=400&q=80&auto=format&fit=crop",
+        "yearsMaking": 17,
+        "tagline": "Glazes mixed from scratch, tested over 400 times.",
+        "story": "I spent six years as a glaze chemist before going full-time with pottery. This celadon took 400 test tiles to get right. It pools darker in the carved lines and lighter on the rims, so every bowl comes out a little different."
+      },
+      "process": [
+        {
+          "step": "Throwing the form",
+          "description": "A wide, low bowl thrown from 4 lbs of porcelain.",
+          "photo": "https://images.unsplash.com/photo-1493106641515-6b5631de4bb9?w=800&q=80&auto=format&fit=crop",
+          "duration": "20 min"
+        },
+        {
+          "step": "Drying slowly",
+          "description": "Bowls dry under plastic for a week so they don't warp.",
+          "photo": "https://images.unsplash.com/photo-1772607407371-44031ae3b69f?w=800&q=80&auto=format&fit=crop",
+          "duration": "7 days"
+        },
+        {
+          "step": "Mixing the celadon",
+          "description": "Glaze mixed by hand from raw minerals in my studio.",
+          "photo": "https://images.unsplash.com/photo-1771523351104-03d9c2cc347c?w=800&q=80&auto=format&fit=crop",
+          "duration": "1 hr"
+        },
+        {
+          "step": "Reduction firing",
+          "description": "Fired in a gas kiln, where the reduction brings out the green.",
+          "photo": "https://images.unsplash.com/photo-1501917018566-8186ec861d99?w=800&q=80&auto=format&fit=crop",
+          "duration": "13 hrs"
+        }
+      ],
+      "attributes": [
+        {
+          "label": "House-made glaze",
+          "detail": "Mixed from raw minerals. Recipe developed over 400 tests.",
+          "x": 45,
+          "y": 35,
+          "type": "material"
+        },
+        {
+          "label": "Glaze pools in carving",
+          "detail": "Darker green collects in the hand-carved lines.",
+          "x": 65,
+          "y": 55,
+          "type": "technique"
+        },
+        {
+          "label": "Vegan",
+          "detail": "Porcelain with no bone ash.",
+          "x": 30,
+          "y": 72,
+          "type": "values"
+        },
+        {
+          "label": "Food safe",
+          "detail": "Lab-tested lead-free glaze.",
+          "x": 72,
+          "y": 80,
+          "type": "care"
+        }
+      ],
+      "materials": [
+        "Porcelain",
+        "Hand-mixed celadon glaze"
+      ],
+      "hoursToMake": 3,
+      "madeToOrder": false,
+      "batchSize": 12,
+      "craftChecklist": {
+        "clayBody": "Porcelain",
+        "formingMethod": "Wheel thrown, hand carved",
+        "glaze": "Celadon (house recipe)",
+        "firing": "Cone 10 gas reduction",
+        "foodSafe": true,
+        "dishwasherSafe": true,
+        "microwaveSafe": true,
+        "timeToMake": "About 3 weeks",
+        "signed": true
+      },
+      "journal": [
+        {
+          "date": "2026-08-20",
+          "note": "Twelve serving bowls thrown. Porcelain is fussy in this humidity.",
+          "photo": "https://images.unsplash.com/photo-1493106641515-6b5631de4bb9?w=600&q=80&auto=format&fit=crop"
+        },
+        {
+          "date": "2026-08-27",
+          "note": "Still drying. Flipped them so the rims don't crack.",
+          "photo": "https://images.unsplash.com/photo-1772607407371-44031ae3b69f?w=600&q=80&auto=format&fit=crop"
+        },
+        {
+          "date": "2026-09-01",
+          "note": "Mixed a fresh 10 gallon bucket of celadon.",
+          "photo": "https://images.unsplash.com/photo-1771523351104-03d9c2cc347c?w=600&q=80&auto=format&fit=crop"
+        },
+        {
+          "date": "2026-09-03",
+          "note": "Gas firing overnight. Fingers crossed for the greens.",
+          "photo": "https://images.unsplash.com/photo-1501917018566-8186ec861d99?w=600&q=80&auto=format&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "matte-black-ramen-bowl",
+      "title": "Matte Black Ramen Bowl - Large Handmade Noodle Bowl, Wabi Sabi Pottery",
+      "price": 45.0,
+      "originalPrice": null,
+      "freeShipping": false,
+      "badge": "Bestseller",
+      "isAd": false,
+      "rating": 5.0,
+      "reviewCount": 7200,
+      "hasVideo": true,
+      "imageOverlayText": "Fits 32 oz",
+      "colors": [],
+      "moreColors": 0,
+      "images": [
+        "https://images.unsplash.com/photo-1622947344865-a7fcf40e88e7?w=800&q=80&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1607556671927-78a6605e290b?w=800&q=80&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1739467516257-20c1d7f1949a?w=800&q=80&auto=format&fit=crop"
+      ],
+      "shop": {
+        "name": "KintsuguKitchen",
+        "starSeller": true,
+        "location": "Oakland, California",
+        "sales": 30900,
+        "onEtsySince": 2018
+      },
+      "maker": {
+        "name": "Aiko Brennan",
+        "photo": "https://images.unsplash.com/photo-1719919409211-ea5f75a1361c?w=400&q=80&auto=format&fit=crop",
+        "yearsMaking": 9,
+        "tagline": "Bowls made for slurping, inspired by my grandmother's kitchen in Kyoto.",
+        "story": "My grandmother served ramen in one heavy, chipped black bowl she'd had for forty years. I make these to be that bowl for someone else: heavy enough to hold heat, and wide enough for chopsticks and a soft egg."
+      },
+      "process": [
+        {
+          "step": "Throwing a wide form",
+          "description": "Thrown thick at the base so it holds heat.",
+          "photo": "https://images.unsplash.com/photo-1607556671927-78a6605e290b?w=800&q=80&auto=format&fit=crop",
+          "duration": "15 min"
+        },
+        {
+          "step": "Carving the foot",
+          "description": "A tall foot ring makes it comfortable to lift with one hand.",
+          "photo": "https://images.unsplash.com/photo-1739467516257-20c1d7f1949a?w=800&q=80&auto=format&fit=crop",
+          "duration": "10 min"
+        },
+        {
+          "step": "Bisque firing",
+          "description": "First firing hardens the clay so it can take glaze.",
+          "photo": "https://images.unsplash.com/photo-1763824372146-95e9b6d90926?w=800&q=80&auto=format&fit=crop",
+          "duration": "9 hrs"
+        },
+        {
+          "step": "Matte glaze firing",
+          "description": "A satin-black glaze that feels like river stone.",
+          "photo": "https://images.unsplash.com/photo-1501917018566-8186ec861d99?w=800&q=80&auto=format&fit=crop",
+          "duration": "11 hrs"
+        }
+      ],
+      "attributes": [
+        {
+          "label": "Holds heat",
+          "detail": "Thick-walled base keeps broth hot longer.",
+          "x": 50,
+          "y": 60,
+          "type": "technique"
+        },
+        {
+          "label": "Satin black glaze",
+          "detail": "Soft matte surface, smooth to the touch.",
+          "x": 35,
+          "y": 35,
+          "type": "material"
+        },
+        {
+          "label": "Vegan",
+          "detail": "No bone ash or animal-derived materials.",
+          "x": 70,
+          "y": 30,
+          "type": "values"
+        },
+        {
+          "label": "Microwave safe",
+          "detail": "Fired to 2232°F, lead-free.",
+          "x": 72,
+          "y": 82,
+          "type": "care"
+        }
+      ],
+      "materials": [
+        "Dark stoneware",
+        "Satin matte glaze"
+      ],
+      "hoursToMake": 3.5,
+      "madeToOrder": true,
+      "batchSize": 10,
+      "craftChecklist": {
+        "clayBody": "Dark stoneware",
+        "formingMethod": "Wheel thrown",
+        "glaze": "Satin matte black",
+        "firing": "Cone 6 electric",
+        "foodSafe": true,
+        "dishwasherSafe": true,
+        "microwaveSafe": true,
+        "timeToMake": "Ships in 2-3 weeks (made to order)",
+        "signed": true
+      },
+      "journal": [
+        {
+          "date": "2026-09-10",
+          "note": "Order queue at 30 bowls. Throwing 10 a day.",
+          "photo": "https://images.unsplash.com/photo-1607556671927-78a6605e290b?w=600&q=80&auto=format&fit=crop"
+        },
+        {
+          "date": "2026-09-12",
+          "note": "Trimmed the batch. Taller feet this round.",
+          "photo": "https://images.unsplash.com/photo-1739467516257-20c1d7f1949a?w=600&q=80&auto=format&fit=crop"
+        },
+        {
+          "date": "2026-09-15",
+          "note": "Bisque out. Not a single crack!",
+          "photo": "https://images.unsplash.com/photo-1763824372146-95e9b6d90926?w=600&q=80&auto=format&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "floral-dessert-bowls",
+      "title": "Hand Painted Floral Dessert Bowls Set of 3 - Ceramic Ice Cream Bowls",
+      "price": 62.0,
+      "originalPrice": null,
+      "freeShipping": true,
+      "badge": null,
+      "isAd": true,
+      "rating": 4.8,
+      "reviewCount": 23,
+      "hasVideo": false,
+      "imageOverlayText": null,
+      "colors": [
+        "#F2C6C2",
+        "#F7E6A6",
+        "#B9D3EE"
+      ],
+      "moreColors": 0,
+      "images": [
+        "https://images.unsplash.com/photo-1567763745030-bfe9c51bec27?w=800&q=80&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1771523351104-03d9c2cc347c?w=800&q=80&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1763824372146-95e9b6d90926?w=800&q=80&auto=format&fit=crop"
+      ],
+      "shop": {
+        "name": "PetalAndKilnCo",
+        "starSeller": true,
+        "location": "Austin, Texas",
+        "sales": 412,
+        "onEtsySince": 2024
+      },
+      "maker": {
+        "name": "Rosa Delgado",
+        "photo": "https://images.unsplash.com/photo-1764507768733-667e135d8cb9?w=400&q=80&auto=format&fit=crop",
+        "yearsMaking": 3,
+        "tagline": "Former nurse, now painting flowers on everything.",
+        "story": "I started painting pottery on night shifts' days off to unwind. Every flower is painted freehand with a single brush. No stencils or decals."
+      },
+      "process": [
+        {
+          "step": "Bisqueware ready",
+          "description": "Each bowl starts as unglazed bisque.",
+          "photo": "https://images.unsplash.com/photo-1763824372146-95e9b6d90926?w=800&q=80&auto=format&fit=crop"
+        },
+        {
+          "step": "Freehand painting",
+          "description": "Underglaze florals painted with one brush, about 40 minutes per bowl.",
+          "photo": "https://images.unsplash.com/photo-1771523351104-03d9c2cc347c?w=800&q=80&auto=format&fit=crop",
+          "duration": "40 min"
+        },
+        {
+          "step": "Clear glaze & fire",
+          "description": "Sealed under a clear food-safe glaze.",
+          "photo": "https://images.unsplash.com/photo-1501917018566-8186ec861d99?w=800&q=80&auto=format&fit=crop",
+          "duration": "10 hrs"
+        }
+      ],
+      "attributes": [
+        {
+          "label": "Painted freehand",
+          "detail": "No stencils or decals. Every flower is unique.",
+          "x": 40,
+          "y": 40,
+          "type": "technique"
+        },
+        {
+          "label": "40 min per bowl",
+          "detail": "Painted by hand with a single brush.",
+          "x": 70,
+          "y": 55,
+          "type": "time"
+        },
+        {
+          "label": "Food safe",
+          "detail": "Clear lead-free glaze over underglaze.",
+          "x": 50,
+          "y": 80,
+          "type": "care"
+        }
+      ],
+      "materials": [
+        "Earthenware",
+        "Underglaze",
+        "Clear glaze"
+      ],
+      "hoursToMake": 2.5,
+      "madeToOrder": false,
+      "batchSize": 9,
+      "craftChecklist": {
+        "clayBody": "Earthenware",
+        "formingMethod": "Slip cast blank, hand painted",
+        "glaze": "Underglaze + clear",
+        "firing": "Cone 04",
+        "foodSafe": true,
+        "dishwasherSafe": false,
+        "microwaveSafe": true,
+        "timeToMake": "About 1 week",
+        "signed": false
+      },
+      "journal": [
+        {
+          "date": "2026-09-18",
+          "note": "Painted 9 bowls: poppies, daisies, forget-me-nots.",
+          "photo": "https://images.unsplash.com/photo-1771523351104-03d9c2cc347c?w=600&q=80&auto=format&fit=crop"
+        },
+        {
+          "date": "2026-09-20",
+          "note": "Glaze firing done. The pinks came out softer than expected.",
+          "photo": "https://images.unsplash.com/photo-1501917018566-8186ec861d99?w=600&q=80&auto=format&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "earth-tone-mug",
+      "title": "Rustic Stoneware Coffee Mug 12 oz - Handmade Pottery Mug with Thumb Rest",
+      "price": 34.0,
+      "originalPrice": null,
+      "freeShipping": false,
+      "badge": "Popular now",
+      "isAd": false,
+      "rating": 4.9,
+      "reviewCount": 2300,
+      "hasVideo": false,
+      "imageOverlayText": null,
+      "colors": [
+        "#8B5A3C",
+        "#C9A27E",
+        "#3D3D3D",
+        "#E8E1D5"
+      ],
+      "moreColors": 0,
+      "images": [
+        "https://images.unsplash.com/photo-1633738674687-9505aa528801?w=800&q=80&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1599958336382-c6a7c598925c?w=800&q=80&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1609881583302-61548332039c?w=800&q=80&auto=format&fit=crop"
+      ],
+      "shop": {
+        "name": "HollowPineClay",
+        "starSeller": true,
+        "location": "Asheville, North Carolina",
+        "sales": 21400,
+        "onEtsySince": 2016
+      },
+      "maker": {
+        "name": "Maya Holt",
+        "photo": "https://images.unsplash.com/photo-1762628727567-250080e7e9a3?w=400&q=80&auto=format&fit=crop",
+        "yearsMaking": 11,
+        "tagline": "One potter, one wheel, a garage studio in the Blue Ridge.",
+        "story": "The thumb rest started as a happy accident: I pressed my thumb into a handle to test it and loved how it felt. Now every handle gets that press."
+      },
+      "process": [
+        {
+          "step": "Throwing the cylinder",
+          "description": "Each mug starts as a 1 lb cylinder.",
+          "photo": "https://images.unsplash.com/photo-1609881583302-61548332039c?w=800&q=80&auto=format&fit=crop",
+          "duration": "8 min"
+        },
+        {
+          "step": "Pulling the handle",
+          "description": "Handles are pulled by hand, then a thumb rest is pressed in.",
+          "photo": "https://images.unsplash.com/photo-1599958336382-c6a7c598925c?w=800&q=80&auto=format&fit=crop",
+          "duration": "6 min"
+        },
+        {
+          "step": "Glaze firing",
+          "description": "Fired to cone 6 in my electric kiln.",
+          "photo": "https://images.unsplash.com/photo-1501917018566-8186ec861d99?w=800&q=80&auto=format&fit=crop",
+          "duration": "11 hrs"
+        }
+      ],
+      "attributes": [
+        {
+          "label": "Thumb rest",
+          "detail": "Pressed by hand into every handle.",
+          "x": 72,
+          "y": 45,
+          "type": "technique"
+        },
+        {
+          "label": "Hand-pulled handle",
+          "detail": "Pulled, not molded, for a comfortable grip.",
+          "x": 80,
+          "y": 55,
+          "type": "technique"
+        },
+        {
+          "label": "Vegan",
+          "detail": "No bone ash.",
+          "x": 40,
+          "y": 70,
+          "type": "values"
+        }
+      ],
+      "materials": [
+        "Stoneware",
+        "Lead-free glaze"
+      ],
+      "hoursToMake": 2,
+      "madeToOrder": false,
+      "batchSize": 30,
+      "craftChecklist": {
+        "clayBody": "Stoneware",
+        "formingMethod": "Wheel thrown, pulled handle",
+        "glaze": "Iron saturate",
+        "firing": "Cone 6 electric",
+        "foodSafe": true,
+        "dishwasherSafe": true,
+        "microwaveSafe": true,
+        "timeToMake": "About 2 weeks",
+        "signed": true
+      },
+      "journal": [
+        {
+          "date": "2026-09-21",
+          "note": "30 mugs thrown. Pulling handles tomorrow.",
+          "photo": "https://images.unsplash.com/photo-1609881583302-61548332039c?w=600&q=80&auto=format&fit=crop"
+        },
+        {
+          "date": "2026-09-22",
+          "note": "Handles on. Thumb rests feel right.",
+          "photo": "https://images.unsplash.com/photo-1599958336382-c6a7c598925c?w=600&q=80&auto=format&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "abstract-painted-mug",
+      "title": "Hand Painted Abstract Mug | One of a Kind Ceramic Art Mug",
+      "price": 48.0,
+      "originalPrice": null,
+      "freeShipping": true,
+      "badge": null,
+      "isAd": true,
+      "rating": 5.0,
+      "reviewCount": 186,
+      "hasVideo": true,
+      "imageOverlayText": "1 of 1",
+      "colors": [],
+      "moreColors": 0,
+      "images": [
+        "https://images.unsplash.com/photo-1780736309211-85721a0702c2?w=800&q=80&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1771523351104-03d9c2cc347c?w=800&q=80&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1764507768733-667e135d8cb9?w=800&q=80&auto=format&fit=crop"
+      ],
+      "shop": {
+        "name": "ColorFieldCeramics",
+        "starSeller": false,
+        "location": "Chicago, Illinois",
+        "sales": 1890,
+        "onEtsySince": 2021
+      },
+      "maker": {
+        "name": "Jordan Okafor",
+        "photo": "https://images.unsplash.com/photo-1719919409211-ea5f75a1361c?w=400&q=80&auto=format&fit=crop",
+        "yearsMaking": 6,
+        "tagline": "Painter who moved from canvas to clay.",
+        "story": "I trained as a painter and started using mugs as tiny round canvases. Each one is a single composition I never repeat, so when it sells, it's gone."
+      },
+      "process": [
+        {
+          "step": "Throwing the blank",
+          "description": "Thrown on the wheel in white stoneware.",
+          "photo": "https://images.unsplash.com/photo-1764507768733-667e135d8cb9?w=800&q=80&auto=format&fit=crop",
+          "duration": "10 min"
+        },
+        {
+          "step": "Layering underglaze",
+          "description": "Four to six layers of color, painted freehand.",
+          "photo": "https://images.unsplash.com/photo-1771523351104-03d9c2cc347c?w=800&q=80&auto=format&fit=crop",
+          "duration": "1.5 hrs"
+        },
+        {
+          "step": "Final firing",
+          "description": "Clear glaze locks in the colors.",
+          "photo": "https://images.unsplash.com/photo-1501917018566-8186ec861d99?w=800&q=80&auto=format&fit=crop",
+          "duration": "11 hrs"
+        }
+      ],
+      "attributes": [
+        {
+          "label": "One of a kind",
+          "detail": "This exact design will never be made again.",
+          "x": 45,
+          "y": 35,
+          "type": "story"
+        },
+        {
+          "label": "1.5 hours of painting",
+          "detail": "Up to six layers of underglaze.",
+          "x": 60,
+          "y": 60,
+          "type": "time"
+        },
+        {
+          "label": "Food safe",
+          "detail": "Lead-free clear glaze.",
+          "x": 30,
+          "y": 80,
+          "type": "care"
+        }
+      ],
+      "materials": [
+        "White stoneware",
+        "Underglaze",
+        "Clear glaze"
+      ],
+      "hoursToMake": 3,
+      "madeToOrder": false,
+      "batchSize": 1,
+      "craftChecklist": {
+        "clayBody": "White stoneware",
+        "formingMethod": "Wheel thrown, hand painted",
+        "glaze": "Underglaze + clear",
+        "firing": "Cone 6 electric",
+        "foodSafe": true,
+        "dishwasherSafe": false,
+        "microwaveSafe": true,
+        "timeToMake": "About 10 days",
+        "signed": true
+      },
+      "journal": [
+        {
+          "date": "2026-09-25",
+          "note": "This one started as a sketch of Lake Michigan at dusk.",
+          "photo": "https://images.unsplash.com/photo-1771523351104-03d9c2cc347c?w=600&q=80&auto=format&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "gradient-mug-set",
+      "title": "Set of 5 Ombre Ceramic Mugs - Colorful Handmade Espresso Cups",
+      "price": 120.0,
+      "originalPrice": 150.0,
+      "freeShipping": true,
+      "badge": "Bestseller",
+      "isAd": false,
+      "rating": 4.8,
+      "reviewCount": 940,
+      "hasVideo": false,
+      "imageOverlayText": null,
+      "colors": [
+        "#F28C6A",
+        "#F6C85F",
+        "#9ED2C6",
+        "#6C8EBF",
+        "#B28DFF"
+      ],
+      "moreColors": 0,
+      "images": [
+        "https://images.unsplash.com/photo-1781150363945-51a8d892b2bf?w=800&q=80&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1763824372146-95e9b6d90926?w=800&q=80&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1771523351104-03d9c2cc347c?w=800&q=80&auto=format&fit=crop"
+      ],
+      "shop": {
+        "name": "ColorFieldCeramics",
+        "starSeller": false,
+        "location": "Chicago, Illinois",
+        "sales": 1890,
+        "onEtsySince": 2021
+      },
+      "maker": {
+        "name": "Jordan Okafor",
+        "photo": "https://images.unsplash.com/photo-1719919409211-ea5f75a1361c?w=400&q=80&auto=format&fit=crop",
+        "yearsMaking": 6,
+        "tagline": "Painter who moved from canvas to clay.",
+        "story": "I wanted a set where each cup feels like a different hour of a sunset. The gradient is sprayed in three passes so the colors blend without hard lines."
+      },
+      "process": [
+        {
+          "step": "Throwing five matched cups",
+          "description": "Weighed clay keeps the set consistent.",
+          "photo": "https://images.unsplash.com/photo-1764507768733-667e135d8cb9?w=800&q=80&auto=format&fit=crop"
+        },
+        {
+          "step": "Bisque",
+          "description": "First firing.",
+          "photo": "https://images.unsplash.com/photo-1763824372146-95e9b6d90926?w=800&q=80&auto=format&fit=crop",
+          "duration": "9 hrs"
+        },
+        {
+          "step": "Sprayed gradient",
+          "description": "Three passes of glaze for a seamless fade.",
+          "photo": "https://images.unsplash.com/photo-1771523351104-03d9c2cc347c?w=800&q=80&auto=format&fit=crop",
+          "duration": "45 min"
+        }
+      ],
+      "attributes": [
+        {
+          "label": "Matched by weight",
+          "detail": "Each cup thrown from exactly 12 oz of clay.",
+          "x": 30,
+          "y": 50,
+          "type": "technique"
+        },
+        {
+          "label": "3-pass gradient",
+          "detail": "Glaze sprayed in layers for a soft fade.",
+          "x": 65,
+          "y": 40,
+          "type": "technique"
+        }
+      ],
+      "materials": [
+        "Stoneware",
+        "Sprayed glaze"
+      ],
+      "hoursToMake": 6,
+      "madeToOrder": false,
+      "batchSize": 5,
+      "craftChecklist": {
+        "clayBody": "Stoneware",
+        "formingMethod": "Wheel thrown",
+        "glaze": "Sprayed gradient",
+        "firing": "Cone 6 electric",
+        "foodSafe": true,
+        "dishwasherSafe": true,
+        "microwaveSafe": true,
+        "timeToMake": "About 2 weeks",
+        "signed": true
+      },
+      "journal": []
+    },
+    {
+      "id": "terracotta-bud-vases",
+      "title": "Set of 3 Terracotta Bud Vases - Minimalist Clay Vase Trio, Raw Unglazed",
+      "price": 42.0,
+      "originalPrice": null,
+      "freeShipping": false,
+      "badge": null,
+      "isAd": false,
+      "rating": 4.7,
+      "reviewCount": 512,
+      "hasVideo": false,
+      "imageOverlayText": null,
+      "colors": [
+        "#B5652E",
+        "#D9A07A",
+        "#7A3E1D"
+      ],
+      "moreColors": 0,
+      "images": [
+        "https://images.unsplash.com/photo-1631125915902-d8abe9225ff2?w=800&q=80&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1493106641515-6b5631de4bb9?w=800&q=80&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1772607407371-44031ae3b69f?w=800&q=80&auto=format&fit=crop"
+      ],
+      "shop": {
+        "name": "RedEarthForms",
+        "starSeller": true,
+        "location": "Santa Fe, New Mexico",
+        "sales": 6700,
+        "onEtsySince": 2019
+      },
+      "maker": {
+        "name": "Luis Ortega",
+        "photo": "https://images.unsplash.com/photo-1705459965546-c39f96f652aa?w=400&q=80&auto=format&fit=crop",
+        "yearsMaking": 22,
+        "tagline": "Third-generation potter. My grandfather taught me on a kick wheel.",
+        "story": "My family has made pots in northern New Mexico for three generations. I still use my grandfather's kick wheel for the small pieces like these vases, and I burnish them by hand with a river stone."
+      },
+      "process": [
+        {
+          "step": "Kick wheel throwing",
+          "description": "Thrown on my grandfather's kick wheel, powered by foot.",
+          "photo": "https://images.unsplash.com/photo-1493106641515-6b5631de4bb9?w=800&q=80&auto=format&fit=crop",
+          "duration": "10 min"
+        },
+        {
+          "step": "Stone burnishing",
+          "description": "Polished with a river stone while leather-hard.",
+          "photo": "https://images.unsplash.com/photo-1590605095243-072811dbe64c?w=800&q=80&auto=format&fit=crop",
+          "duration": "25 min"
+        },
+        {
+          "step": "Low firing",
+          "description": "Fired low to keep the warm terracotta color.",
+          "photo": "https://images.unsplash.com/photo-1501917018566-8186ec861d99?w=800&q=80&auto=format&fit=crop",
+          "duration": "8 hrs"
+        }
+      ],
+      "attributes": [
+        {
+          "label": "Kick wheel",
+          "detail": "Made on a foot-powered wheel from the 1960s.",
+          "x": 30,
+          "y": 45,
+          "type": "story"
+        },
+        {
+          "label": "Burnished by stone",
+          "detail": "Hand-polished with a river stone instead of glaze.",
+          "x": 55,
+          "y": 35,
+          "type": "technique"
+        },
+        {
+          "label": "Not watertight",
+          "detail": "Unglazed. Use for dried stems or add a glass insert.",
+          "x": 78,
+          "y": 70,
+          "type": "care"
+        }
+      ],
+      "materials": [
+        "Terracotta"
+      ],
+      "hoursToMake": 2,
+      "madeToOrder": false,
+      "batchSize": 15,
+      "craftChecklist": {
+        "clayBody": "Terracotta",
+        "formingMethod": "Kick wheel thrown, burnished",
+        "glaze": "None (raw)",
+        "firing": "Cone 06",
+        "foodSafe": false,
+        "dishwasherSafe": false,
+        "microwaveSafe": false,
+        "timeToMake": "About 10 days",
+        "signed": true
+      },
+      "journal": [
+        {
+          "date": "2026-08-30",
+          "note": "Kick wheel day. Fifteen little vases.",
+          "photo": "https://images.unsplash.com/photo-1493106641515-6b5631de4bb9?w=600&q=80&auto=format&fit=crop"
+        },
+        {
+          "date": "2026-09-02",
+          "note": "Burnishing until they shine. My favorite part.",
+          "photo": "https://images.unsplash.com/photo-1590605095243-072811dbe64c?w=600&q=80&auto=format&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "cobalt-blue-vase",
+      "title": "Cobalt Blue Ceramic Vase - Tall Handmade Flower Vase, Glossy Glaze",
+      "price": 78.0,
+      "originalPrice": null,
+      "freeShipping": true,
+      "badge": "Etsy's Pick",
+      "isAd": false,
+      "rating": 4.9,
+      "reviewCount": 1100,
+      "hasVideo": true,
+      "imageOverlayText": null,
+      "colors": [
+        "#1F4FA0",
+        "#2E7D8C",
+        "#FFFFFF"
+      ],
+      "moreColors": 0,
+      "images": [
+        "https://images.unsplash.com/photo-1526198049595-f32cde2a219d?w=800&q=80&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1493106641515-6b5631de4bb9?w=800&q=80&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1501917018566-8186ec861d99?w=800&q=80&auto=format&fit=crop"
+      ],
+      "shop": {
+        "name": "SaltMarshStudio",
+        "starSeller": true,
+        "location": "Portland, Maine",
+        "sales": 48200,
+        "onEtsySince": 2013
+      },
+      "maker": {
+        "name": "Theo Alvarez",
+        "photo": "https://images.unsplash.com/photo-1705459965546-c39f96f652aa?w=400&q=80&auto=format&fit=crop",
+        "yearsMaking": 17,
+        "tagline": "Glazes mixed from scratch, tested over 400 times.",
+        "story": "The cobalt glaze is named after the harbor at 6 a.m. in winter, which is the color I was chasing."
+      },
+      "process": [
+        {
+          "step": "Throwing in two parts",
+          "description": "Tall vases are thrown in two sections and joined.",
+          "photo": "https://images.unsplash.com/photo-1493106641515-6b5631de4bb9?w=800&q=80&auto=format&fit=crop",
+          "duration": "35 min"
+        },
+        {
+          "step": "Cobalt glaze",
+          "description": "Dipped twice for depth.",
+          "photo": "https://images.unsplash.com/photo-1771523351104-03d9c2cc347c?w=800&q=80&auto=format&fit=crop",
+          "duration": "15 min"
+        },
+        {
+          "step": "Gas firing",
+          "description": "Cone 10 reduction.",
+          "photo": "https://images.unsplash.com/photo-1501917018566-8186ec861d99?w=800&q=80&auto=format&fit=crop",
+          "duration": "13 hrs"
+        }
+      ],
+      "attributes": [
+        {
+          "label": "Thrown in two parts",
+          "detail": "Joined by hand for extra height.",
+          "x": 50,
+          "y": 45,
+          "type": "technique"
+        },
+        {
+          "label": "Watertight",
+          "detail": "Fully glazed inside.",
+          "x": 50,
+          "y": 80,
+          "type": "care"
+        }
+      ],
+      "materials": [
+        "Porcelain",
+        "Cobalt glaze"
+      ],
+      "hoursToMake": 4,
+      "madeToOrder": false,
+      "batchSize": 6,
+      "craftChecklist": {
+        "clayBody": "Porcelain",
+        "formingMethod": "Wheel thrown in sections",
+        "glaze": "Cobalt gloss",
+        "firing": "Cone 10 gas reduction",
+        "foodSafe": true,
+        "dishwasherSafe": false,
+        "microwaveSafe": false,
+        "timeToMake": "About 3 weeks",
+        "signed": true
+      },
+      "journal": []
+    },
+    {
+      "id": "brown-rim-dinner-plate",
+      "title": "Handmade Dinner Plate with Raw Clay Rim | Modern Stoneware Plate",
+      "price": 36.0,
+      "originalPrice": null,
+      "freeShipping": false,
+      "badge": null,
+      "isAd": true,
+      "rating": 4.9,
+      "reviewCount": 23,
+      "hasVideo": false,
+      "imageOverlayText": null,
+      "colors": [
+        "#FFFFFF",
+        "#E8E1D5",
+        "#3D3D3D"
+      ],
+      "moreColors": 0,
+      "images": [
+        "https://images.unsplash.com/photo-1705948730553-3ea0c89ae6fb?w=800&q=80&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1676125105332-608345abe20e?w=800&q=80&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1739467516257-20c1d7f1949a?w=800&q=80&auto=format&fit=crop"
+      ],
+      "shop": {
+        "name": "PotteryByDanaReyes",
+        "starSeller": true,
+        "location": "Minneapolis, Minnesota",
+        "sales": 380,
+        "onEtsySince": 2025
+      },
+      "maker": {
+        "name": "Dana Reyes",
+        "photo": "https://images.unsplash.com/photo-1764507768733-667e135d8cb9?w=400&q=80&auto=format&fit=crop",
+        "yearsMaking": 4,
+        "tagline": "Making the plates I couldn't find in stores.",
+        "story": "I wanted plates that show the clay they're made from. The rim is left raw on purpose so you can feel the stoneware under your thumb."
+      },
+      "process": [
+        {
+          "step": "Throwing flat",
+          "description": "Plates are thrown low and compressed so they don't warp.",
+          "photo": "https://images.unsplash.com/photo-1771523350533-a831d1f703a7?w=800&q=80&auto=format&fit=crop",
+          "duration": "15 min"
+        },
+        {
+          "step": "Wax-resist rim",
+          "description": "The rim is waxed so glaze won't stick, leaving raw clay.",
+          "photo": "https://images.unsplash.com/photo-1739467516257-20c1d7f1949a?w=800&q=80&auto=format&fit=crop",
+          "duration": "5 min"
+        },
+        {
+          "step": "Glaze firing",
+          "description": "Cone 6.",
+          "photo": "https://images.unsplash.com/photo-1501917018566-8186ec861d99?w=800&q=80&auto=format&fit=crop",
+          "duration": "11 hrs"
+        }
+      ],
+      "attributes": [
+        {
+          "label": "Raw clay rim",
+          "detail": "Left unglazed on purpose to show the stoneware.",
+          "x": 80,
+          "y": 20,
+          "type": "technique"
+        },
+        {
+          "label": "Compressed to resist warping",
+          "detail": "Pressed flat by hand several times while throwing.",
+          "x": 50,
+          "y": 50,
+          "type": "technique"
+        },
+        {
+          "label": "Vegan",
+          "detail": "No bone ash.",
+          "x": 30,
+          "y": 75,
+          "type": "values"
+        }
+      ],
+      "materials": [
+        "Stoneware",
+        "Satin white glaze"
+      ],
+      "hoursToMake": 2.5,
+      "madeToOrder": true,
+      "batchSize": 8,
+      "craftChecklist": {
+        "clayBody": "Stoneware",
+        "formingMethod": "Wheel thrown",
+        "glaze": "Satin white",
+        "firing": "Cone 6 electric",
+        "foodSafe": true,
+        "dishwasherSafe": true,
+        "microwaveSafe": true,
+        "timeToMake": "Ships in 3 weeks (made to order)",
+        "signed": true
+      },
+      "journal": [
+        {
+          "date": "2026-09-28",
+          "note": "First set of 8 plates for a wedding order!",
+          "photo": "https://images.unsplash.com/photo-1771523350533-a831d1f703a7?w=600&q=80&auto=format&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "clay-teapot",
+      "title": "Handmade Clay Teapot 24 oz - Stoneware Tea Pot with Bamboo Handle",
+      "price": 95.0,
+      "originalPrice": null,
+      "freeShipping": true,
+      "badge": "Popular now",
+      "isAd": false,
+      "rating": 4.9,
+      "reviewCount": 670,
+      "hasVideo": true,
+      "imageOverlayText": null,
+      "colors": [
+        "#6B3E26",
+        "#2E2E2E"
+      ],
+      "moreColors": 0,
+      "images": [
+        "https://images.unsplash.com/photo-1565550967973-727d4372df7c?w=800&q=80&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1764507768733-667e135d8cb9?w=800&q=80&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1501917018566-8186ec861d99?w=800&q=80&auto=format&fit=crop"
+      ],
+      "shop": {
+        "name": "KintsuguKitchen",
+        "starSeller": true,
+        "location": "Oakland, California",
+        "sales": 30900,
+        "onEtsySince": 2018
+      },
+      "maker": {
+        "name": "Aiko Brennan",
+        "photo": "https://images.unsplash.com/photo-1719919409211-ea5f75a1361c?w=400&q=80&auto=format&fit=crop",
+        "yearsMaking": 9,
+        "tagline": "Bowls made for slurping, inspired by my grandmother's kitchen in Kyoto.",
+        "story": "A teapot has six parts (body, lid, spout, knob, strainer, handle) and they all have to agree with each other. It's the hardest thing I make and my favorite."
+      },
+      "process": [
+        {
+          "step": "Throwing body, lid & spout",
+          "description": "Six separate parts, each thrown on the wheel.",
+          "photo": "https://images.unsplash.com/photo-1764507768733-667e135d8cb9?w=800&q=80&auto=format&fit=crop",
+          "duration": "1 hr"
+        },
+        {
+          "step": "Assembling",
+          "description": "Parts joined when leather-hard; strainer holes hand-drilled.",
+          "photo": "https://images.unsplash.com/photo-1739467516257-20c1d7f1949a?w=800&q=80&auto=format&fit=crop",
+          "duration": "45 min"
+        },
+        {
+          "step": "Firing",
+          "description": "Two firings, about 20 hours in the kiln.",
+          "photo": "https://images.unsplash.com/photo-1501917018566-8186ec861d99?w=800&q=80&auto=format&fit=crop",
+          "duration": "20 hrs"
+        }
+      ],
+      "attributes": [
+        {
+          "label": "6 hand-thrown parts",
+          "detail": "Body, lid, spout, knob, strainer and handle mount.",
+          "x": 45,
+          "y": 45,
+          "type": "technique"
+        },
+        {
+          "label": "Drip-free spout",
+          "detail": "Spout edge cut sharp to stop dribbles.",
+          "x": 15,
+          "y": 40,
+          "type": "technique"
+        },
+        {
+          "label": "Built-in strainer",
+          "detail": "Hand-drilled holes, no metal infuser needed.",
+          "x": 55,
+          "y": 60,
+          "type": "care"
+        }
+      ],
+      "materials": [
+        "Stoneware",
+        "Bamboo"
+      ],
+      "hoursToMake": 5,
+      "madeToOrder": false,
+      "batchSize": 4,
+      "craftChecklist": {
+        "clayBody": "Stoneware",
+        "formingMethod": "Wheel thrown and assembled",
+        "glaze": "Tenmoku brown",
+        "firing": "Cone 6 electric",
+        "foodSafe": true,
+        "dishwasherSafe": false,
+        "microwaveSafe": false,
+        "timeToMake": "About 3 weeks",
+        "signed": true
+      },
+      "journal": [
+        {
+          "date": "2026-09-04",
+          "note": "Spouts are the trickiest part. Remade two today.",
+          "photo": "https://images.unsplash.com/photo-1764507768733-667e135d8cb9?w=600&q=80&auto=format&fit=crop"
+        }
+      ]
+    },
+    {
+      "id": "stoneware-jug",
+      "title": "Large Stoneware Pitcher Jug - Farmhouse Ceramic Water Pitcher",
+      "price": 88.0,
+      "originalPrice": null,
+      "freeShipping": false,
+      "badge": null,
+      "isAd": false,
+      "rating": 4.8,
+      "reviewCount": 304,
+      "hasVideo": false,
+      "imageOverlayText": null,
+      "colors": [
+        "#C9B79C",
+        "#6E5A44"
+      ],
+      "moreColors": 0,
+      "images": [
+        "https://images.unsplash.com/photo-1481401908818-600b7a676c0d?w=800&q=80&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1493106641515-6b5631de4bb9?w=800&q=80&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1772607407371-44031ae3b69f?w=800&q=80&auto=format&fit=crop"
+      ],
+      "shop": {
+        "name": "RedEarthForms",
+        "starSeller": true,
+        "location": "Santa Fe, New Mexico",
+        "sales": 6700,
+        "onEtsySince": 2019
+      },
+      "maker": {
+        "name": "Luis Ortega",
+        "photo": "https://images.unsplash.com/photo-1705459965546-c39f96f652aa?w=400&q=80&auto=format&fit=crop",
+        "yearsMaking": 22,
+        "tagline": "Third-generation potter. My grandfather taught me on a kick wheel.",
+        "story": "These jugs are based on one my grandmother kept water in on the porch. I measured it and still throw them to the same size."
+      },
+      "process": [
+        {
+          "step": "Throwing",
+          "description": "Thrown from 6 lbs of clay.",
+          "photo": "https://images.unsplash.com/photo-1493106641515-6b5631de4bb9?w=800&q=80&auto=format&fit=crop",
+          "duration": "25 min"
+        },
+        {
+          "step": "Pulling the spout",
+          "description": "Lip shaped with a wet finger.",
+          "photo": "https://images.unsplash.com/photo-1590605095243-072811dbe64c?w=800&q=80&auto=format&fit=crop",
+          "duration": "3 min"
+        },
+        {
+          "step": "Drying",
+          "description": "Dried slowly for 10 days.",
+          "photo": "https://images.unsplash.com/photo-1772607407371-44031ae3b69f?w=800&q=80&auto=format&fit=crop",
+          "duration": "10 days"
+        }
+      ],
+      "attributes": [
+        {
+          "label": "Family design",
+          "detail": "Sized to match a jug from the maker's grandmother.",
+          "x": 45,
+          "y": 40,
+          "type": "story"
+        },
+        {
+          "label": "Holds 2 quarts",
+          "detail": "Fully glazed interior.",
+          "x": 50,
+          "y": 75,
+          "type": "care"
+        }
+      ],
+      "materials": [
+        "Stoneware",
+        "Ash glaze"
+      ],
+      "hoursToMake": 3,
+      "madeToOrder": false,
+      "batchSize": 6,
+      "craftChecklist": {
+        "clayBody": "Stoneware",
+        "formingMethod": "Wheel thrown",
+        "glaze": "Wood ash",
+        "firing": "Cone 10",
+        "foodSafe": true,
+        "dishwasherSafe": false,
+        "microwaveSafe": false,
+        "timeToMake": "About 3 weeks",
+        "signed": true
+      },
+      "journal": []
+    }
+  ]
+}

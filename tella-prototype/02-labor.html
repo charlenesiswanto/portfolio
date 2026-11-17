@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Prototype 1 Labor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Caveat:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared/listing.css">
+</head>
+<body>
+  <div id="app"></div>
+  <script type="module">
+    // PROTOTYPE 1 · LABOR: What goes into making it?
+    // A three-step process timeline with photos and short captions.
+    import { renderListing } from "./shared/listing.js";
+    import { storyCard, wireStory, photo } from "./shared/story.js";
+
+    const items = [
+      { title: "Throwing on the wheel", meta: "25 min", img: photo("1771523350533-a831d1f703a7"),
+        caption: "I wedge 2 lbs of red stoneware by hand, then throw and shape each bowl on the wheel." },
+      { title: "Cutting the facets", meta: "40 min", img: photo("1739467516257-20c1d7f1949a"),
+        caption: "Once it's leather-hard, I cut the facets with a wire and carve the foot, then dry it for a week." },
+      { title: "Glazing & two firings", meta: "20 hrs", img: photo("1501917018566-8186ec861d99"),
+        caption: "Each bowl is dipped in glaze by hand and fired twice in my kiln, the last time to 2,232°F." },
+    ];
+    const story = {
+      mode: "steps", items,
+      eyebrow: "How it's made",
+      heading: "3 stages, about 3 weeks per bowl",
+      media: i => `<img src="${items[i].img}" alt="${items[i].title}">`,
+      chip: i => `Stage ${i + 1} of 3 · ${items[i].meta}`,
+    };
+
+    await renderListing({ layout: "story-first", slots: { story: storyCard(story) } });
+    wireStory(story);
+  </script>
+</body>
+</html>

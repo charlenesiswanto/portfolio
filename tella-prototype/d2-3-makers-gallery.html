@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>D2 Makers Gallery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Caveat:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared/listing.css">
+  <style>
+    /* Entry 1: "See maker's gallery" bubble on the listing photo (same spot as prototype 1's 3D button) */
+    .meet-bubble { position: absolute; left: var(--pad); bottom: 38px; z-index: 3; height: 38px; padding: 0 14px 0 3px; border-radius: 22px; display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; }
+    .meet-bubble img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 2px #fff, 0 0 0 4px #F1641E; margin-left: 3px; }
+
+    /* Entry 2: preview card right under delivery / shipping / ratings */
+    .maker-preview { display: block; width: 100%; text-align: left; background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; margin: 0 0 18px; box-shadow: 0 2px 10px rgba(0,0,0,.05); }
+    .maker-preview .strip { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 2px; height: 104px; overflow: hidden; }
+    .maker-preview .strip img { width: 100%; height: 104px; min-height: 0; object-fit: cover; display: block; }
+    .maker-preview .body { position: relative; padding: 30px 14px 14px; }
+    .maker-preview .face { position: absolute; top: -26px; left: 14px; width: 52px; height: 52px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 0 0 2px #F1641E; }
+    .maker-preview .eyebrow2 { position: absolute; top: 8px; left: 78px; font-size: 11.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: #A0522D; }
+    .maker-preview h3 { margin: 0; font-size: 17px; display: flex; align-items: center; gap: 5px; }
+    .maker-preview h3 .star-seller { width: 16px; height: 16px; }
+    .maker-preview .where { font-size: 13.5px; color: var(--ink-2); margin-top: 1px; }
+    .maker-preview .q { font-size: 14.5px; line-height: 1.45; margin: 8px 0 10px; font-style: italic; color: #4A4038; }
+    .maker-preview .facts2 { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+    .maker-preview .facts2 span { font-size: 12.5px; font-weight: 600; background: var(--chip); border-radius: 10px; padding: 3px 9px; }
+    .maker-preview .cta { display: flex; align-items: center; justify-content: center; gap: 6px; height: 42px; border-radius: 22px; background: var(--ink); color: #fff; font-weight: 600; font-size: 15px; }
+
+    .maker-preview .mp-stages { list-style: none; margin: 10px 0 12px; padding: 0; }
+    .maker-preview .mp-stages li { display: flex; align-items: center; gap: 8px; padding: 5px 0; font-size: 14px; border-top: 1px solid var(--line); }
+    .maker-preview .mp-stages li:first-child { border-top: 0; }
+    .maker-preview .mp-stages .n { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--ink); display: grid; place-items: center; font-size: 11px; font-weight: 700; flex: none; }
+    .maker-preview .mp-stages .t { flex: 1; font-weight: 600; }
+    .maker-preview .mp-stages .tm, .m-labor .tm { white-space: nowrap; flex: none; align-self: flex-start; font-size: 12px; font-weight: 600; color: var(--ink-2); background: var(--chip); border-radius: 10px; padding: 1px 8px; }
+    .m-labor { list-style: none; margin: 0; padding: 0; }
+    .m-labor li { display: flex; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); }
+    .m-labor li:first-child { border-top: 0; }
+    .m-labor img { width: 88px; height: 88px; border-radius: 10px; object-fit: cover; flex: none; }
+    .m-labor .lt { display: flex; justify-content: space-between; gap: 8px; font-weight: 600; }
+    .m-labor p { margin: 4px 0 0; font-size: 14.5px; line-height: 1.45; color: var(--ink-2); }
+
+    /* Entry: "Made by" now opens the maker's page */
+    .made-by a { cursor: pointer; }
+    .made-by .meet { font-size: 12.5px; font-weight: 600; color: #A0522D; margin-left: 2px; }
+
+    /* Maker page: pushed in from the right, like an app screen */
+    .maker {
+      position: fixed; top: 0; bottom: 0; left: 50%; width: 100%; max-width: 480px; z-index: 40;
+      background: var(--bg); overflow-y: auto; overscroll-behavior: contain;
+      transform: translateX(-50%) translateX(100%); visibility: hidden; transition: transform .32s cubic-bezier(.2,.8,.2,1), visibility 0s .32s;
+    }
+    .maker.open { transform: translateX(-50%); visibility: visible; transition: transform .32s cubic-bezier(.2,.8,.2,1); }
+    body.maker-open { overflow: hidden; }
+    .maker .status-bar { position: sticky; left: auto; transform: none; margin-bottom: -52px; }
+    .m-top { position: sticky; top: 60px; z-index: 31; display: flex; gap: 12px; padding: 0 var(--pad); margin-top: 8px; height: 0; }
+    .m-top .spacer { flex: 1; }
+
+    .m-hero { position: relative; }
+    .m-hero img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; background: #E9E6E0; }
+    .m-hero .cap { position: absolute; left: var(--pad); bottom: 14px; font-size: 12px; font-weight: 600; color: #fff; background: rgba(34,34,34,.6); border-radius: 10px; padding: 3px 9px; }
+    .m-intro { padding: 22px var(--pad) 0; }
+    .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: #A0522D; }
+    .m-name { font-family: var(--serif); font-weight: 400; font-size: 34px; line-height: 1.1; margin: 6px 0 4px; letter-spacing: -.3px; }
+    .m-role { font-size: 15px; color: var(--ink-2); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .m-role .star-seller { width: 18px; height: 18px; }
+    .m-meta { display: flex; gap: 0; margin: 18px 0 18px; }
+    .m-meta > div { flex: 1; border-left: 1px solid var(--line); padding: 2px 10px; }
+    .m-meta > div:first-child { border-left: 0; padding-left: 0; }
+    .m-meta .k { font-size: 12.5px; color: var(--ink-2); }
+    .m-meta .v { font-size: 15px; font-weight: 600; }
+
+    .quote { font-family: var(--serif); font-size: 23px; line-height: 1.32; margin: 0; letter-spacing: -.2px; text-wrap: pretty; }
+    .quote::before { content: "\201C"; display: block; font-size: 54px; line-height: .6; color: #A0522D; margin: 10px 0 6px; }
+    .quote-by { font-size: 13.5px; color: var(--ink-2); margin-top: 10px; }
+    .body-copy { font-size: 16px; line-height: 1.55; margin: 16px 0 0; text-wrap: pretty; }
+    .body-copy + .body-copy { margin-top: 12px; }
+    .lede { font-size: 15px; color: var(--ink-2); margin: -8px 0 16px; line-height: 1.45; }
+
+    /* team */
+    .team .person { width: 220px; }
+    .person img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 12px; display: block; background: #E9E6E0; }
+    .person .n { font-weight: 600; font-size: 16px; margin-top: 10px; }
+    .person .r { font-size: 13.5px; color: var(--ink-2); }
+    .person .q { font-size: 14.5px; line-height: 1.42; margin-top: 6px; font-style: italic; color: #4A4038; }
+
+    /* timeline */
+    .timeline { list-style: none; margin: 0; padding: 0; }
+    .timeline li { position: relative; display: grid; grid-template-columns: 56px 1fr; gap: 12px; padding-bottom: 22px; }
+    .timeline li:not(:last-child)::after { content: ""; position: absolute; left: 61px; top: 22px; bottom: 0; width: 1.5px; background: var(--ink); opacity: .25; }
+    .timeline .yr { font-family: var(--serif); font-size: 18px; padding-top: 1px; }
+    .timeline .dot { position: absolute; left: 56px; top: 7px; width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--ink); background: var(--bg); }
+    .timeline li.now .dot { background: #A0522D; border-color: #A0522D; }
+    .timeline .txt { padding-left: 18px; }
+    .timeline .t { font-weight: 600; font-size: 15.5px; }
+    .timeline .c { font-size: 14.5px; color: var(--ink-2); line-height: 1.45; margin-top: 2px; }
+    .timeline img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 10px; margin-top: 10px; display: block; background: #E9E6E0; }
+
+    /* values */
+    .values { display: grid; gap: 10px; }
+    .value { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+    .value .t { font-weight: 600; font-size: 15.5px; }
+    .value .c { font-size: 14.5px; color: var(--ink-2); line-height: 1.45; margin-top: 2px; }
+
+    /* studio */
+    .studio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .studio-grid figure { margin: 0; position: relative; border-radius: 10px; overflow: hidden; background: #E9E6E0; }
+    .studio-grid figure.wide { grid-column: 1 / -1; }
+    .studio-grid img { width: 100%; height: 100%; object-fit: cover; display: block; aspect-ratio: 1 / 1; }
+    .studio-grid figure.wide img { aspect-ratio: 16 / 10; }
+    .studio-grid figcaption { position: absolute; left: 8px; bottom: 8px; right: 8px; font-size: 12.5px; font-weight: 600; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.5); }
+    .kit-label { font-size: 13px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2); margin: 24px 0 4px; }
+    .kit { list-style: none; margin: 0; padding: 0; }
+    .kit li { display: flex; gap: 14px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); }
+    .kit li:last-child { border-bottom: 0; }
+    .kit img { width: 56px; height: 56px; border-radius: 8px; object-fit: cover; flex: none; background: #E9E6E0; }
+    .kit .t { font-weight: 600; font-size: 15px; }
+    .kit .c { font-size: 14px; color: var(--ink-2); line-height: 1.4; }
+
+    /* creations: deliberately small */
+    .creations .item { width: 140px; text-align: left; }
+    .creations .item img { width: 140px; height: 140px; object-fit: cover; border-radius: 10px; display: block; background: #E9E6E0; }
+    .creations .item .p { font-weight: 700; font-size: 14.5px; margin-top: 6px; }
+    .creations .item .t { font-size: 13px; color: var(--ink-2); line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .m-end { padding: 8px var(--pad) 40px; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script type="module">
+    // DESIGN DECISION 2 · PROTOTYPE 3: Maker's gallery
+    // A "See maker's gallery" bubble on the photo, a preview card under delivery/shipping/ratings, "Made by HollowPineClay"
+    // and the shop in "Meet your seller" all open the maker's own page:
+    // the people, the shop's story, the studio and process first; a small row of products last.
+    // All people and history are fictional. Photos: Unsplash / Mixkit stills (free licenses).
+    import { renderListing } from "./shared/listing.js";
+
+    const U = (id, w = 800) => `https://images.unsplash.com/photo-${id}?w=${w}&q=80&auto=format&fit=crop`;
+    const MX = id => `https://assets.mixkit.co/videos/${id}/${id}-thumb-360-0.jpg`;
+
+    const TEAM = [
+      { name: "Maya Holt", role: "Founder · throws every bowl", img: U("1762628727567-250080e7e9a3", 500),
+        q: "I still center every ball of clay myself. It's the part of the day I'd never hand off." },
+      { name: "Jonah Reyes", role: "Studio assistant · since 2021", img: MX(1971),
+        q: "I wedge the clay, load the kiln and keep the wheel room from becoming a swamp." },
+      { name: "Inés Calder", role: "Glazing & packing · since 2023", img: MX(1975),
+        q: "Every bowl gets checked by hand and wrapped in paper from the studio's own scrap." },
+    ];
+
+    const TIMELINE = [
+      { yr: "2013", t: "A used kick wheel in a garage", c: "Maya buys a secondhand wheel and teaches herself to throw after work, mostly by ruining a lot of clay." },
+      { yr: "2015", t: "HollowPineClay opens on Etsy", c: "Named for the hollow pine by the creek behind the house. The first listing: six mugs. Two sold in the first month.", img: U("1771523350533-a831d1f703a7") },
+      { yr: "2018", t: "The ramen bowl", c: "A friend asks for a bowl deep enough for broth and wide enough for toppings. It becomes the shop's bestseller." },
+      { yr: "2021", t: "A real studio, and Jonah", c: "The shop moves into an old feed store in Asheville with its own kiln room. Jonah joins as the first hire." },
+      { yr: "2023", t: "Local clay", c: "The studio starts blending red clay dug near the Blue Ridge into its stoneware. That's where the iron speckles come from.", img: U("1589051088132-06f36a22012a") },
+      { yr: "Today", t: "Three people, one wheel room", c: "Still made to order, still signed HP on the foot. Over 20,000 pieces sent to kitchens around the country.", now: true },
+    ];
+
+    const VALUES = [
+      { t: "Made to order, never mass-made", c: "We throw your bowl after you order it. That's why it takes 2–3 weeks, and why no two match." },
+      { t: "Signed by the hands that made it", c: "Every piece is stamped HP on the raw foot before the first firing." },
+      { t: "Clay from close to home", c: "Part of every batch comes from within 30 miles of the studio." },
+    ];
+
+    const STUDIO = [
+      { img: U("1622947344865-a7fcf40e88e7"), cap: "The wheel room, 7 a.m.", wide: true },
+      { img: U("1739467516257-20c1d7f1949a", 500), cap: "Trimming the foot" },
+      { img: U("1772607407371-44031ae3b69f", 500), cap: "Drying shelves" },
+      { img: U("1501917018566-8186ec861d99"), cap: "The kiln, after a 20-hour firing", wide: true },
+    ];
+
+    const KIT = [
+      { img: U("1589051088132-06f36a22012a", 200), t: "Red stoneware clay", c: "Iron-rich, partly dug locally. Wedged by hand, 2 lbs per bowl." },
+      { img: MX(1979), t: "Loop tools & a cut wire", c: "For trimming the foot and cutting each facet while the clay is leather-hard." },
+      { img: U("1771523351104-03d9c2cc347c", 200), t: "Glazes mixed in-house", c: "Sage over charcoal, dipped by hand and fired twice to 2,232°F." },
+    ];
+
+    const STAR = `<svg class="star-seller" viewBox="0 0 24 24" aria-label="Star Seller"><path fill="#9560E8" d="M12 1.5l2.4 2.1 3.2-.4 1 3 3 1-.4 3.2 2.1 2.4-2.1 2.4.4 3.2-3 1-1 3-3.2-.4L12 22.5l-2.4-2.1-3.2.4-1-3-3-1 .4-3.2L.7 12l2.1-2.4-.4-3.2 3-1 1-3 3.2.4z"/><path fill="#fff" d="M12 6.8l1.5 3.2 3.4.4-2.5 2.4.6 3.4-3-1.7-3 1.7.6-3.4-2.5-2.4 3.4-.4z"/></svg>`;
+    const BACK = `<svg width="22" height="22" viewBox="0 0 24 24"><path d="M15 4 7 12l8 8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    const SHARE = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M7.5 7.5 12 3l4.5 4.5"/><path d="M8 10H5v11h14V10h-3"/></svg>`;
+    const HEART = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-width="2.4" d="M12 20s-7-4.3-9.3-8.6C1.2 8.4 2.9 5 6.2 4.7c2.1-.2 3.8.9 5.8 3.1 2-2.2 3.7-3.3 5.8-3.1 3.3.3 5 3.7 3.5 6.7C19 15.7 12 20 12 20z"/></svg>`;
+
+    // The decision 1 Labor story, shown in the preview card and first on the maker's page
+    const LABOR = [
+      { t: "Throwing on the wheel", time: "25 min", c: "I wedge 2 lbs of red stoneware by hand, then throw and shape each bowl on the wheel.", img: U("1771523350533-a831d1f703a7", 500) },
+      { t: "Cutting the facets", time: "40 min", c: "Once it's leather-hard, I cut the facets with a wire and carve the foot, then dry it for a week.", img: U("1739467516257-20c1d7f1949a", 500) },
+      { t: "Glazing & two firings", time: "20 hrs", c: "Each bowl is dipped in glaze by hand and fired twice in my kiln, the last time to 2,232°F.", img: U("1501917018566-8186ec861d99", 500) }
+    ];
+
+    // Two visible ways into the maker's page, so buyers know it's there before they scroll
+    const maren = TEAM[0];
+    const meetBubble = `<button class="meet-bubble glass" data-open-maker><img src="${maren.img}" alt="">See maker's gallery</button>`;
+    const makerPreview = `
+      <button class="maker-preview" data-open-maker aria-label="See the process in the maker's gallery">
+        <div class="strip">${LABOR.map(x => `<img src="${x.img}" alt="">`).join("")}</div>
+        <div class="body">
+          <img class="face" src="${maren.img}" alt="">
+          <span class="eyebrow2">How it's made</span>
+          <h3>How Maya makes your bowl ${STAR}</h3>
+          <div class="where">3 stages · about 3 weeks · HollowPineClay, Asheville</div>
+          <ol class="mp-stages">${LABOR.map((x, i) => `<li><span class="n">${i + 1}</span><span class="t">${x.t}</span><span class="tm">${x.time}</span></li>`).join("")}</ol>
+          <span class="cta">See the whole process in Maya's gallery ›</span>
+        </div>
+      </button>`;
+    const d = await renderListing({ slots: { afterTitle: "", heroOverlay: meetBubble, afterFacts: makerPreview } });
+    if (!d) throw new Error("listing failed");
+    const s = d.seller, l = d.listing;
+    const money = n => `$${n.toFixed(2)}`;
+    const creations = [{ image: l.images[0], price: l.price, title: "Handmade Ceramic Ramen Bowl", current: true }, ...d.moreFromShop];
+
+    const page = document.createElement("div");
+    page.className = "maker";
+    page.setAttribute("aria-hidden", "true");
+    page.innerHTML = `
+      ${document.querySelector(".status-bar").outerHTML}
+      <div class="m-top">
+        <button class="circle-btn glass" id="m-back" aria-label="Back">${BACK}</button>
+        <span class="spacer"></span>
+        <button class="circle-btn glass" aria-label="Share">${SHARE}</button>
+      </div>
+
+      <div class="m-hero">
+        <img src="${U("1762628727567-250080e7e9a3", 900)}" alt="${s.owner} in her studio">
+        <span class="cap">${s.owner} in the wheel room</span>
+      </div>
+
+      <div class="m-intro">
+        <div class="eyebrow">Meet the maker</div>
+        <h1 class="m-name">${s.owner}</h1>
+        <div class="m-role">Potter &amp; founder of <b>${s.shopName}</b>${s.starSeller ? STAR : ""}</div>
+        <div class="m-role" style="margin-top:2px">${s.location}</div>
+        <div class="m-meta">
+          <div><div class="k">Making pots</div><div class="v">Since 2013</div></div>
+          <div><div class="k">Team</div><div class="v">3 people</div></div>
+          <div><div class="k">Pieces sent</div><div class="v">${s.sales}</div></div>
+        </div>
+        <div class="btn-row"><button class="btn outline">${HEART} Follow (${s.followers})</button><button class="btn outline">Message Maya</button></div>
+      </div>
+
+      <main>
+        <section class="section">
+          <div class="eyebrow">How it's made</div>
+          <h2 class="section-title" style="margin-top:4px">What goes into every bowl</h2>
+          <ol class="m-labor">${LABOR.map((x, i) => `
+            <li><img src="${x.img}" alt=""><div><div class="lt"><span>${i + 1} · ${x.t}</span><span class="tm">${x.time}</span></div><p>${x.c}</p></div></li>`).join("")}
+          </ol>
+        </section>
+
+        <section class="section">
+          <p class="quote">I want you to feel the hands that made it every time you pick up your bowl.</p>
+          <div class="quote-by">Maya, on why she still throws every piece herself</div>
+          <p class="body-copy">I started making bowls because I wanted the ones I ate out of to mean something. Eleven years later that's still the whole idea: small batches, made after you order, by people you can actually meet.</p>
+          <p class="body-copy">Most days start at 7 with the radio on and a table of clay to wedge. If you've bought from us, there's a good chance I remember throwing your bowl.</p>
+        </section>
+
+        <section class="section">
+          <div class="eyebrow">The people</div>
+          <h2 class="section-title" style="margin-top:4px">Who makes your bowl</h2>
+          <div class="hscroll team">${TEAM.map(p => `
+            <div class="person"><img src="${p.img}" alt="${p.name}"><div class="n">${p.name}</div><div class="r">${p.role}</div><div class="q">“${p.q}”</div></div>`).join("")}
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="eyebrow">Our story</div>
+          <h2 class="section-title" style="margin-top:4px">From a garage wheel to a studio of three</h2>
+          <ol class="timeline">${TIMELINE.map(e => `
+            <li class="${e.now ? "now" : ""}"><span class="yr">${e.yr}</span><span class="dot"></span>
+              <div class="txt"><div class="t">${e.t}</div><div class="c">${e.c}</div>${e.img ? `<img src="${e.img}" alt="${e.t}">` : ""}</div></li>`).join("")}
+          </ol>
+          <div class="kit-label" style="margin-top:4px">What we hold on to</div>
+          <div class="values" style="margin-top:8px">${VALUES.map(v => `<div class="value"><div class="t">${v.t}</div><div class="c">${v.c}</div></div>`).join("")}</div>
+        </section>
+
+        <section class="section">
+          <div class="eyebrow">Behind the scenes</div>
+          <h2 class="section-title" style="margin-top:4px">Inside the studio</h2>
+          <p class="lede">An old feed store on the edge of Asheville: one wheel room, one kiln room, and a lot of shelves.</p>
+          <div class="studio-grid">${STUDIO.map(f => `
+            <figure class="${f.wide ? "wide" : ""}"><img src="${f.img}" alt="${f.cap}"><figcaption>${f.cap}</figcaption></figure>`).join("")}
+          </div>
+          <div class="kit-label">Tools, materials &amp; techniques</div>
+          <ul class="kit">${KIT.map(k => `
+            <li><img src="${k.img}" alt="${k.t}"><div><div class="t">${k.t}</div><div class="c">${k.c}</div></div></li>`).join("")}
+          </ul>
+        </section>
+
+        <section class="section">
+          <div class="eyebrow">Explore their creations</div>
+          <h2 class="section-title" style="margin-top:4px">Made in this studio</h2>
+          <div class="hscroll creations">${creations.map(c => `
+            <button class="item" data-listing><img src="${c.image}" alt="${c.title}"><div class="p">${money(c.price)}</div><div class="t">${c.title}</div></button>`).join("")}
+          </div>
+        </section>
+      </main>
+      <div class="m-end"><button class="btn gray" data-listing>Visit the full shop</button></div>`;
+    document.body.appendChild(page);
+
+    const open = () => { page.scrollTop = 0; page.classList.add("open"); page.setAttribute("aria-hidden", "false"); document.body.classList.add("maker-open"); };
+    const close = () => { page.classList.remove("open"); page.setAttribute("aria-hidden", "true"); document.body.classList.remove("maker-open"); };
+
+    // Entry points: "Made by …" under the title, plus the shop name / avatar in "Meet your seller"
+    const madeBy = document.querySelector(".made-by a");
+    madeBy.insertAdjacentHTML("afterend", `<span class="meet">· Meet the maker ›</span>`);
+    document.querySelector(".made-by").addEventListener("click", e => { e.preventDefault(); open(); });
+    document.querySelectorAll(".seller-card .shop, .seller-card .avatar").forEach(el => { el.style.cursor = "pointer"; el.addEventListener("click", open); });
+    document.querySelectorAll("[data-open-maker]").forEach(el => el.addEventListener("click", open));
+
+    document.getElementById("m-back").addEventListener("click", close);
+    // Prototype has one listing, so product taps return to it
+    page.querySelectorAll("[data-listing]").forEach(b => b.addEventListener("click", () => { close(); window.scrollTo({ top: 0, behavior: "smooth" }); }));
+
+    if (location.hash.startsWith("#maker")) open();
+  </script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>D3 AI Draft</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared/seller-app.css">
+  <style>
+    .draft-peek { display: flex; gap: 10px; align-items: center; border: 1px solid var(--s-line); border-radius: 12px; padding: 8px; background: #fff; margin-bottom: 4px; }
+    .draft-peek img { width: 52px; height: 52px; border-radius: 8px; object-fit: cover; flex: none; }
+    .draft-peek b { display: block; font-family: var(--serif); font-weight: 400; font-size: 16px; }
+    .draft-peek span { font-size: 12.5px; color: var(--s-ink-2); }
+    .ai-chip { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 700; color: var(--s-blue); background: var(--s-blue-soft); border-radius: 10px; padding: 2px 8px; }
+
+    /* Sources screen */
+    .src { margin: 0 var(--pad) 10px; border: 1px solid var(--s-line); border-radius: 14px; padding: 12px; }
+    .src.off { opacity: .5; }
+    .src .head { display: flex; align-items: center; gap: 10px; }
+    .src .ic { width: 36px; height: 36px; border-radius: 10px; background: var(--s-soft); display: grid; place-items: center; flex: none; }
+    .src .head .txt { flex: 1; min-width: 0; }
+    .src .head b { display: block; font-size: 14.5px; }
+    .src .head span { font-size: 12.5px; color: var(--s-ink-2); }
+    .src blockquote { margin: 10px 0 0; padding: 8px 10px; background: var(--s-soft); border-radius: 10px; font-size: 13.5px; line-height: 1.45; color: #3A3A3A; }
+    .src blockquote mark { background: #FFE8C2; border-radius: 3px; padding: 0 2px; }
+    .src blockquote small { display: block; font-size: 11.5px; color: var(--s-ink-3); margin-top: 4px; }
+    .src .thumbs { display: flex; gap: 6px; margin-top: 10px; }
+    .src .thumbs img { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; }
+    .src-note { margin: 4px var(--pad) 0; font-size: 12.5px; color: var(--s-ink-3); display: flex; gap: 6px; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <div class="pl-screen" id="screen"></div>
+  <div class="gen" id="gen"></div>
+  <script type="module">
+    // DESIGN DECISION 3 · PROTOTYPE 3: AI draft ("Etsy drafts it for you")
+    // The near-zero-effort end of decision 3. Etsy AI drafts the story from what the seller has already
+    // shared (listing description and photos, shop About, answers to buyers in Messages, buyer reviews).
+    // The seller only checks which sources to use, reviews the draft and approves. About a minute.
+    // Same AI drafting step and the same shared review as prototypes 1 and 2, so only the seller's input
+    // differs: 1 = moments captured while making, 2 = three answers in one sitting, 3 = nothing new.
+    // Add #sources or #review to the URL to jump to a screen.
+    import { renderSellerListing, sStatus, sIcons } from "./shared/seller-app.js";
+    import { mountStoryReview, showDrafting } from "./shared/story-review.js";
+
+    const IC = {
+      spark: `<svg width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l2.2 6.3L20 10l-5.8 1.7L12 18l-2.2-6.3L4 10l5.8-1.7zM19 15l1 2.6 2.5.9-2.5.9L19 22l-1-2.6-2.5-.9 2.5-.9z"/></svg>`,
+      sparkSm: `<svg width="11" height="11" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l2.2 6.3L20 10l-5.8 1.7L12 18l-2.2-6.3L4 10l5.8-1.7z"/></svg>`,
+      check: `<svg width="12" height="12" viewBox="0 0 24 24"><path d="m5 12 5 5 9-10" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      clock: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>`,
+      doc: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>`,
+      photo: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="m21 16-5-5-9 9"/></svg>`,
+      shop: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 9 5 4h14l2 5M4 9v11h16V9M3 9h18"/><path d="M9 20v-6h6v6"/></svg>`,
+      msg: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>`,
+      star: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg>`,
+      lock: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>`,
+    };
+    const MAKER = { name: "Maya Holt", shop: "HollowPineClay", avatar: "https://images.unsplash.com/photo-1598815272841-4e85a77e0a67?w=80&h=80&q=80&auto=format&fit=crop&crop=faces" };
+    const product = await (await fetch("data/product.json")).json();
+    const LISTING = "Handmade Ceramic Bowl for Ramen or Pho";
+    const IMG = product.listing.images.map(s => s.replace(/w=\d+/, "w=600"));
+
+    // What Etsy AI drafts from. Each source becomes one moment of the same neutral story
+    // the other two tools produce. `quote` is what the seller already wrote; highlighted part = what AI used.
+    const SOURCES = [
+      { id: "description", icon: IC.doc, name: "Your listing description", meta: "Written when you listed it",
+        quote: "This listing is for one handmade ramen bowl, thrown from <mark>iron-red stoneware clay</mark>. <mark>Each bowl is unique</mark>, with slight variations in shape, glaze and speckling.",
+        moment: { img: IMG[0], label: "From your listing description", caption: "Thrown by hand from iron-red stoneware, so every bowl is a little different in shape, glaze and speckling." } },
+      { id: "messages", icon: IC.msg, name: "Your answers to buyers", meta: "2 replies in Messages",
+        quote: "Hi Priya! Yes they're all made by me. <mark>I cut the facets by hand with a wire</mark> while the clay is soft, <mark>about 40 minutes a bowl</mark>, that's why it takes 2–3 weeks.", by: "You → Priya · Sep 28",
+        moment: { img: IMG[4], label: "From your answers to buyers", caption: "Each of the 12 facets is cut by hand with a wire while the clay is still soft, about 40 minutes per bowl." } },
+      { id: "reviews", icon: IC.star, name: "What buyers say", meta: "From 440 reviews",
+        quote: "So happy with these bowls! They're <mark>heavier than I expected</mark> in the best way.", by: "Priya · ★★★★★",
+        moment: { img: IMG[1], label: "From buyer reviews", caption: "The first thing buyers notice is the weight: heavy enough to keep broth hot to the last spoonful." } },
+      { id: "about", icon: IC.shop, name: "Your shop's About section", meta: "HollowPineClay",
+        quote: "One potter, one wheel. <mark>Every piece is signed HP</mark> and <mark>made to order in Asheville</mark>, North Carolina.",
+        moment: { img: IMG[3], label: "From your shop's About", caption: "Signed HP on the raw foot and made to order in Asheville, North Carolina." } },
+    ];
+
+    const state = { on: Object.fromEntries(SOURCES.map(s => [s.id, true])), review: null, published: null };
+    const app = document.getElementById("app"), screen = document.getElementById("screen"), gen = document.getElementById("gen");
+    const go = name => { location.hash = name; };
+
+    // ---------- Overview: the draft is already waiting ----------
+    function entryCard() {
+      return `
+        <div class="pl-card">
+          <div class="top"><h3>Your story is drafted</h3><span class="pl-new">New</span><span class="sb-time" style="margin-left:auto">${IC.clock} About 1 min</span></div>
+          <p>Etsy AI wrote a story for this listing from things you've already shared. Check it and publish, nothing new to write.</p>
+          <div class="draft-peek"><img src="${IMG[0].replace("w=600", "w=160")}" alt=""><div><b>From clay to kiln</b><span><span class="ai-chip">${IC.sparkSm} Etsy AI draft</span> · 4 moments</span></div></div>
+          ${state.published ? `<span class="pl-live">${IC.check} Story published</span>` : ""}
+          <div class="pl-actions"><button class="s-btn dark" data-go="sources">${state.published ? "Edit my story" : "Review my draft"}</button></div>
+        </div>`;
+    }
+
+    // ---------- What Etsy AI used ----------
+    function renderSources() {
+      const n = Object.values(state.on).filter(Boolean).length;
+      return `
+        ${sStatus()}
+        <header class="s-header"><button class="s-icon" data-back aria-label="Close">${sIcons.close}</button><span class="ttl">Your story draft</span><span class="sb-time">${IC.clock} About 1 min</span></header>
+        <h1 class="pl-h1">Here's what Etsy AI used</h1>
+        <p class="pl-lead">Only things you've already shared. Turn off anything you don't want in your story.</p>
+        ${SOURCES.map(s => `
+          <div class="src ${state.on[s.id] ? "" : "off"}">
+            <div class="head"><span class="ic">${s.icon}</span><span class="txt"><b>${s.name}</b><span>${s.meta}</span></span>
+              <button class="sr-toggle ${state.on[s.id] ? "on" : ""}" data-src="${s.id}" aria-pressed="${state.on[s.id]}" aria-label="Use ${s.name}"></button></div>
+            <blockquote>${s.quote}${s.by ? `<small>${s.by}</small>` : ""}</blockquote>
+          </div>`).join("")}
+        <div class="src">
+          <div class="head"><span class="ic">${IC.photo}</span><span class="txt"><b>Your listing photos</b><span>${IMG.length} photos</span></span><span class="sb-time">Always used</span></div>
+          <div class="thumbs">${IMG.map(s => `<img src="${s.replace("w=600", "w=120")}" alt="">`).join("")}</div>
+        </div>
+        <p class="src-note">${IC.lock} Buyers' names and messages are never shown in your story.</p>
+        <div class="pl-footer"><button class="s-btn dark" id="draft" ${n === 0 ? "disabled" : ""}>${IC.spark} See my story</button></div>`;
+    }
+
+    function runGenerate() {
+      const used = SOURCES.filter(s => state.on[s.id]);
+      state.review = {
+        title: "From clay to kiln", maker: MAKER, listingTitle: LISTING,
+        lead: `Etsy AI drafted ${used.length} moments from what you've already shared.`,
+        moments: used.map(s => ({ id: s.id, ...s.moment, suggested: true })),
+        places: { listing: true, feed: true, gallery: true },
+        onBack: () => history.back(),
+        onApprove: m => { state.published = { ...m.places }; location.replace("#done"); },
+      };
+      showDrafting(gen, ["Reading your listing and shop", "Picking details from your messages and reviews", "Matching each to a photo", "Matching your shop's style"],
+        () => location.hash === "#review" ? route() : go("review"));
+    }
+
+    function renderDone() {
+      const p = state.published || {};
+      const where = [p.listing && "your listing", p.feed && "the Story feed", p.gallery && "your maker's gallery"].filter(Boolean);
+      return `
+        ${sStatus()}
+        <div class="done-wrap">
+          <div class="big">${IC.check.replace('width="12" height="12"', 'width="34" height="34"')}</div>
+          <h2>Your story is published</h2>
+          <p>Buyers can now find it on ${where.join(", ").replace(/, ([^,]*)$/, " and $1")}. Etsy AI will suggest updates as new reviews come in.</p>
+          ${p.feed ? `<a class="s-btn dark" href="d2-2-story-feed.html#stories/0" target="_blank">See it in the Story feed ↗</a>` : ""}
+          ${p.gallery ? `<a class="s-btn outline" href="d2-3-makers-gallery.html#maker" target="_blank">See your maker's gallery ↗</a>` : ""}
+          <button class="s-btn outline" data-go="">Back to listing</button>
+        </div>`;
+    }
+
+    // ---------- Routing ----------
+    const ROUTES = { sources: renderSources, done: renderDone, review: null };
+    function bindGo(root) {
+      root.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => go(b.dataset.go)));
+      root.querySelectorAll("[data-back]").forEach(b => b.addEventListener("click", () => history.back()));
+    }
+    async function route() {
+      const name = location.hash.slice(1);
+      if (!(name in ROUTES)) {
+        screen.className = "pl-screen"; screen.innerHTML = ""; document.body.style.overflow = "";
+        await renderSellerListing({ slots: { afterPhotos: entryCard() } });
+        bindGo(app);
+        return;
+      }
+      screen.className = "pl-screen open";
+      document.body.style.overflow = "hidden";
+      screen.scrollTop = 0;
+      if (name === "review") {
+        if (!state.review) { runGenerate(); return; }
+        mountStoryReview(screen, state.review);
+        return;
+      }
+      screen.innerHTML = ROUTES[name]();
+      bindGo(screen);
+      if (name === "sources") wireSources();
+    }
+    function wireSources() {
+      screen.querySelectorAll("[data-src]").forEach(b => b.addEventListener("click", () => {
+        state.on[b.dataset.src] = !state.on[b.dataset.src];
+        state.review = null;
+        const y = screen.scrollTop; screen.innerHTML = renderSources(); bindGo(screen); wireSources(); screen.scrollTop = y;
+      }));
+      screen.querySelector("#draft").addEventListener("click", runGenerate);
+    }
+
+    window.addEventListener("hashchange", route);
+    route();
+  </script>
+</body>
+</html>

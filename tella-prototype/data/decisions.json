@@ -1,0 +1,198 @@
+{
+  "base": {
+    "num": "Base",
+    "name": "Current Etsy",
+    "file": "01-base-listing.html",
+    "status": "ready",
+    "desc": "Today's Etsy app product page, unchanged. The starting point every prototype in this row is compared against."
+  },
+  "decisions": [
+    {
+      "id": "d1",
+      "num": "Design decision 1",
+      "title": "What makes a handmade story valuable?",
+      "intro": "Same product, same story card and the same amount of content. The card sits right after the item details, ahead of checkout and reviews. Only the story angle changes.",
+      "protos": [
+        {
+          "name": "The Labor",
+          "file": "02-labor.html",
+          "status": "ready",
+          "desc": "What goes into making it? A three-step process timeline with photos and short captions showing the stages, time and effort."
+        },
+        {
+          "name": "The Craft",
+          "file": "03-craftsmanship.html",
+          "status": "ready",
+          "desc": "What makes it special? Three close-up photos highlighting technique, material choices and details a buyer might otherwise overlook."
+        },
+        {
+          "name": "The Inspiration",
+          "file": "04-inspiration.html",
+          "status": "ready",
+          "desc": "Why did the maker create it this way? A short first-person story paired with sketches and product photos."
+        }
+      ]
+    },
+    {
+      "id": "d2",
+      "num": "Design decision 2",
+      "title": "Where should buyers discover that story?",
+      "intro": "Builds on decision 1: every prototype tells the same Labor story (throwing 25 min · cutting the facets 40 min · glazing & two firings 20 hrs). Only where the buyer first meets it changes: on the listing photo, in search results, or on the maker's page.",
+      "protos": [
+        {
+          "name": "Interactive detail on the listing image",
+          "file": "d2-1-interactive-image.html",
+          "status": "ready",
+          "desc": "A \"Tap to explore in 3D\" button on the listing photo opens a 360° model of the bowl. Rotate and zoom; the three labor stages are pinned where each shows on the bowl."
+        },
+        {
+          "name": "Story feed",
+          "file": "d2-2-story-feed.html",
+          "desc": "The story finds the buyer: searching \"ceramic\" shows a row of 9:16 maker stories above the results. The bowl's reel walks through the three labor stages; \"View item\" opens the listing.",
+          "status": "ready"
+        },
+        {
+          "name": "Maker's gallery",
+          "file": "d2-3-makers-gallery.html",
+          "desc": "A \"See maker's gallery\" bubble and a \"How Maya makes your bowl\" card on the listing open the maker's page, which leads with the three labor stages, then the people, studio and story.",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "id": "d3",
+      "num": "Design decision 3",
+      "title": "How can sellers communicate the product story without extra work?",
+      "intro": "These happen in the Etsy Seller app, so the base is the seller's listing screen. All three use the same Etsy AI drafting step and end on the same \"Your story is ready\" review, so only the seller's input changes: moments captured while making, three answers in one sitting, or nothing new at all.",
+      "protos": [
+        {
+          "name": "Process log",
+          "file": "d3-1-process-log.html",
+          "desc": "The seller snaps a photo or records a clip at each meaningful step (optional caption or voice note). Clips build a growing reel for the Story feed. Etsy picks the moments and makes the story to review and publish.",
+          "status": "ready"
+        },
+        {
+          "name": "Guided story builder",
+          "file": "d3-2-story-builder.html",
+          "desc": "One sitting, about 5 minutes: the seller picks existing listing photos and answers 3 prompts (type or say it). Etsy structures the answers into the same story to review and publish.",
+          "status": "ready"
+        },
+        {
+          "name": "AI story draft",
+          "file": "d3-3-ai-draft.html",
+          "status": "ready",
+          "desc": "Near-zero effort: Etsy AI drafts the story from what the seller already shared (listing description, shop About, answers to buyers, reviews). The seller checks the sources, reviews and publishes in about a minute."
+        }
+      ],
+      "base": {
+        "num": "Base",
+        "name": "Current Etsy Seller app",
+        "file": "05-base-seller-app.html",
+        "status": "ready",
+        "desc": "The bowl's listing overview in today's Etsy Seller app (a separate app from the buyer one). Every prototype in this row is compared against it."
+      }
+    }
+  ],
+  "final": {
+    "id": "final",
+    "num": "Final solution · Tella by Etsy",
+    "title": "Sellers capture the making, buyers discover it in search",
+    "intro": "Two phones, one story. On the buyer's phone, HollowPineClay is always the second story in the Tella row above the search results: tap it, swipe through the three labor stages, then See details for her listing. Start a Tella on the seller's phone and publish it, and the buyer's Tella updates to exactly what Maya published (marked New).",
+    "screens": [
+      {
+        "label": "Seller app",
+        "name": "Maya starts a Tella",
+        "file": "final-seller.html",
+        "status": "ready",
+        "desc": "Her bowl's listing in the Seller app. She captures moments while making; Make my Tella has Etsy AI group them into the three labor stages. Approve & publish sends it to the buyer app."
+      },
+      {
+        "label": "Buyer app",
+        "name": "A buyer finds it in Tella",
+        "file": "final-buyer.html",
+        "status": "ready",
+        "desc": "Searching \"ceramic\". HollowPineClay is the second story in the Tella row. Tap it for her reel, then See details for her listing with the same \"Tella · How it's made\" stages."
+      }
+    ],
+    "map": [
+      {
+        "id": "d1",
+        "step": "1",
+        "side": "Buyer side",
+        "q": "What makes a handmade story valuable?",
+        "purpose": "Find which kind of story makes buyers see a handmade bowl as worth its price.",
+        "changed": "The story angle: labor, craft or inspiration",
+        "kept": "Same bowl, same page, same position after item details, same card format and amount of content",
+        "chosen": {
+          "name": "The Labor",
+          "file": "02-labor.html",
+          "why": "Time and effort explain the price. Every handmade item has a process (not every maker has an inspiring backstory, and craft details often need expertise to appreciate), and it's the easiest to show honestly."
+        },
+        "alts": [
+          {
+            "name": "The Craft",
+            "file": "03-craftsmanship.html",
+            "whyNot": "Close-ups of technique are impressive, but buyers often can't tell what's special without explanation, and it doesn't explain the price as directly."
+          },
+          {
+            "name": "The Inspiration",
+            "file": "04-inspiration.html",
+            "whyNot": "Personal and memorable, but depends on the maker having a compelling story, so it doesn't work for every seller or product."
+          }
+        ]
+      },
+      {
+        "id": "d2",
+        "step": "2",
+        "side": "Buyer side",
+        "q": "Where should buyers first meet that story?",
+        "purpose": "Find where the labor story reaches the most buyers at the moment it changes their decision.",
+        "changed": "Where the buyer first meets the story: listing photo, search results or maker's page",
+        "kept": "The same Labor story (3 stages, same words and times), same product",
+        "chosen": {
+          "name": "Story feed in search",
+          "file": "d2-2-story-feed.html",
+          "why": "It reaches every buyer who searches, at the exact point where handmade items blur into thumbnails and prices, and video naturally shows a process over time."
+        },
+        "alts": [
+          {
+            "name": "3D image on the listing",
+            "file": "d2-1-interactive-image.html",
+            "whyNot": "Only reaches buyers who already opened the listing, shows the finished object rather than the time behind it, and needs a costly 360° capture from sellers."
+          },
+          {
+            "name": "Maker's gallery",
+            "file": "d2-3-makers-gallery.html",
+            "whyNot": "Great for buyers who already care about the maker, but too few people reach it to fix discovery in search."
+          }
+        ]
+      },
+      {
+        "id": "d3",
+        "step": "3",
+        "side": "Seller side",
+        "q": "How can sellers make that story without extra work?",
+        "purpose": "Find the lightest way for sellers who aren't content creators to produce the labor story buyers need.",
+        "changed": "The seller's input and effort: moments while making, 3 answers in one sitting, or nothing new",
+        "kept": "Same Etsy AI drafting step, same review screen, same output and where it can appear",
+        "chosen": {
+          "name": "Process log",
+          "file": "d3-1-process-log.html",
+          "why": "It's the only tool that captures the making itself, which the labor story and video feed need. Etsy AI keeps it to a few seconds per moment."
+        },
+        "alts": [
+          {
+            "name": "Guided story builder",
+            "file": "d3-2-story-builder.html",
+            "whyNot": "Quick and structured, but it only has the finished listing photos, so it can't show the process happening."
+          },
+          {
+            "name": "AI story draft",
+            "file": "d3-3-ai-draft.html",
+            "whyNot": "The least effort, but it reuses words and photos of the finished product, so there's no real footage of the making and less of the maker's own voice."
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>D3 Story Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared/seller-app.css">
+  <style>
+
+    /* Step progress */
+    .steps { display: flex; gap: 4px; margin: 0 var(--pad) 14px; }
+    .steps i { flex: 1; height: 4px; border-radius: 2px; background: var(--s-line); }
+    .steps i.on { background: var(--s-ink); }
+
+    /* Photo picker */
+    .pick-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 0 var(--pad); }
+    .pick { position: relative; aspect-ratio: 1; border-radius: 10px; overflow: hidden; }
+    .pick img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .15s; }
+    .pick .chk { position: absolute; top: 6px; right: 6px; width: 24px; height: 24px; border-radius: 50%; border: 2px solid #fff; background: rgba(0,0,0,.25); display: grid; place-items: center; color: #fff; font-size: 12px; font-weight: 700; }
+    .pick.on { background: var(--s-blue-soft); }
+    .pick.on img { transform: scale(.92); border-radius: 8px; }
+    .pick.on .chk { background: var(--s-blue); border-color: var(--s-blue); }
+    .pick .cover { position: absolute; left: 6px; bottom: 6px; font-size: 10.5px; font-weight: 700; color: #fff; background: rgba(0,0,0,.55); border-radius: 6px; padding: 1px 5px; }
+    .pick-note { margin: 12px var(--pad) 0; font-size: 13px; color: var(--s-ink-2); }
+
+    /* Question screens */
+    .q-num { margin: 0 var(--pad); font-size: 12.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--s-ink-3); }
+    .q-title { font-family: var(--serif); font-weight: 400; font-size: 28px; line-height: 1.2; margin: 4px var(--pad) 6px; }
+    .q-help { margin: 0 var(--pad) 14px; color: var(--s-ink-2); font-size: 14px; }
+    .q-box { margin: 0 var(--pad); border: 1.5px solid #CFCFCF; border-radius: 14px; padding: 4px; }
+    .q-box:focus-within { border-color: var(--s-ink); }
+    .q-box textarea { width: 100%; border: 0; outline: 0; resize: none; font: inherit; font-size: 16px; line-height: 1.45; padding: 10px; min-height: 120px; }
+    .q-box .bar { display: flex; align-items: center; justify-content: space-between; padding: 4px 6px 6px; }
+    .say { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 13.5px; border-radius: 16px; padding: 6px 12px; background: var(--s-soft); }
+    .say.on { background: #FFF1F1; color: #C62828; }
+    .say.on svg { animation: blink 1s infinite; }
+    @keyframes blink { 50% { opacity: .3; } }
+    .count { font-size: 12px; color: var(--s-ink-3); }
+    .q-label { margin: 16px var(--pad) 6px; font-weight: 600; font-size: 14px; }
+    .q-chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 var(--pad); }
+    .q-photos { display: flex; gap: 8px; margin: 0 var(--pad); overflow-x: auto; scrollbar-width: none; padding: 3px; }
+    .q-photos button { position: relative; flex: none; width: 64px; height: 64px; border-radius: 10px; overflow: hidden; }
+    .q-photos img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .q-photos button.on { box-shadow: 0 0 0 3px var(--s-blue); }
+    .q-photos button.on::after { content: "✓"; position: absolute; top: 4px; right: 4px; width: 18px; height: 18px; border-radius: 50%; background: var(--s-blue); color: #fff; font-size: 11px; font-weight: 700; display: grid; place-items: center; }
+    .q-foot { display: flex; gap: 10px; }
+    .q-foot .skip { flex: none; width: auto; padding: 0 18px; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <div class="pl-screen" id="screen"></div>
+  <div class="gen" id="gen"></div>
+  <script type="module">
+    // DESIGN DECISION 3 · PROTOTYPE 2: Guided story builder
+    // The seller makes a story in one sitting from the listing's existing photos and three short prompts.
+    // No ongoing documentation habit needed. Etsy structures the answers into the same neutral story every
+    // decision 3 tool produces (shared/story-review.js), so only the seller's effort differs.
+    // Core hypothesis: sellers tell a compelling story more easily when Etsy asks the right questions.
+    // Flow: listing overview → pick listing photos → 3 prompts (type or "say it", attach a photo) →
+    // Etsy drafts the story → shared review (edit wording/order, choose where it appears) → published.
+    // Add #photos, #q1, #q2, #q3 or #review to the URL to jump to a screen.
+    import { renderSellerListing, sStatus, sIcons, sToast } from "./shared/seller-app.js";
+    import { mountStoryReview, showDrafting } from "./shared/story-review.js";
+
+    const IC = {
+      spark: `<svg width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l2.2 6.3L20 10l-5.8 1.7L12 18l-2.2-6.3L4 10l5.8-1.7zM19 15l1 2.6 2.5.9-2.5.9L19 22l-1-2.6-2.5-.9 2.5-.9z"/></svg>`,
+      mic: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>`,
+      check: `<svg width="12" height="12" viewBox="0 0 24 24"><path d="m5 12 5 5 9-10" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      clock: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>`,
+      chat: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg>`,
+    };
+    const MAKER = { name: "Maya Holt", shop: "HollowPineClay", avatar: "https://images.unsplash.com/photo-1598815272841-4e85a77e0a67?w=80&h=80&q=80&auto=format&fit=crop&crop=faces" };
+
+    const product = await (await fetch("data/product.json")).json();
+    const LISTING = "Handmade Ceramic Bowl for Ramen or Pho";
+    const PHOTOS = product.listing.images.map((src, i) => ({ i, src: src.replace(/w=\d+/, "w=600") }));
+
+    // The three prompts. `sample` is what "Say it" fills in (standing in for speech-to-text);
+    // `polished` is how Etsy would structure that answer for buyers.
+    const QUESTIONS = [
+      { key: "special", label: "What makes it special", title: "What makes this bowl special?",
+        help: "Think about what you'd tell someone holding it at a craft fair.",
+        chips: ["The clay", "The shape", "The glaze", "Made to order"], photo: 0,
+        sample: "the clay is partly dug near my studio so every bowl has its own speckles and no two look the same",
+        polished: "Part of the clay is dug near my Blue Ridge studio, so every bowl gets its own iron speckles and no two match." },
+      { key: "care", label: "What takes the most care", title: "What part takes the most care?",
+        help: "The step you'd never rush, or the one that took longest to learn.",
+        chips: ["Throwing", "Cutting the facets", "Glazing", "Firing"], photo: 4,
+        sample: "cutting the facets. i do it with a wire while the clay is still soft, it takes about 40 minutes a bowl",
+        polished: "Cutting the 12 facets by hand with a wire while the clay is still soft, about 40 minutes per bowl." },
+      { key: "notice", label: "What buyers should notice", title: "What should buyers notice?",
+        help: "A detail that's easy to miss in a photo.",
+        chips: ["The facets", "Where the glaze breaks", "The stamp underneath", "How it feels"], photo: 3,
+        sample: "turn it over, theres my HP stamp on the raw foot. and the glaze goes darker right at the rim",
+        polished: "Turn it over: every bowl is stamped HP on the raw foot, and the sage glaze darkens to charcoal at the rim." },
+    ];
+
+    const state = {
+      photos: new Set([0, 1, 3, 4]),
+      answers: { special: "", care: "", notice: "" },
+      photoFor: Object.fromEntries(QUESTIONS.map(q => [q.key, q.photo])),
+      review: null,
+      published: null,
+    };
+
+    const app = document.getElementById("app"), screen = document.getElementById("screen"), gen = document.getElementById("gen");
+    const go = name => { location.hash = name; };
+
+    // ---------- Overview: entry card on the seller's listing ----------
+    function entryCard() {
+      return `
+        <div class="pl-card">
+          <div class="top"><h3>Story builder</h3><span class="pl-new">New</span><span class="sb-time" style="margin-left:auto">${IC.clock} About 5 min</span></div>
+          <p>Answer 3 quick questions about this bowl. Etsy AI turns your answers and listing photos into a story.</p>
+          ${state.published ? `<span class="pl-live">${IC.check} Story published</span>` : ""}
+          <div class="pl-actions"><button class="s-btn dark" data-go="photos">${IC.chat} ${state.published ? "Edit my story" : "Build my story"}</button></div>
+        </div>`;
+    }
+
+    // ---------- Step 1: choose photos from the listing ----------
+    function renderPhotos() {
+      const order = [...state.photos];
+      return `
+        ${sStatus()}
+        <header class="s-header"><button class="s-icon" data-back aria-label="Close">${sIcons.close}</button><span class="ttl">Story builder</span><span class="sb-time">${IC.clock} About 5 min</span></header>
+        <div class="steps"><i class="on"></i><i></i><i></i><i></i></div>
+        <h1 class="pl-h1">Pick photos from your listing</h1>
+        <p class="pl-lead">You already have these. Choose the ones that help tell the story.</p>
+        <div class="pick-grid">
+          ${PHOTOS.map(p => `
+            <button class="pick ${state.photos.has(p.i) ? "on" : ""}" data-pick="${p.i}">
+              <img src="${p.src}" alt="">
+              <span class="chk">${state.photos.has(p.i) ? order.indexOf(p.i) + 1 : ""}</span>
+              ${order[0] === p.i ? `<span class="cover">Cover</span>` : ""}
+            </button>`).join("")}
+        </div>
+        <p class="pick-note">From “${LISTING}”. The first photo you pick becomes the cover.</p>
+        <div class="pl-footer"><button class="s-btn dark" data-go="q1" ${state.photos.size < 1 ? "disabled" : ""}>Next: 3 quick questions</button></div>`;
+    }
+
+    // ---------- Steps 2–4: one prompt per screen ----------
+    function renderQuestion(n) {
+      const q = QUESTIONS[n], val = state.answers[q.key];
+      const picked = PHOTOS.filter(p => state.photos.has(p.i));
+      return `
+        ${sStatus()}
+        <header class="s-header"><button class="s-icon" data-back aria-label="Back">${sIcons.back}</button><span class="ttl">Story builder</span><span class="sb-time">${IC.clock} ~1 min</span></header>
+        <div class="steps">${[0, 1, 2, 3].map(i => `<i class="${i <= n + 1 ? "on" : ""}"></i>`).join("")}</div>
+        <div class="q-num">Question ${n + 1} of 3</div>
+        <h1 class="q-title">${q.title}</h1>
+        <p class="q-help">${q.help}</p>
+        <div class="q-box">
+          <textarea id="ans" placeholder="A sentence or two is plenty. Don't worry about wording, Etsy AI will tidy it up.">${val}</textarea>
+          <div class="bar"><button class="say" id="say">${IC.mic} Say it instead</button><span class="count" id="count">${val ? val.split(/\s+/).filter(Boolean).length + " words" : ""}</span></div>
+        </div>
+        <div class="q-label">Need a starting point?</div>
+        <div class="q-chips">${q.chips.map(c => `<button class="chip" data-chip="${c}">${c}</button>`).join("")}</div>
+        <div class="q-label">Which photo goes with this?</div>
+        <div class="q-photos">${picked.map(p => `<button class="${state.photoFor[q.key] === p.i ? "on" : ""}" data-ph="${p.i}"><img src="${p.src.replace("w=600", "w=160")}" alt=""></button>`).join("")}</div>
+        <div class="pl-footer"><div class="q-foot">
+          <button class="s-btn outline skip" id="skip">Skip</button>
+          <button class="s-btn dark" id="next">${n < 2 ? "Next question" : `${IC.spark} Make my story`}</button>
+        </div></div>`;
+    }
+
+    // ---------- Etsy drafts the story → shared review ----------
+    const tidy = (q, text) => {
+      const t = text.trim();
+      if (!t) return "";
+      if (t === q.sample) return q.polished;
+      return (t[0].toUpperCase() + t.slice(1)).replace(/\s+/g, " ").replace(/([^.!?])$/, "$1.");
+    };
+
+    function runGenerate() {
+      const answered = QUESTIONS.filter(q => state.answers[q.key].trim());
+      const used = new Set(answered.map(q => state.photoFor[q.key]));
+      const cover = [...state.photos][0];
+      // Cover photo opens the story; each answered prompt becomes one moment with its photo.
+      const moments = [];
+      if (!used.has(cover)) moments.push({ id: "cover", img: PHOTOS[cover].src, label: "The bowl", caption: "Thrown, cut and glazed by hand in Asheville, North Carolina.", suggested: true });
+      answered.forEach(q => moments.push({ id: q.key, img: PHOTOS[state.photoFor[q.key]].src, label: q.label, caption: tidy(q, state.answers[q.key]), suggested: true }));
+      state.review = {
+        title: "From clay to kiln", maker: MAKER, listingTitle: LISTING, moments,
+        lead: `Etsy AI turned your answers into ${moments.length} short captions and matched each to a photo.`,
+        places: { listing: true, feed: true, gallery: true },
+        onBack: () => history.back(),
+        onApprove: m => { state.published = { ...m.places }; location.replace("#done"); },
+      };
+      showDrafting(gen, ["Reading your answers", "Turning them into short captions", "Matching each to a photo", "Matching your shop's style"],
+        () => location.hash === "#review" ? route() : go("review"));
+    }
+
+    function renderDone() {
+      const p = state.published || {};
+      const where = [p.listing && "your listing", p.feed && "the Story feed", p.gallery && "your maker's gallery"].filter(Boolean);
+      return `
+        ${sStatus()}
+        <div class="done-wrap">
+          <div class="big">${IC.check.replace('width="12" height="12"', 'width="34" height="34"')}</div>
+          <h2>Your story is published</h2>
+          <p>Buyers can now find it on ${where.join(", ").replace(/, ([^,]*)$/, " and $1")}. You can edit your answers anytime.</p>
+          ${p.feed ? `<a class="s-btn dark" href="d2-2-story-feed.html#stories/0" target="_blank">See it in the Story feed ↗</a>` : ""}
+          ${p.gallery ? `<a class="s-btn outline" href="d2-3-makers-gallery.html#maker" target="_blank">See your maker's gallery ↗</a>` : ""}
+          <button class="s-btn outline" data-go="">Back to listing</button>
+        </div>`;
+    }
+
+    // ---------- Routing ----------
+    const ROUTES = { photos: renderPhotos, q1: () => renderQuestion(0), q2: () => renderQuestion(1), q3: () => renderQuestion(2), done: renderDone, review: null };
+
+    function bindGo(root) {
+      root.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => go(b.dataset.go)));
+      root.querySelectorAll("[data-back]").forEach(b => b.addEventListener("click", () => history.back()));
+    }
+
+    async function route() {
+      const name = location.hash.slice(1);
+      if (!(name in ROUTES)) {
+        screen.className = "pl-screen"; screen.innerHTML = ""; document.body.style.overflow = "";
+        await renderSellerListing({ slots: { afterPhotos: entryCard() } });
+        bindGo(app);
+        return;
+      }
+      screen.className = "pl-screen open";
+      document.body.style.overflow = "hidden";
+      screen.scrollTop = 0;
+      if (name === "review") {
+        if (!state.review) {   // opened directly: use the sample answers so there's something to show
+          QUESTIONS.forEach(q => { if (!state.answers[q.key]) state.answers[q.key] = q.sample; });
+          runGenerate(); return;
+        }
+        mountStoryReview(screen, state.review);
+        return;
+      }
+      screen.innerHTML = ROUTES[name]();
+      bindGo(screen);
+      if (name === "photos") wirePhotos();
+      if (name.startsWith("q")) wireQuestion(+name[1] - 1);
+    }
+
+    function wirePhotos() {
+      screen.querySelectorAll("[data-pick]").forEach(b => b.addEventListener("click", () => {
+        const i = +b.dataset.pick;
+        state.photos.has(i) ? state.photos.delete(i) : state.photos.add(i);
+        // Keep each prompt's photo valid
+        QUESTIONS.forEach(q => { if (!state.photos.has(state.photoFor[q.key])) state.photoFor[q.key] = [...state.photos][0]; });
+        state.review = null;
+        screen.innerHTML = renderPhotos(); bindGo(screen); wirePhotos();
+      }));
+    }
+
+    function wireQuestion(n) {
+      const q = QUESTIONS[n], ta = screen.querySelector("#ans"), count = screen.querySelector("#count"), say = screen.querySelector("#say");
+      const sync = () => { state.answers[q.key] = ta.value; state.review = null; const w = ta.value.split(/\s+/).filter(Boolean).length; count.textContent = w ? `${w} words` : ""; };
+      ta.addEventListener("input", sync);
+      screen.querySelectorAll("[data-chip]").forEach(c => c.addEventListener("click", () => {
+        ta.value = (ta.value.trim() ? ta.value.trim() + " " : "") + c.dataset.chip.toLowerCase() + " ";
+        ta.focus(); sync();
+      }));
+      screen.querySelectorAll("[data-ph]").forEach(b => b.addEventListener("click", () => {
+        state.photoFor[q.key] = +b.dataset.ph;
+        screen.querySelectorAll("[data-ph]").forEach(x => x.classList.toggle("on", x === b));
+      }));
+      // "Say it instead": stands in for speech-to-text by typing out a sample spoken answer
+      let typing;
+      say.addEventListener("click", () => {
+        if (typing) return;
+        say.classList.add("on"); say.innerHTML = `${IC.mic} Listening…`;
+        ta.value = ""; let i = 0;
+        typing = setInterval(() => {
+          ta.value = q.sample.slice(0, ++i); sync();
+          if (i >= q.sample.length) { clearInterval(typing); typing = null; say.classList.remove("on"); say.innerHTML = `${IC.mic} Say it again`; }
+        }, 22);
+      });
+      const next = () => { if (n < 2) go(`q${n + 2}`); else runGenerate(); };
+      screen.querySelector("#next").addEventListener("click", () => {
+        if (!state.answers[q.key].trim()) { sToast("Add a sentence, say it, or tap Skip"); return; }
+        next();
+      });
+      screen.querySelector("#skip").addEventListener("click", () => { state.answers[q.key] = ""; next(); });
+      if (new URLSearchParams(location.search).has("say")) say.click();
+    }
+
+    window.addEventListener("hashchange", route);
+    route();
+  </script>
+</body>
+</html>
